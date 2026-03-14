@@ -34,6 +34,8 @@ categoryTech: FF6550
   --font-epilogue: var(--font-epilogue);
   --font-roboto: var(--font-roboto);
   --font-mono: var(--font-roboto-mono);
+  --font-clash: var(--font-clash);
+  --font-sf-pro: var(--font-sf-pro);
 
   /* base */
   --color-background: var(--background);
