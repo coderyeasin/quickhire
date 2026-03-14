@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "../Header/Header";
 import HeroSection from "../HeroSection/HeroSection";
+import SupportCompany from "../SupportCompany/SupportCompany";
+import Categories from "../Categories/Categories";
 
 const HomePage = () => {
   return (
@@ -9,6 +11,8 @@ const HomePage = () => {
         <Header />
         <HeroSection />
       </div>
+      <SupportCompany />
+      <Categories />
     </section>
   );
 };

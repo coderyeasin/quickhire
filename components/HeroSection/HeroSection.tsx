@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FiSearch } from "react-icons/fi";
 import { SlLocationPin } from "react-icons/sl";
 
+
 const HeroSection = () => {
   return (
     <section className="container-layout relative py-10">
@@ -49,14 +50,14 @@ const HeroSection = () => {
                 className="text-white font-bold bg-indigoTags w-44 py-4"
               />
             </div>
-            <p className="text-md font-epilogue text-[#202430]/70">
+            <p className="text-md font-epilogue text-second-gray/70">
               Popular : UI Designer, UX Researcher, Android, Admin
             </p>
           </div>
         </div>
 
         <div className="relative flex justify-center lg:justify-end z-0">
-          <div className="absolute -translate-y-6/12 w-[501px] h-[707px]">
+          <div className="absolute -translate-y-6/12 w-125.25 h-176.75">
             <Image
               src="/images/hero/candidates.png"
               alt="hero"

@@ -5,3 +5,10 @@ export interface CustomButtonProps {
   className?: string;
   type?: "button" | "submit" | "reset";
 }
+
+export interface CategoryCardType {
+  id: number;
+  title: string;
+  jobs: string;
+  image: string;
+}
