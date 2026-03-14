@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
+/* 
+Epilogue
+Epilogue
+Roboto
+Roboto Mono
+Inter
+SF Pro
+
+primary-gray: 515B6F
+second-gray: 202430
+third-gray: 7C8493
+ftr-gray: D6DDEB
+
+
+blueTxt: 26A4FF
+darkTxt: 25324B
+blueTxt: 4640DE
+
+activeJob: 56CDAD
+categoryJob: FFB836
+categoryTech: FF6550
+ */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
 @theme inline {
+  /* fonts */
+  --font-inter: var(--font-inter);
+  --font-epilogue: var(--font-epilogue);
+  --font-roboto: var(--font-roboto);
+  --font-mono: var(--font-roboto-mono);
+
+  /* base */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* gray palette */
+  --color-primary-gray: #515b6f;
+  --color-second-gray: #202430;
+  --color-third-gray: #7c8493;
+
+  /* text colors */
+  --color-blue-text: #26a4ff;
+  --color-dark-text: #25324b;
+  --color-footerTxt: #d6ddeb;
+
+  /* Tag colors */
+  --color-greenTags: #56cdad;
+  --color-ylwTags: #ffb836;
+  --color-redTags: #ff6550;
+  --color-indigoTags: #4640de;
+
+  /* layout container */
+  --container-sm: 768px;
+  --container-md: 1024px;
+  --container-main: 1240px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@utility container-layout {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-main);
+  padding-inline: 1.5rem;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  scroll-behavior: smooth;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
 }
