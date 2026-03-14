@@ -7,17 +7,19 @@ const Header = () => {
     <header className="container-layout">
       <nav className="flex justify-between items-center py-5">
         <div className="text-xl font-bold text-dark-text flex items-center gap-12">
-          <Image
-            src="/images/Logo-blk.png"
-            alt="Logo"
-            width={152}
-            height={36}
-            priority
-          />
+          <Link href={`/`}>
+            <Image
+              src="/images/Logo-blk.png"
+              alt="Logo"
+              width={152}
+              height={36}
+              priority
+            />
+          </Link>
           <ul className="flex space-x-10 text-md font-normal font-epilogue mt-2">
             <li>
               <Link
-                href="#"
+                href="/jobs"
                 className=" text-primary-gray hover:text-dark-text"
               >
                 Find Jobs
