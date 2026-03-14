@@ -12,3 +12,24 @@ export interface CategoryCardType {
   jobs: string;
   image: string;
 }
+
+export type CategoryName =
+  | "Marketing"
+  | "Sales"
+  | "Business"
+  | "Finance"
+  | "Technology"
+  | "Design"
+  | "Data Science"
+  | "Research";
+
+export interface JobCardType {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  category: CategoryName[];
+  workType: "Full-time" | "Part-time" | "Contract" | "Remote";
+  shortDescription: string;
+  image: string;
+}
