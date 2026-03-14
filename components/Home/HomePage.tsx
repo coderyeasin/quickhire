@@ -3,6 +3,9 @@ import Header from "../Header/Header";
 import HeroSection from "../HeroSection/HeroSection";
 import SupportCompany from "../SupportCompany/SupportCompany";
 import Categories from "../Categories/Categories";
+import FeaturedJobs from "../FeaturedJobs/FeaturedJobs";
+import LatestJobs from "../LatestJobs/LatestJobs";
+import Footer from "../Footer/Footer";
 
 const HomePage = () => {
   return (
@@ -13,6 +16,9 @@ const HomePage = () => {
       </div>
       <SupportCompany />
       <Categories />
+      <FeaturedJobs />
+      <LatestJobs />
+      <Footer />
     </section>
   );
 };
