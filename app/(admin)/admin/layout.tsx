@@ -1,8 +1,8 @@
 import { Epilogue, Roboto, Roboto_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "../../globals.css";
-import Sidebar from "@/components/admin/Sidebar/Sidebar";
-import TopHeader from "@/components/admin/TopHeader/TopHeader";
+import Sidebar from "@/components/Admin/Sidebar/Sidebar";
+import TopHeader from "@/components/Admin/TopHeader/TopHeader";
 import type { Metadata } from "next";
 
 export const inter = Inter({
