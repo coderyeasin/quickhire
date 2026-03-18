@@ -12,7 +12,7 @@ import { loginValidation } from "./LoginValidators";
 
 type LoginFormData = z.infer<typeof loginValidation>;
 
-const LoginPage = () => {
+const LoginPage = ({ onSuccess }) => {
   const {
     register,
     handleSubmit,
@@ -42,14 +42,23 @@ const LoginPage = () => {
       setServerError(error.message || "Something went wrong");
     }
   };
-  const commonCls = "mt-3 w-full border-0 outline-0 bg-teal-500/30";
+  const commonCls =
+    "mt-3 w-full border-0 outline-0 bg-indigoTags/30 rounded-md px-3 py-1 text-white";
   return (
-    <div className=" min-h-screen flex items-start justify-center pt-20 ">
+    <div className="flex items-center justify-center ">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-md bg-teal-900 p-6 rounded-xl shadow"
+        className="w-full bg-indigoTags/10 p-6 rounded-xl shadow relative"
       >
-        <h3 className="text-2xl font-semibold text-center mb-6">Login</h3>
+        <h3 className="text-2xl font-semibold text-center mb-6 text-primary-gray">
+          Login to your account
+        </h3>
+        <button
+          onClick={onSuccess}
+          className="absolute right-6 top-4 text-3xl text-second-gray hover:text-third-gray cursor-pointer"
+        >
+          ✕
+        </button>
         {serverError && (
           <p className="error text-red-400 text-center">{serverError}</p>
         )}
@@ -72,7 +81,7 @@ const LoginPage = () => {
         <button
           disabled={isSubmitting}
           className={
-            "mt-5 w-full cursor-pointer bg-teal-950 py-2 rounded-md flex items-center justify-center gap-2 " +
+            "mt-5 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2 " +
             (isSubmitting ? "opacity-60 cursor-not-allowed" : "")
           }
         >
@@ -87,7 +96,7 @@ const LoginPage = () => {
         <div className="flex flex-col lg:flex-row items-center gap-5">
           <button
             type="button"
-            className="mt-4 w-full cursor-pointer bg-teal-600 py-2 rounded-md flex items-center justify-center gap-2"
+            className="mt-4 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2"
             // onClick={() => signIn("google", { callbackUrl })}
           >
             <FaGoogle />
@@ -95,7 +104,7 @@ const LoginPage = () => {
           </button>
           <button
             type="button"
-            className="mt-4 w-full cursor-pointer bg-teal-600 py-2 rounded-md flex items-center justify-center gap-2"
+            className="mt-4 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2"
             // onClick={() => signIn("facebook", { callbackUrl })}
           >
             <FaFacebook />
