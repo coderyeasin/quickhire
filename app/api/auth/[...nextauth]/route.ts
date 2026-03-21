@@ -1,1 +1,3 @@
-export const authOptions = async () => {};
+import { handlers } from "@/lib/auth";
+
+export const { GET, POST } = handlers;
