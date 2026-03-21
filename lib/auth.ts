@@ -8,6 +8,10 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         email: {},
         password: {},
       },
+      authorize: async (credentials) => {},
     }),
   ],
+  pages: {
+    error: "/login",
+  },
 });
