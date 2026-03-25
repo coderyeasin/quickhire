@@ -11,18 +11,7 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         email: {},
         password: {},
       },
-      authorize: async (credentials) => {
-        let user = null;
-        const validatorsLogin = loginValidation.parse(credentials);
-        if (validatorsLogin.email) {
-          user = await UserModel.findOne({
-            where: {
-              email: validatorsLogin.email,
-            },
-          });
-        }
-      },
-    }),
+  
   ],
   pages: {
     error: "/login",
