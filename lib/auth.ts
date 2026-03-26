@@ -15,9 +15,9 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         const validatorsLogin = loginValidation.parse(credentials);
         if (validatorsLogin.email) {
           user = await UserModel.findOne({
-            // where: {
-            //   email: validatorsLogin.email,
-            // },
+            where: {
+              email: validatorsLogin.email,
+            },
           });
         }
       },
