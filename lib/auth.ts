@@ -24,6 +24,6 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
     }),
   ],
   pages: {
-    // error: "/login",
+    error: "/login",
   },
 });
