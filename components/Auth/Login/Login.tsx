@@ -7,12 +7,16 @@ import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import Link from "next/link";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { loginValidation } from "./LoginValidators";
 
 type LoginFormData = z.infer<typeof loginValidation>;
 
 const LoginPage = ({ onSuccess }) => {
+  const { data: session, status } = useSession();
+
+  console.log(session, status);
+
   const {
     register,
     handleSubmit,
