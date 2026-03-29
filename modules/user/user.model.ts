@@ -1,6 +1,5 @@
-import { model, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IUser } from "./user.interface";
-import { models } from "mongoose";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -34,5 +33,4 @@ const UserSchema = new Schema<IUser>(
   },
 );
 
-// export const UserModel = models.user || model<IUser>("user", UserSchema);
-export const UserModel = model<IUser>("user", UserSchema);
+export const UserModel = mongoose.model<IUser>("user", UserSchema);

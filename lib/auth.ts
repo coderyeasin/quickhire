@@ -3,15 +3,19 @@ import { UserModel } from "@/modules/user/user.model";
 import { compare } from "bcrypt";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { connectToDB } from "./mongodb";
 
 export const { signIn, signOut, auth, handlers } = NextAuth({
   providers: [
     Credentials({
+      name: "credentials",
       credentials: {
         email: { type: "email" },
         password: { type: "password" },
       },
       authorize: async (credentials) => {
+        await connectToDB();
+
         const validatorsLogin = loginValidation.safeParse(credentials);
         if (!validatorsLogin.success) return null;
         const { email, password } = validatorsLogin.data;
@@ -23,14 +27,11 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         const isValid = await compare(password, user.password);
         if (!isValid) return null;
 
-        return user;
-
-        // if (user && user.password) {
-        //   const isValid = await compare(password, user.password);
-        //   if (!isValid) return null;
-        // }
-        // if (!user) return null;
-        // return user;
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],
@@ -38,25 +39,26 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        // token.role = user.role;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
-        // session.user.role = token.role as string;
+        session.user.role = token.role as "candidate" | "admin";
       }
       return session;
     },
   },
-  pages: {
-    error: "/login",
-  },
+  secret: process.env.NEXT_AUTH_SECRET,
 });
