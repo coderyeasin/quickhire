@@ -5,8 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { registerValidation } from "./RegisterValidators";
 
 type RegisterFormData = z.infer<typeof registerValidation>;
