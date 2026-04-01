@@ -19,7 +19,6 @@ const RegisterPage = ({ onSuccess }) => {
   });
   const [serverError, setServerError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  // const router = useRouter();
 
   const onSubmit = async (data: RegisterFormData) => {
     setServerError(null);
