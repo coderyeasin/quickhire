@@ -14,7 +14,7 @@ type LoginFormData = z.infer<typeof loginValidation>;
 const LoginPage = ({ onSuccess }) => {
   const { data: session, status } = useSession();
 
-  console.log(session, status);
+  // console.log(session, status);
 
   const {
     register,
