@@ -10,17 +10,21 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
     Credentials({
       name: "credentials",
       credentials: {
+        name: { type: "text" },
         email: { type: "email" },
         password: { type: "password" },
+        avatar: { type: "text" },
       },
       authorize: async (credentials) => {
+        if (!credentials) return null;
+
         await connectToDB();
 
         const validatorsLogin = loginValidation.safeParse(credentials);
         if (!validatorsLogin.success) return null;
-        const { email, password } = validatorsLogin.data;
+        const { email, password, name, avatar } = validatorsLogin.data;
 
-        const user = await UserModel.findOne({ email }).exec();
+        const user = await UserModel.findOne({ email });
 
         if (!user || !user.password) return null;
 

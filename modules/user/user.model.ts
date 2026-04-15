@@ -20,7 +20,7 @@ const UserSchema = new Schema<IUser>(
     },
     avatar: {
       type: String,
-      default: "/images/fav-ico.png",
+      default: null,
     },
     role: {
       type: String,
@@ -33,4 +33,4 @@ const UserSchema = new Schema<IUser>(
   },
 );
 
-export const UserModel = mongoose.model<IUser>("user", UserSchema);
+export const UserModel = mongoose.model<IUser>("User", UserSchema);
