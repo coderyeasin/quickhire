@@ -1,11 +1,12 @@
 import { loginValidation } from "@/components/Auth/Login/LoginValidators";
 import { UserModel } from "@/modules/user/user.model";
-import { compare } from "bcrypt";
+import * as bcrypt from "bcrypt";
 import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { connectToDB } from "./mongodb";
 
-export const { signIn, signOut, auth, handlers } = NextAuth({
+export const authOptions: NextAuthOptions = NextAuth({
   providers: [
     Credentials({
       name: "credentials",
@@ -16,26 +17,46 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         avatar: { type: "text" },
       },
       authorize: async (credentials) => {
-        if (!credentials) return null;
-
         await connectToDB();
 
         const validatorsLogin = loginValidation.safeParse(credentials);
         if (!validatorsLogin.success) return null;
+
         const { email, password, name, avatar } = validatorsLogin.data;
 
         const user = await UserModel.findOne({ email });
 
-        if (!user || !user.password) return null;
+        // if (!user || !user.password) return null;
+        if (!user && name) {
+          const hashedPass = await bcrypt.hash(password, 10);
 
-        const isValid = await compare(password, user.password);
-        if (!isValid) return null;
-
-        return {
-          id: user._id.toString(),
-          email: user.email,
-          role: user.role,
-        };
+          const newUser = await UserModel.create({
+            name,
+            email,
+            password: hashedPass,
+            avatar: avatar || undefined,
+            role: "candidate",
+          });
+          return {
+            id: newUser._id.toString(),
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role,
+            avatar: newUser.avatar,
+          };
+        } else if (!user) {
+          throw new Error("User not found");
+        } else {
+          const valid = await bcrypt.compare(password, user.password);
+          if (!valid) throw new Error("Invalid credentials");
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar,
+          };
+        }
       },
     }),
   ],
@@ -44,7 +65,7 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/login",
+    signIn: "/auth/login",
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -52,6 +73,7 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         token.id = user.id;
         token.email = user.email;
         token.role = user.role;
+        token.avatar = user.avatar;
       }
       return token;
     },
@@ -60,6 +82,7 @@ export const { signIn, signOut, auth, handlers } = NextAuth({
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.role = token.role as "candidate" | "admin";
+        session.user.avatar = token.avatar as string | undefined;
       }
       return session;
     },

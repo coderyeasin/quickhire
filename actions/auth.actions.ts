@@ -21,17 +21,17 @@ export async function registerAction(formData: FormData) {
       throw new Error("User already exists");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
 
     await UserModel.create({
       name,
       email,
-      password: hashedPassword,
+      password: password,
       role: "candidate",
     });
     await signIn("credentials", {
       email,
-      password: hashedPassword,
+      password: password,
       redirect: false,
     });
     return { success: true };
