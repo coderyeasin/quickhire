@@ -2,34 +2,89 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { FaFacebook, FaGoogle } from "react-icons/fa6";
-import { useState } from "react";
-import { registerValidation } from "./RegisterValidators";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import {
+  RegisterInput,
+  registerValidator,
+} from "@/modules/user/UserValidators";
+import { useMutation } from "@tanstack/react-query";
+import { registerAction } from "@/actions/auth.actions";
 
-type RegisterFormData = z.infer<typeof registerValidation>;
-
-const RegisterPage = ({ onSuccess }) => {
+const RegisterPage = ({ onSuccess }: { onSuccess: () => void }) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerValidation),
+    formState: { errors },
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerValidator),
+    defaultValues: {
+      role: "candidate",
+    },
   });
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  // const router = useRouter();
 
+  const {
+    mutate,
+    isPending,
+    error: mutationError,
+  } = useMutation({
+    mutationFn: async (data: RegisterInput) => {
+      const formData = new FormData();
+
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("confirmPassword", data.confirmPassword);
+      if (data.role) formData.append("role", data.role);
+      if (data.avatar instanceof FileList && data.avatar.length > 0) {
+        formData.append("avatar", data.avatar[0]);
+      }
+
+      const res = await registerAction(formData);
+      if (!res.success) {
+        throw new Error(
+          Object.values(res.errors ?? {})[0]?.[0] || "Registration failed",
+        );
+      }
+      return {
+        ...res,
+        email: data.email,
+        password: data.password,
+        role: data.role,
+        avatar: data.avatar,
+      };
+      // Object.entries(data).forEach(([key, value]) => {
+      //   if (value !== undefined) formData.append(key, value as string);
+      // });
+
+      // const result = await registerAction(formData);
+      // if (!result.success) {
+      //   throw new Error(Object.values(result.errors ?? {})[0]?.[0]);
+      // }
+      // return result;
+    },
+
+    onSuccess: async (_, data) => {
+      await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        callbackUrl: ` /${data.role}`,
+      });
+    },
+  });
+
+  /*
   const onSubmit = async (data: RegisterFormData) => {
     setServerError(null);
     setSuccess(false);
-    // const formData = new FormData();
-    // formData.append("name", data.name);
-    // formData.append("email", data.email);
-    // formData.append("password", data.password);
-    // formData.append("confirmPassword", data.confirmPassword);
-    // formData.append("profileImg", data.profileImg[0]);
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("confirmPassword", data.confirmPassword);
+    formData.append("avatar", data.avatar[0]);
     try {
       // const res = await fetch("/api/auth/register", {
       //   method: "POST",
@@ -41,7 +96,7 @@ const RegisterPage = ({ onSuccess }) => {
       //   return;
       // }
       // setSuccess(true);
-      console.log("data", data);
+      console.log("reg-data", data);
 
       // await signIn("credentials", {
       //   email: data.email,
@@ -53,12 +108,13 @@ const RegisterPage = ({ onSuccess }) => {
       console.log(setServerError(e));
     }
   };
+ */
   const commonCls =
     "mt-3 w-full border-0 outline-0 bg-indigoTags/30 rounded-md px-3 py-1 text-white";
   return (
     <div className="flex items-center justify-center">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => mutate(data))}
         className="w-full bg-indigoTags/10 p-6 rounded-xl shadow relative"
       >
         <h3 className="text-2xl font-semibold text-center mb-6 text-primary-gray">
@@ -70,10 +126,12 @@ const RegisterPage = ({ onSuccess }) => {
         >
           ✕
         </button>
-        {serverError && (
-          <p className="error text-red-400 text-center">{serverError}</p>
+        {mutationError && (
+          <p className="error text-red-400 text-center">
+            {mutationError.message}
+          </p>
         )}
-        {success && (
+        {isPending && (
           <p className="text-green-400 text-center">
             Registration successful! Redirecting...
           </p>
@@ -95,11 +153,11 @@ const RegisterPage = ({ onSuccess }) => {
         <input
           type="file"
           accept="image/*"
-          {...register("profileImg")}
+          {...register("avatar")}
           className={commonCls}
         />
-        {errors.profileImg && (
-          <p className="error">{errors.profileImg.message as string}</p>
+        {errors.avatar && (
+          <p className="error">{errors.avatar.message as string}</p>
         )}
 
         {/* Password */}
@@ -123,10 +181,10 @@ const RegisterPage = ({ onSuccess }) => {
         )}
 
         <button
-          disabled={isSubmitting}
+          disabled={isPending}
           className="mt-5 w-full bg-indigoTags text-white py-2 rounded-md cursor-pointer"
         >
-          {isSubmitting ? "Registering..." : "Register"}
+          {isPending ? "Registering..." : "Register"}
         </button>
 
         <p className="mt-4 text-center text-2xl font-bold">OR</p>

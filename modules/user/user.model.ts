@@ -24,7 +24,7 @@ const UserSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["candidate", "admin"],
+      enum: ["candidate", "admin", "recruiter"],
       default: "candidate",
     },
   },
@@ -33,4 +33,5 @@ const UserSchema = new Schema<IUser>(
   },
 );
 
-export const UserModel = mongoose.model<IUser>("User", UserSchema);
+export const UserModel =
+  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

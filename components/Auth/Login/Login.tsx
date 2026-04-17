@@ -1,32 +1,51 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaFacebook, FaGoogle } from "react-icons/fa6";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { loginValidation } from "./LoginValidators";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
-type LoginFormData = z.infer<typeof loginValidation>;
+import { LoginInput, loginValidator } from "@/modules/user/UserValidators";
+import { useMutation } from "@tanstack/react-query";
+import { googleLoginAction } from "@/actions/auth.actions";
 
-const LoginPage = ({ onSuccess }) => {
-  const { data: session, status } = useSession();
-
-  console.log(session, status);
+const LoginPage = ({ onSuccess }: { onSuccess: () => void }) => {
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginValidation),
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginValidator),
   });
-  const [serverError, setServerError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-  //   const callbackUrl = searchParams.get("callbackUrl") || "/";
+  // const [serverError, setServerError] = useState<string | null>(null);
+  // const searchParams = useSearchParams();
 
+  const {
+    mutate,
+    isPending,
+    error: mutationError,
+  } = useMutation({
+    mutationFn: async (data: LoginInput) => {
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+      if (result?.error) {
+        throw new Error(result.error || "Login failed");
+      }
+      return result;
+    },
+    onSuccess: () => {
+      router.refresh();
+      router.push("/");
+    },
+  });
+
+  /** 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
     try {
@@ -45,12 +64,14 @@ const LoginPage = ({ onSuccess }) => {
       setServerError(error.message || "Something went wrong");
     }
   };
+  
+  */
   const commonCls =
     "mt-3 w-full border-0 outline-0 bg-indigoTags/30 rounded-md px-3 py-1 text-white";
   return (
     <div className="flex items-center justify-center ">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => mutate(data))}
         className="w-full bg-indigoTags/10 p-6 rounded-xl shadow relative"
       >
         <h3 className="text-2xl font-semibold text-center mb-6 text-primary-gray">
@@ -62,8 +83,10 @@ const LoginPage = ({ onSuccess }) => {
         >
           ✕
         </button>
-        {serverError && (
-          <p className="error text-red-400 text-center">{serverError}</p>
+        {mutationError && (
+          <p className="error text-red-400 text-center">
+            {mutationError.message}
+          </p>
         )}
 
         <input
@@ -82,16 +105,16 @@ const LoginPage = ({ onSuccess }) => {
         {errors.password && <p className="error">{errors.password.message}</p>}
 
         <button
-          disabled={isSubmitting}
+          disabled={isPending}
           className={
             "mt-5 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2 " +
-            (isSubmitting ? "opacity-60 cursor-not-allowed" : "")
+            (isPending ? "opacity-60 cursor-not-allowed" : "")
           }
         >
-          {isSubmitting && (
+          {isPending && (
             <span className="loader border-2 border-t-2 border-t-white border-white/30 rounded-full w-4 h-4 mr-2 animate-spin"></span>
           )}
-          {isSubmitting ? "Logging in..." : "Login"}
+          {isPending ? "Logging in..." : "Login"}
         </button>
 
         <p className="mt-4 text-center text-2xl font-bold">OR</p>
@@ -100,7 +123,7 @@ const LoginPage = ({ onSuccess }) => {
           <button
             type="button"
             className="mt-4 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2"
-            // onClick={() => signIn("google", { callbackUrl })}
+            onClick={() => googleLoginAction()}
           >
             <FaGoogle />
             Google

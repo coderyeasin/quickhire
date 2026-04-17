@@ -2,7 +2,7 @@ import { Epilogue, Roboto, Roboto_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import "../globals.css";
-import AuthProviders from "../provider";
+import { Providers } from "@/components/Providers/Providers";
 
 export const inter = Inter({
   subsets: ["latin"],
@@ -86,7 +86,7 @@ export default function RootLayout({
 
            antialiased`}
       >
-        <AuthProviders>{children}</AuthProviders>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
