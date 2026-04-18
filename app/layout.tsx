@@ -1,6 +1,6 @@
 import { Epilogue, Roboto, Roboto_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/UI/Header/Header";
 import Footer from "@/components/UI/Footer/Footer";
@@ -67,6 +67,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/fav-ico.png",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
