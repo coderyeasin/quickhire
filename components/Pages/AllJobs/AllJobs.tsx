@@ -2,7 +2,7 @@ import React from "react";
 
 const AllJobs = () => {
   return (
-    <section className="py-10">
+    <section className="container-layout h-screen w-full py-10">
       <div>AllJobs</div>
     </section>
   );

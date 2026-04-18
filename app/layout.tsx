@@ -1,7 +1,9 @@
 import { Epilogue, Roboto, Roboto_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
-import "../globals.css";
+import "./globals.css";
+import Header from "@/components/UI/Header/Header";
+import Footer from "@/components/UI/Footer/Footer";
 
 export const inter = Inter({
   subsets: ["latin"],
@@ -31,12 +33,12 @@ export const robotoMono = Roboto_Mono({
 const clashDisplay = localFont({
   src: [
     {
-      path: "../../public/fonts/ClashDisplay/ClashDisplay-Bold.otf",
+      path: "../public/fonts/ClashDisplay/ClashDisplay-Bold.otf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../public/fonts/ClashDisplay/ClashDisplay-Medium.otf",
+      path: "../public/fonts/ClashDisplay/ClashDisplay-Medium.otf",
       weight: "500",
       style: "normal",
     },
@@ -46,12 +48,12 @@ const clashDisplay = localFont({
 const sfPro = localFont({
   src: [
     {
-      path: "../../public/fonts/sf-pro-display/sf-pro-bold.otf",
+      path: "../public/fonts/sf-pro-display/sf-pro-bold.otf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../public/fonts/sf-pro-display/sf-pro-medium.otf",
+      path: "../public/fonts/sf-pro-display/sf-pro-medium.otf",
       weight: "500",
       style: "normal",
     },
@@ -85,7 +87,7 @@ export default function RootLayout({
 
            antialiased`}
       >
-        {children}
+        <Header /> {children} <Footer />
       </body>
     </html>
   );
