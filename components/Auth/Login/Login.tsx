@@ -2,17 +2,16 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FaFacebook, FaGoogle } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
+import { FaGoogle } from "react-icons/fa6";
 import { signIn } from "next-auth/react";
-
-import { LoginInput, loginValidator } from "@/modules/user/UserValidators";
 import { useMutation } from "@tanstack/react-query";
+import { LoginInput, loginValidator } from "@/modules/user/UserValidators";
 import { googleLoginAction } from "@/actions/auth.actions";
 
-const LoginPage = ({ onSuccess }: { onSuccess: () => void }) => {
-  const router = useRouter();
+const inputCls =
+  "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigoTags/70 transition-all";
 
+export default function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   const {
     register,
     handleSubmit,
@@ -20,8 +19,6 @@ const LoginPage = ({ onSuccess }: { onSuccess: () => void }) => {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginValidator),
   });
-  // const [serverError, setServerError] = useState<string | null>(null);
-  // const searchParams = useSearchParams();
 
   const {
     mutate,
@@ -34,116 +31,90 @@ const LoginPage = ({ onSuccess }: { onSuccess: () => void }) => {
         password: data.password,
         redirect: false,
       });
-      if (result?.error) {
-        throw new Error(result.error || "Login failed");
-      }
+      if (result?.error) throw new Error("Invalid email or password");
       return result;
     },
-    onSuccess: () => {
-      router.refresh();
-      router.push("/");
+    onSuccess: async () => {
+      const { getSession } = await import("next-auth/react");
+      const session = await getSession();
+      const role = session?.user?.role ?? "candidate";
+
+      onSuccess();
+      window.location.href = `/${role}`;
     },
   });
 
-  /** 
-  const onSubmit = async (data: LoginFormData) => {
-    setServerError(null);
-    try {
-      //   const res = await signIn("credentials", {
-      //     email: data.email,
-      //     password: data.password,
-      //     redirect: true,
-      //     callbackUrl: callbackUrl,
-      //   });
-      //   if (res?.error) {
-      //     setServerError(res.error || "Login failed");
-      //     return;
-      //   }
-      console.log(data);
-    } catch (error) {
-      setServerError(error.message || "Something went wrong");
-    }
-  };
-  
-  */
-  const commonCls =
-    "mt-3 w-full border-0 outline-0 bg-indigoTags/30 rounded-md px-3 py-1 text-white";
   return (
-    <div className="flex items-center justify-center ">
+    <div className="space-y-5">
+      <div className="space-y-1">
+        <p className="text-xs text-white/40 uppercase tracking-widest font-medium">
+          Welcome back
+        </p>
+        <h2 className="text-xl font-bold text-white">
+          Sign in to your account
+        </h2>
+      </div>
+
+      {mutationError && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2.5">
+          <p className="text-sm text-red-400">{mutationError.message}</p>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit((data) => mutate(data))}
-        className="w-full bg-indigoTags/10 p-6 rounded-xl shadow relative"
+        className="space-y-3"
       >
-        <h3 className="text-2xl font-semibold text-center mb-6 text-primary-gray">
-          Login to your account
-        </h3>
-        <button
-          onClick={onSuccess}
-          className="absolute right-6 top-4 text-3xl text-second-gray hover:text-third-gray cursor-pointer"
-        >
-          ✕
-        </button>
-        {mutationError && (
-          <p className="error text-red-400 text-center">
-            {mutationError.message}
-          </p>
-        )}
-
-        <input
-          {...register("email")}
-          placeholder="Email"
-          className={commonCls}
-        />
-        {errors.email && <p className="error">{errors.email.message}</p>}
-
-        <input
-          type="password"
-          {...register("password")}
-          placeholder="Password"
-          className={commonCls}
-        />
-        {errors.password && <p className="error">{errors.password.message}</p>}
+        <div>
+          <input
+            {...register("email")}
+            placeholder="Email address"
+            className={inputCls}
+          />
+          {errors.email && (
+            <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
+          )}
+        </div>
+        <div>
+          <input
+            type="password"
+            {...register("password")}
+            placeholder="Password"
+            className={inputCls}
+          />
+          {errors.password && (
+            <p className="text-red-400 text-xs mt-1">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
 
         <button
+          type="submit"
           disabled={isPending}
-          className={
-            "mt-5 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2 " +
-            (isPending ? "opacity-60 cursor-not-allowed" : "")
-          }
+          className="w-full bg-indigoTags hover:bg-indigoTags/90 text-white cursor-pointer font-semibold py-2.5 rounded-lg transition-all disabled:opacity-60 flex items-center justify-center gap-2 mt-1"
         >
           {isPending && (
-            <span className="loader border-2 border-t-2 border-t-white border-white/30 rounded-full w-4 h-4 mr-2 animate-spin"></span>
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           )}
-          {isPending ? "Logging in..." : "Login"}
+          {isPending ? "Signing in..." : "Sign In"}
         </button>
-
-        <p className="mt-4 text-center text-2xl font-bold">OR</p>
-
-        <div className="flex flex-col lg:flex-row items-center gap-5">
-          <button
-            type="button"
-            className="mt-4 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2"
-            onClick={() => googleLoginAction()}
-          >
-            <FaGoogle />
-            Google
-          </button>
-          <button
-            type="button"
-            className="mt-4 w-full cursor-pointer bg-indigoTags text-white py-2 rounded-md flex items-center justify-center gap-2"
-            // onClick={() => signIn("facebook", { callbackUrl })}
-          >
-            <FaFacebook />
-            Facebook
-          </button>
-        </div>
-        {/* <Link href="/register" className="mt-4 text-center text-sm block">
-          Do not have an account?
-          <span className="text-teal-300 font-semibold">Register</span>
-        </Link> */}
       </form>
+
+      <div className="relative flex items-center gap-3">
+        <div className="flex-1 border-t border-white/10" />
+        <span className="text-xs text-white/30">OR</span>
+        <div className="flex-1 border-t border-white/10" />
+      </div>
+
+      <button
+        type="button"
+        onClick={() => googleLoginAction()}
+        className="w-full flex items-center justify-center gap-2.5 cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-2.5 rounded-lg transition-all"
+      >
+        <FaGoogle />
+        Continue with Google
+      </button>
     </div>
   );
-};
-
-export default LoginPage;
+}

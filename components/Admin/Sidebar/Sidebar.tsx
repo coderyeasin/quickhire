@@ -9,7 +9,8 @@ import {
 } from "react-icons/fi";
 import Image from "next/image";
 
-const Sidebar = () => {
+const Sidebar = ({ role }: { role: string }) => {
+  console.log("User Role in Sidebar:", role); // Debugging line to check the role value
   return (
     <aside className="fixed inset-y-0 left-0 w-64 bg-indigoTags text-white flex flex-col z-50">
       <div className="p-8">

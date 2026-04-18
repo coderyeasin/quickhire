@@ -66,7 +66,6 @@ export async function registerAction(formData: FormData) {
 }
 
 // login action
-
 export async function loginAction(formData: FormData) {
   try {
     await signIn("credentials", {
@@ -91,9 +90,6 @@ export async function loginAction(formData: FormData) {
 
 // google login action
 export async function googleLoginAction(role?: string) {
-  // await signIn("google", {
-  //   redirectTo: "/candidate",
-  // });
   await signIn("google", {
     redirectTo: `/${role ?? "candidate"}`,
   });

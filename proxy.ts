@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth } from "./lib/auth";
 
 const ROLE_ROUTES: Record<string, string[]> = {
   "/admin": ["admin"],
@@ -8,50 +9,35 @@ const ROLE_ROUTES: Record<string, string[]> = {
 
 function getDashboardRoute(role: string) {
   if (role === "admin") return "/admin";
-  // if(role === "candidate") return "/candidate";
   if (role === "recruiter") return "/recruiter";
   return "/candidate";
 }
 
-export default function proxy(req) {
+export default auth((req) => {
   const { pathname } = req.nextUrl;
   const session = req.auth;
 
-  //   not logged in - redirect to login
-  const isProtectedRoute = Object.keys(ROLE_ROUTES).some((route) =>
-    pathname.startsWith(route),
+  const isProtected = Object.keys(ROLE_ROUTES).some((r) =>
+    pathname.startsWith(r),
   );
 
-  if (isProtectedRoute && !session) {
-    // return NextResponse.redirect(new URL("/login", req.url));
+  if (isProtected && !session) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if (session) {
-    const userRole = session.user.role;
-
-    for (const [route, allowedRoles] of Object.entries(ROLE_ROUTES)) {
-      if (pathname.startsWith(route) && !allowedRoles.includes(userRole)) {
-        return NextResponse.redirect(
-          new URL(`/${getDashboardRoute(userRole)}`, req.url),
-        );
+  // Logged in + own dashboard
+  if (session && isProtected) {
+    const role = session.user.role;
+    for (const [route, allowed] of Object.entries(ROLE_ROUTES)) {
+      if (pathname.startsWith(route) && !allowed.includes(role)) {
+        return NextResponse.redirect(new URL(getDashboardRoute(role), req.url));
       }
     }
-
-    // if (pathname === "/login" || pathname === "/register") {
-    //   return NextResponse.redirect(new URL(`/${getDashboardRoute(userRole)}`, req.url));
-    // }
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: [
-    "/admin/:path*",
-    "/candidate/:path*",
-    "/recruiter/:path*",
-    // "/login",
-    // "/register",
-  ],
+  matcher: ["/admin/:path*", "/candidate/:path*", "/recruiter/:path*"],
 };
