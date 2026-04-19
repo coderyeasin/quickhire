@@ -7,11 +7,11 @@ import { signIn } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import { LoginInput, loginValidator } from "@/modules/user/UserValidators";
 import { googleLoginAction } from "@/actions/auth.actions";
-
-const inputCls =
-  "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigoTags/70 transition-all";
+import { useRouter } from "next/navigation";
+import RegisterFields from "../Register/RegisterFields";
 
 export default function LoginForm({ onSuccess }: { onSuccess: () => void }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -40,13 +40,14 @@ export default function LoginForm({ onSuccess }: { onSuccess: () => void }) {
       const role = session?.user?.role ?? "candidate";
 
       onSuccess();
-      window.location.href = `/${role}`;
+
+      router.push(`/${role}`);
     },
   });
 
   return (
-    <div className="space-y-5">
-      <div className="space-y-1">
+    <section className="space-y-5">
+      <div className="space-y-1 text-center">
         <p className="text-xs text-white/40 uppercase tracking-widest font-medium">
           Welcome back
         </p>
@@ -54,51 +55,16 @@ export default function LoginForm({ onSuccess }: { onSuccess: () => void }) {
           Sign in to your account
         </h2>
       </div>
-
-      {mutationError && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2.5">
-          <p className="text-sm text-red-400">{mutationError.message}</p>
-        </div>
-      )}
-
-      <form
-        onSubmit={handleSubmit((data) => mutate(data))}
-        className="space-y-3"
-      >
-        <div>
-          <input
-            {...register("email")}
-            placeholder="Email address"
-            className={inputCls}
-          />
-          {errors.email && (
-            <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
-          )}
-        </div>
-        <div>
-          <input
-            type="password"
-            {...register("password")}
-            placeholder="Password"
-            className={inputCls}
-          />
-          {errors.password && (
-            <p className="text-red-400 text-xs mt-1">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full bg-indigoTags hover:bg-indigoTags/90 text-white cursor-pointer font-semibold py-2.5 rounded-lg transition-all disabled:opacity-60 flex items-center justify-center gap-2 mt-1"
-        >
-          {isPending && (
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          )}
-          {isPending ? "Signing in..." : "Sign In"}
-        </button>
+      <form onSubmit={handleSubmit((data) => mutate(data))}>
+        <RegisterFields
+          variant="login"
+          register={register}
+          errors={errors}
+          isPending={isPending}
+          errorMessage={mutationError?.message}
+          submitLabel="Sign In"
+          pendingLabel="Signing in..."
+        />
       </form>
 
       <div className="relative flex items-center gap-3">
@@ -115,6 +81,6 @@ export default function LoginForm({ onSuccess }: { onSuccess: () => void }) {
         <FaGoogle />
         Continue with Google
       </button>
-    </div>
+    </section>
   );
 }
