@@ -15,43 +15,42 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-[#f8f8fd]">
+    <header className="w-full">
       <div className="container-layout">
         <nav className="flex justify-between items-center py-4 md:py-5">
-          {/* Logo */}
-          <div className="text-xl font-bold text-dark-text flex items-center">
-            <Link href={`/`}>
-              <Image
-                src="/images/Logo-blk.png"
-                alt="Logo"
-                width={152}
-                height={36}
-                priority
-                className="w-32 md:w-40 h-auto"
-              />
-            </Link>
+          <div className=" flex items-center gap-7">
+            <div className="text-xl font-bold text-dark-text">
+              <Link href={`/`}>
+                <Image
+                  src="/images/Logo-blk.png"
+                  alt="Logo"
+                  width={152}
+                  height={36}
+                  priority
+                  className="w-32 md:w-40 h-auto"
+                />
+              </Link>
+            </div>
+
+            <ul className="hidden lg:mt-2 md:flex text-md font-normal font-epilogue items-center gap-8">
+              <li>
+                <Link
+                  href="#"
+                  className="text-primary-gray hover:text-dark-text transition-colors"
+                >
+                  Find Jobs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  className="text-primary-gray hover:text-dark-text transition-colors"
+                >
+                  Browse Companies
+                </Link>
+              </li>
+            </ul>
           </div>
-
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-10 text-md font-normal font-epilogue items-center gap-8">
-            <li>
-              <Link
-                href="/jobs"
-                className="text-primary-gray hover:text-dark-text transition-colors"
-              >
-                Find Jobs
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="text-primary-gray hover:text-dark-text transition-colors"
-              >
-                Browse Companies
-              </Link>
-            </li>
-          </ul>
-
           {/* Desktop Buttons */}
           <div className="hidden md:flex divide-x-2 divide-gray-300 space-x-3 font-epilogue">
             <CustomButton
@@ -76,11 +75,11 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-indigoTags z-20 shadow-lg">
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-primary-gray z-20 shadow-lg">
             <ul className="flex flex-col space-y-4 text-md font-normal font-epilogue px-6 py-6">
               <li>
                 <Link
-                  href="/jobs"
+                  href="#"
                   className="text-white hover:text-dark-text transition-colors"
                   onClick={() => setIsOpen(false)}
                 >

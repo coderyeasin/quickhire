@@ -3,11 +3,13 @@ import SupportCompany from "../SupportCompany/SupportCompany";
 import Categories from "../Categories/Categories";
 import FeaturedJobs from "../FeaturedJobs/FeaturedJobs";
 import LatestJobs from "../LatestJobs/LatestJobs";
+import Header from "../Header/Header";
 
 const HomePage = () => {
   return (
     <section className="bg-white">
       <div className="w-full h-auto md:h-196 bg-[#F8F8FD] bg-[url(/images/hero/Pattern.png)] bg-no-repeat bg-contain bg-right lg:[clip-path:polygon(0_0,100%_0,100%_60%,67%_100%,0_100%)]">
+        <Header />
         <HeroSection />
       </div>
       <SupportCompany />

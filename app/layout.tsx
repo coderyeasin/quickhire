@@ -2,7 +2,6 @@ import { Epilogue, Roboto, Roboto_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import Header from "@/components/UI/Header/Header";
 import Footer from "@/components/UI/Footer/Footer";
 
 export const inter = Inter({
@@ -93,7 +92,7 @@ export default function RootLayout({
 
            antialiased`}
       >
-        <Header /> {children} <Footer />
+        {children} <Footer />
       </body>
     </html>
   );
