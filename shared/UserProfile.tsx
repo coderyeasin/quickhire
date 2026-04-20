@@ -3,7 +3,11 @@ import { CgProfile } from "react-icons/cg";
 import { GoSignIn } from "react-icons/go";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/Shadcn/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+} from "@/components/Shadcn/dropdown-menu";
+import { Button } from "@/components/Shadcn/button";
 
 function getDashboard(role?: string) {
   if (role === "admin") return "/admin";

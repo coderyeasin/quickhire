@@ -2,7 +2,7 @@
 
 import LoginForm from "@/components/Auth/Login/Login";
 import RegisterForm from "@/components/Auth/Register/Register";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/Shadcn/dialog";
 
 export type AuthMode = "login" | "register";
 
