@@ -2,9 +2,9 @@ import AllJobs from "@/components/Pages/AllJobs/AllJobs";
 
 const JobsHome = () => {
   return (
-    <div>
+    <section className="container-layout h-screen">
       <AllJobs />
-    </div>
+    </section>
   );
 };
 
