@@ -1,9 +1,8 @@
 import { Epilogue, Roboto, Roboto_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/UI/Header/Header";
-import Footer from "@/components/UI/Footer/Footer";
+import { Providers } from "@/components/Providers/Providers";
 
 export const inter = Inter({
   subsets: ["latin"],
@@ -69,12 +68,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5,
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -93,7 +86,7 @@ export default function RootLayout({
 
            antialiased`}
       >
-        <Header /> {children} <Footer />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
