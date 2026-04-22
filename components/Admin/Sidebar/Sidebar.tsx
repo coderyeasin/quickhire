@@ -8,9 +8,10 @@ import {
   FiGrid,
 } from "react-icons/fi";
 import Image from "next/image";
+import NavLinks from "@/shared/NavLinks";
 
-const Sidebar = ({ role }: { role: string }) => {
-  console.log("User Role in Sidebar:", role); // Debugging line to check the role value
+const Sidebar = () => {
+  // console.log("User Role in Sidebar:", role); // Debugging line to check the role value
   return (
     <aside className="fixed inset-y-0 left-0 w-64 bg-indigoTags text-white flex flex-col z-50">
       <div className="p-8">
@@ -33,28 +34,28 @@ const Sidebar = ({ role }: { role: string }) => {
           Main Menu
         </p>
 
-        <AdminNavLink href="/admin" icon={<FiGrid />}>
+        <NavLinks href="/admin" icon={<FiGrid />}>
           Dashboard
-        </AdminNavLink>
+        </NavLinks>
 
-        <AdminNavLink href="/admin/jobs" icon={<FiBriefcase />}>
+        <NavLinks href="/admin/jobs" icon={<FiBriefcase />}>
           Manage Jobs
-        </AdminNavLink>
+        </NavLinks>
 
-        <AdminNavLink href="/admin/add" icon={<FiPlusCircle />}>
+        <NavLinks href="/admin/add" icon={<FiPlusCircle />}>
           Post New Job
-        </AdminNavLink>
+        </NavLinks>
 
         <div className="pt-8">
           <p className="text-[11px] font-bold text-white uppercase px-4 mb-4 tracking-wider">
             Organization
           </p>
-          <AdminNavLink href="/admin/candidates" icon={<FiUsers />}>
+          <NavLinks href="/admin/candidates" icon={<FiUsers />}>
             Applications
-          </AdminNavLink>
-          <AdminNavLink href="/admin/settings" icon={<FiSettings />}>
+          </NavLinks>
+          <NavLinks href="/admin/profile" icon={<FiSettings />}>
             Settings
-          </AdminNavLink>
+          </NavLinks>
         </div>
       </nav>
 
@@ -79,26 +80,3 @@ const Sidebar = ({ role }: { role: string }) => {
 };
 
 export default Sidebar;
-
-// Sidebar Link Component for cleaner code
-function AdminNavLink({
-  href,
-  icon,
-  children,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-footer-gray hover:text-white hover:bg-white/5 group"
-    >
-      <span className="text-xl group-hover:text-blue-text transition-colors">
-        {icon}
-      </span>
-      {children}
-    </Link>
-  );
-}
