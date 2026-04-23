@@ -3,6 +3,11 @@ import { UserModel } from "./user.model";
 import bcrypt from "bcryptjs";
 import { UserRole } from "./user.interface";
 
+// Get users
+export async function getAllUsers() {
+  await connectToDB();
+  return await UserModel.find().sort({ createdAt: -1 });
+}
 // Get user by email
 export async function getUserByEmail(email: string) {
   await connectToDB();
@@ -44,7 +49,6 @@ export async function createUser(userData: {
 }
 
 // update user profile for OAuth users
-
 export async function findCreateOAuthUser(userData: {
   name: string;
   email: string;
