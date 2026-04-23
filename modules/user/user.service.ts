@@ -24,6 +24,7 @@ export async function getUserById(id: string) {
 export async function createUser(userData: {
   name: string;
   email: string;
+  company?: string;
   password: string;
   avatar?: string;
   role?: UserRole;
@@ -40,6 +41,7 @@ export async function createUser(userData: {
   const newUser = await UserModel.create({
     name: userData.name,
     email: userData.email,
+    company: userData.company,
     password: hashedPassword,
     avatar: userData.avatar ?? null,
     role: userData.role ?? "candidate",

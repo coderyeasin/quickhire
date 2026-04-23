@@ -20,6 +20,7 @@ export async function registerAction(formData: FormData) {
     const raw = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
+      company: formData.get("company") as string,
       password: formData.get("password") as string,
       confirmPassword: formData.get("confirmPassword") as string,
       role: formData.get("role") as string,

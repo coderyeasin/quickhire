@@ -18,6 +18,10 @@ const UserSchema = new Schema<IUser>(
       type: String,
       require: [true, "Password is required"],
     },
+    company: {
+      type: String,
+      require: [true, "Company is required"],
+    },
     avatar: {
       type: String,
       default: null,

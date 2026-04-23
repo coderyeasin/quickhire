@@ -56,6 +56,7 @@ export const authConfig: NextAuthConfig = {
           id: user.id,
           email: user.email,
           name: user.name,
+          company: user.company,
           avatar: user.avatar,
           role: user.role,
         };
@@ -93,6 +94,7 @@ export const authConfig: NextAuthConfig = {
         token.role = user.role;
         token.name = user.name;
         token.email = user.email;
+        token.company = user.company;
         token.avatar = user.avatar;
       }
       return token;
@@ -103,6 +105,7 @@ export const authConfig: NextAuthConfig = {
         session.user.id = token.id as string;
         session.user.role = token.role;
         session.user.name = token.name as string;
+        session.user.company = token.company as string;
         session.user.email = token.email as string;
         session.user.avatar = token.avatar as string;
       }
