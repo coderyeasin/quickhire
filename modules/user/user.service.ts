@@ -2,6 +2,8 @@ import { connectToDB } from "@/lib/mongodb";
 import { UserModel } from "./user.model";
 import bcrypt from "bcryptjs";
 import { UserRole } from "./user.interface";
+import AppError from "@/lib/AppError";
+import httpStatus from "http-status";
 
 // Get users
 export async function getAllUsers() {
@@ -33,7 +35,7 @@ export async function createUser(userData: {
   const existingUser = await UserModel.findOne({ email: userData.email });
 
   if (existingUser) {
-    throw new Error("Email already in use");
+    throw new AppError(httpStatus.BAD_REQUEST, "Already Email in use");
   }
 
   const hashedPassword = await bcrypt.hash(userData.password, 12);

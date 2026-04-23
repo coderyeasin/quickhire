@@ -104,9 +104,9 @@ const RegisterFields = (props: UserRegister) => {
             placeholder="Your Company Name"
             className={inputCls}
           />
-          {registerErrors.name && (
+          {registerErrors.company && (
             <p className="text-red-400 text-xs mt-1">
-              {registerErrors.name.message}
+              {registerErrors.company.message}
             </p>
           )}
         </div>
