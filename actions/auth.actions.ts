@@ -47,9 +47,11 @@ export async function registerAction(formData: FormData) {
 
       avatarUrl = await uploadCloudinary(avatarFile);
     }
+    console.log("parsedData", parsedData);
 
     await createUser({
       ...parsedData.data,
+      company: parsedData.data.company ?? undefined,
       avatar: avatarUrl,
       role: parsedData.data.role as "candidate" | "admin" | "recruiter",
     });

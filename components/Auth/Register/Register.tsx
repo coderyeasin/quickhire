@@ -39,9 +39,9 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("email", data.email);
-      formData.append("company", data.company);
       formData.append("password", data.password);
       formData.append("confirmPassword", data.confirmPassword);
+      if (data.company) formData.append("company", data.company);
       if (data.role) formData.append("role", data.role);
       if (data.avatar instanceof FileList && data.avatar.length > 0) {
         formData.append("avatar", data.avatar[0]);
