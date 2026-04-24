@@ -47,7 +47,6 @@ export async function registerAction(formData: FormData) {
 
       avatarUrl = await uploadCloudinary(avatarFile);
     }
-    console.log("parsedData", parsedData);
 
     await createUser({
       ...parsedData.data,
