@@ -9,6 +9,4 @@ export interface IUser {
   confirmPassword: string;
   avatar?: string | null;
   role: UserRole;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
