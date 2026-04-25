@@ -37,7 +37,7 @@ export const createJobValidationSchema = z.object({
     .transform((val) => (val ? new Date(val) : undefined)),
 });
 
-export default createJobValidationSchema;
+export const updateJobValidationSchema = createJobValidationSchema.partial();
 
 export type CreatedJobType = z.infer<typeof createJobValidationSchema>;
 export type UpdateJobType = z.infer<typeof createJobValidationSchema>;

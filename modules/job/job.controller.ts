@@ -1,18 +1,19 @@
 import httpStatus from "http-status";
 import { withAuth } from "@/lib/withAuth";
 import catchAsync from "@/utils/catchAsync";
-import createJobValidationSchema from "./job.validation";
 import sendResponse from "@/utils/sendResponse";
 import AppError from "@/lib/AppError";
 import { NextRequest } from "next/server";
 import { uploadCloudinary } from "@/lib/cloudinary";
 import { jobServices } from "./job.service";
 import { Types } from "mongoose";
-import { connectToDB } from "@/lib/mongodb";
+import {
+  createJobValidationSchema,
+  updateJobValidationSchema,
+} from "./job.validation";
+import { IJob } from "./job.interface";
 
 export const createJobController = catchAsync(async (req: NextRequest) => {
-  await connectToDB();
-
   const user = await withAuth(["recruiter", "admin"]);
 
   const formData = await req.formData();
@@ -65,6 +66,103 @@ export const createJobController = catchAsync(async (req: NextRequest) => {
   });
 });
 
+const getAllJobs = catchAsync(async () => {
+  const result = await jobServices.getAllJobsFromDB();
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully all Jobs are fetched",
+    data: result,
+  });
+});
+
+export const getMyJobs = catchAsync(async () => {
+  const user = await withAuth(["admin", "recruiter"]);
+  const result = await jobServices.getRecruiterJobs(user.id);
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully get my Jobs",
+    data: result,
+  });
+});
+
+export const getSingleJobs = catchAsync(async (_, routeCtx) => {
+  const result = await jobServices.getJobById(routeCtx.params.id);
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully get Single Job",
+    data: result,
+  });
+});
+
+// need to modify
+export const updateSingleJob = catchAsync(async (req, routeCtx) => {
+  const user = await withAuth(["recruiter", "admin"]);
+
+  const body = await req.json();
+  const parsedData = updateJobValidationSchema.safeParse(body);
+
+  if (!parsedData)
+    throw new AppError(httpStatus.BAD_REQUEST, "Data is not parsed");
+
+  const result = await jobServices.updateJobs(
+    routeCtx.params.id,
+    parsedData.data as Partial<IJob>,
+    user.id,
+    user.role,
+  );
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully Updated a Single Job",
+    data: result,
+  });
+});
+
+export const updateJobStatus = catchAsync(async (req, routeCtx) => {
+  await withAuth(["admin"]);
+
+  const { status } = await req.json();
+
+  if (!["approved", "rejected"].includes(status)) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Status must be approved or rejected",
+    );
+  }
+  const result = await jobServices.updateJobStatus(routeCtx.params.id, status);
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully Status Updated",
+    data: result,
+  });
+});
+
+export const deleteJob = catchAsync(async (_, routeCtx) => {
+  const user = await withAuth(["recruiter", "admin"]);
+
+  const result = await jobServices.deleteJob(
+    routeCtx.params.id,
+    user.id,
+    user.role,
+  );
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully Deleted a Job",
+    data: result,
+  });
+});
+
 export const jobControllers = {
   createJobController,
+  getAllJobs,
+  getMyJobs,
+  getSingleJobs,
+  updateSingleJob,
+  updateJobStatus,
+  deleteJob,
 };
