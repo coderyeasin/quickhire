@@ -8,9 +8,12 @@ import { NextRequest } from "next/server";
 import { uploadCloudinary } from "@/lib/cloudinary";
 import { jobServices } from "./job.service";
 import { Types } from "mongoose";
+import { connectToDB } from "@/lib/mongodb";
 
 export const createJobController = catchAsync(async (req: NextRequest) => {
-  //   const user = await withAuth(["recruiter", "admin"]);
+  await connectToDB();
+
+  const user = await withAuth(["recruiter", "admin"]);
 
   const formData = await req.formData();
   const logoFile = formData.get("companyLogo");
@@ -47,7 +50,8 @@ export const createJobController = catchAsync(async (req: NextRequest) => {
   const payload = {
     ...parsedData.data,
     companyLogo: companyLogoUrl,
-    recruiterId: new Types.ObjectId("69eafd9d84b0731c0dae368b"),
+    recruiterId: new Types.ObjectId(user.id),
+    // recruiterId: new Types.ObjectId("69eafd9d84b0731c0dae368b"),
     status: parsedData.data.status as "pending" | "approved" | "rejected",
   };
   console.log("PARSED:", parsedData);

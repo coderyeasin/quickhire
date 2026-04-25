@@ -1,6 +1,5 @@
 import { CreatedJobType } from "./job.validation";
 import { JobModel } from "./job.model";
-import { IJob } from "./job.interface";
 
 async function createJobIntoDB(payload: CreatedJobType) {
   const result = await JobModel.create(payload);
