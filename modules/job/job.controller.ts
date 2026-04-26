@@ -9,11 +9,11 @@ import { jobServices } from "./job.service";
 import { Types } from "mongoose";
 import {
   createJobValidationSchema,
+  UpdateJobType,
   updateJobValidationSchema,
 } from "./job.validation";
-import { IJob } from "./job.interface";
 
-export const createJobController = catchAsync(async (req: NextRequest) => {
+export const createJob = catchAsync(async (req: NextRequest) => {
   const user = await withAuth(["recruiter", "admin"]);
 
   const formData = await req.formData();
@@ -109,7 +109,7 @@ export const updateSingleJob = catchAsync(async (req, routeCtx) => {
 
   const result = await jobServices.updateJobs(
     routeCtx.params.id,
-    parsedData.data as Partial<IJob>,
+    parsedData.data as UpdateJobType,
     user.id,
     user.role,
   );
@@ -158,7 +158,7 @@ export const deleteJob = catchAsync(async (_, routeCtx) => {
 });
 
 export const jobControllers = {
-  createJobController,
+  createJob,
   getAllJobs,
   getMyJobs,
   getSingleJobs,
