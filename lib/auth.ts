@@ -14,10 +14,6 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt",
     maxAge: 60 * 60 * 24 * 30, // 30 days
   },
-  // pages: {
-  //   signIn: "/login",
-  //   error: "/login",
-  // },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -53,7 +49,7 @@ export const authConfig: NextAuthConfig = {
         }
 
         return {
-          id: user.id,
+          id: user._id.toString(),
           email: user.email,
           name: user.name,
           company: user.company,
@@ -78,8 +74,14 @@ export const authConfig: NextAuthConfig = {
             email: user.email as string,
             avatar: (user.image as string) ?? undefined,
           });
-          user.id = dbUser.id.toString();
-          user.role = dbUser.role;
+          if (dbUser && dbUser._id) {
+            user.id = dbUser._id.toString();
+            user.role = dbUser.role;
+            return false;
+          }
+          console.error(
+            "Google login: User could not be found or created in DB",
+          );
           return true;
         } catch {
           return false;

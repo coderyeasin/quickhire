@@ -51,7 +51,7 @@ export async function getRecruiterJobs(recruiterId: string) {
   return res;
 }
 
-// Update Job - recruiter can only edit their own jobs
+// Update Job - recruiter & admin edit their own jobs
 export async function updateJobs(
   id: string,
   data: UpdateJobType,
@@ -67,10 +67,15 @@ export async function updateJobs(
     throw new AppError(httpStatus.FORBIDDEN, "You do not own this Job");
   }
 
-  const updatedData = await JobModel.findByIdAndUpdate(id, data, {
-    new: true,
-    runValidators: true,
-  }).lean();
+  const updatedData = await JobModel.findByIdAndUpdate(
+    id,
+    { $set: data },
+    {
+      // new: true,
+      returnDocument: "after",
+      runValidators: true,
+    },
+  ).lean();
   return updatedData;
 }
 

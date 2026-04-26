@@ -30,7 +30,6 @@ export const createJob = catchAsync(async (req: NextRequest) => {
     skills: formData.getAll("skills") as string[],
     deadline: formData.get("deadline") || undefined,
   };
-  console.log("RAW:", jobForm);
   const parsedData = createJobValidationSchema.safeParse(jobForm);
 
   if (!parsedData.success) {
@@ -52,10 +51,8 @@ export const createJob = catchAsync(async (req: NextRequest) => {
     ...parsedData.data,
     companyLogo: companyLogoUrl,
     recruiterId: new Types.ObjectId(user.id),
-    // recruiterId: new Types.ObjectId("69eafd9d84b0731c0dae368b"),
     status: parsedData.data.status as "pending" | "approved" | "rejected",
   };
-  console.log("PARSED:", parsedData);
   const res = await jobServices.createJobIntoDB(payload);
 
   return sendResponse({
@@ -88,7 +85,8 @@ export const getMyJobs = catchAsync(async () => {
 });
 
 export const getSingleJobs = catchAsync(async (_, routeCtx) => {
-  const result = await jobServices.getJobById(routeCtx.params.id);
+  const { id } = await routeCtx.params;
+  const result = await jobServices.getJobById(id);
   return sendResponse({
     success: true,
     statusCode: httpStatus.OK,
@@ -97,18 +95,20 @@ export const getSingleJobs = catchAsync(async (_, routeCtx) => {
   });
 });
 
-// need to modify
 export const updateSingleJob = catchAsync(async (req, routeCtx) => {
   const user = await withAuth(["recruiter", "admin"]);
 
+  const { id } = await routeCtx.params;
+
   const body = await req.json();
+
   const parsedData = updateJobValidationSchema.safeParse(body);
 
   if (!parsedData)
     throw new AppError(httpStatus.BAD_REQUEST, "Data is not parsed");
 
   const result = await jobServices.updateJobs(
-    routeCtx.params.id,
+    id,
     parsedData.data as UpdateJobType,
     user.id,
     user.role,
@@ -124,6 +124,7 @@ export const updateSingleJob = catchAsync(async (req, routeCtx) => {
 export const updateJobStatus = catchAsync(async (req, routeCtx) => {
   await withAuth(["admin"]);
 
+  const { id } = await routeCtx.params;
   const { status } = await req.json();
 
   if (!["approved", "rejected"].includes(status)) {
@@ -132,7 +133,7 @@ export const updateJobStatus = catchAsync(async (req, routeCtx) => {
       "Status must be approved or rejected",
     );
   }
-  const result = await jobServices.updateJobStatus(routeCtx.params.id, status);
+  const result = await jobServices.updateJobStatus(id, status);
   return sendResponse({
     success: true,
     statusCode: httpStatus.OK,
@@ -143,12 +144,8 @@ export const updateJobStatus = catchAsync(async (req, routeCtx) => {
 
 export const deleteJob = catchAsync(async (_, routeCtx) => {
   const user = await withAuth(["recruiter", "admin"]);
-
-  const result = await jobServices.deleteJob(
-    routeCtx.params.id,
-    user.id,
-    user.role,
-  );
+  const { id } = await routeCtx.params;
+  const result = await jobServices.deleteJob(id, user.id, user.role);
   return sendResponse({
     success: true,
     statusCode: httpStatus.OK,
