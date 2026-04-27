@@ -116,7 +116,7 @@ const updateAppliedJobStatus = catchAsync(async (req, routeCtx) => {
 });
 
 const getSingleJobApplicant = catchAsync(async (req, routeCtx) => {
-  const user = await withAuth(["recruiter", "admin"]);
+  const user = await withAuth(["candidate", "recruiter", "admin"]);
 
   const { applicationId } = await routeCtx.params;
 
