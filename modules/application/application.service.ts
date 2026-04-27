@@ -54,44 +54,6 @@ const applyToJob = async (
   return application;
 };
 
-// candidate get own application
-const getOwnApplications = async (candidateId: string) => {
-  await connectToDB();
-  return ApplicationModel.find({ candidateId });
-};
-
-// Recruiter:get applicants for their job
-const getApplicantsForJob = async (
-  recruiterId: string,
-  jobId: string,
-  requestRole: string,
-) => {
-  await connectToDB();
-
-  // check if job belongs to recruiter
-  const job = await JobModel.findById(jobId);
-  if (!job) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      "Job not found or you are not the owner",
-    );
-  }
-
-  //   ownership check
-  if (requestRole !== "admin" && job.recruiterId.toString() !== recruiterId) {
-    throw new AppError(
-      httpStatus.FORBIDDEN,
-      "You are not authorized to view applicants for this job",
-    );
-  }
-
-  // get applications for the job
-  return ApplicationModel.find({ jobId })
-    .populate("candidateId", "name email avatar skills")
-    .sort({ appliedAt: -1 })
-    .lean();
-};
-
 // admin get all applications
 const getAllApplications = async () => {
   await connectToDB();
@@ -103,8 +65,14 @@ const getAllApplications = async () => {
     .lean();
 };
 
+// candidate get own application
+const getOwnApplications = async (candidateId: string) => {
+  await connectToDB();
+  return ApplicationModel.find({ candidateId });
+};
+
 // get single application details
-const getSingleApplicants = async (
+const getApplicationById = async (
   applicationId: string,
   requestRole: string,
   requestId?: string,
@@ -174,7 +142,10 @@ const updateApplicationStatus = async (
   const updatedApplication = await ApplicationModel.findByIdAndUpdate(
     applicationId,
     { status: newStatus },
-    { new: true },
+    {
+      returnDocument: "after",
+      // new: true
+    },
   )
     .populate("candidateId", "name email")
     .populate("jobId", "title company")
@@ -182,6 +153,39 @@ const updateApplicationStatus = async (
     .lean();
 
   return updatedApplication;
+};
+
+// Recruiter & Admin :get applicants for their job
+const getJobApplicantsById = async (
+  jobId: string,
+  recruiterId: string,
+  requestRole: string,
+) => {
+  await connectToDB();
+
+  // check if job belongs to recruiter
+  const job = await JobModel.findById(jobId);
+  if (!job) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Job not found or you are not the owner",
+    );
+  }
+  console.log("Received jobId:", jobId, recruiterId, requestRole);
+
+  //   ownership check
+  if (requestRole !== "admin" && job.recruiterId.toString() !== recruiterId) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to view applicants for this job",
+    );
+  }
+
+  // get applications for the job
+  return ApplicationModel.find({ jobId })
+    .populate("candidateId", "name email avatar skills")
+    .sort({ appliedAt: -1 })
+    .lean();
 };
 
 // candidate withdraw application
@@ -218,9 +222,9 @@ const withdrawApplication = async (
 export const applicationServices = {
   applyToJob,
   getOwnApplications,
-  getApplicantsForJob,
   getAllApplications,
-  getSingleApplicants,
+  getApplicationById,
   updateApplicationStatus,
+  getJobApplicantsById,
   withdrawApplication,
 };

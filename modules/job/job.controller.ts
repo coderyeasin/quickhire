@@ -84,7 +84,7 @@ export const getMyJobs = catchAsync(async () => {
   });
 });
 
-export const getSingleJobs = catchAsync(async (_, routeCtx) => {
+export const getSingleJobs = catchAsync(async (req, routeCtx) => {
   const { id } = await routeCtx.params;
   const result = await jobServices.getJobById(id);
   return sendResponse({
@@ -142,7 +142,7 @@ export const updateJobStatus = catchAsync(async (req, routeCtx) => {
   });
 });
 
-export const deleteJob = catchAsync(async (_, routeCtx) => {
+export const deleteJob = catchAsync(async (req, routeCtx) => {
   const user = await withAuth(["recruiter", "admin"]);
   const { id } = await routeCtx.params;
   const result = await jobServices.deleteJob(id, user.id, user.role);

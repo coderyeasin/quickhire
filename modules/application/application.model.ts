@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IApplication } from "./application.interface";
 
 const applicationSchema = new Schema<IApplication>(
@@ -46,7 +46,6 @@ applicationSchema.index({ recruiterId: 1, status: 1 });
 applicationSchema.index({ candidateId: 1, appliedAt: -1 });
 applicationSchema.index({ jobId: 1, status: 1 });
 
-export const ApplicationModel = model<IApplication>(
-  "Application",
-  applicationSchema,
-);
+export const ApplicationModel =
+  mongoose.models.Application ||
+  mongoose.model<IApplication>("Application", applicationSchema);

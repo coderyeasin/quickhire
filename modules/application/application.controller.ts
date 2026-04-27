@@ -15,10 +15,13 @@ const createApplication = catchAsync(async (req: NextRequest) => {
   const user = await withAuth(["candidate"]);
 
   const body = await req.json();
+
   const parsedData = createApplicationValidationSchema.safeParse(body);
 
   if (!parsedData.success)
     throw new AppError(httpStatus.BAD_REQUEST, "Data is not parsed");
+
+  console.log("Received application data:", parsedData.data);
 
   const result = await applicationServices.applyToJob(
     user.id,
@@ -61,21 +64,20 @@ const getMyApplications = catchAsync(async () => {
   });
 });
 
-const getApplicantsForJob = catchAsync(async (req, routeCtx) => {
-  const user = await withAuth(["recruiter"]);
+const getSingleApplicantById = catchAsync(async (req, routeCtx) => {
+  const user = await withAuth(["candidate", "recruiter", "admin"]);
 
-  const { jobId } = await routeCtx.params;
-
-  const result = await applicationServices.getApplicantsForJob(
-    jobId,
-    user.id,
+  const { id: applicationId } = await routeCtx.params;
+  const result = await applicationServices.getApplicationById(
+    applicationId,
     user.role,
+    user.id,
   );
 
   return sendResponse({
     success: true,
     statusCode: httpStatus.OK,
-    message: "Successfully get applicants for the job",
+    message: "Successfully get single application",
     data: result,
   });
 });
@@ -83,7 +85,7 @@ const getApplicantsForJob = catchAsync(async (req, routeCtx) => {
 const updateAppliedJobStatus = catchAsync(async (req, routeCtx) => {
   const user = await withAuth(["recruiter", "admin"]);
 
-  const { applicationId } = await routeCtx.params;
+  const { id: applicationId } = await routeCtx.params;
 
   const body = await req.json();
 
@@ -103,8 +105,8 @@ const updateAppliedJobStatus = catchAsync(async (req, routeCtx) => {
   const result = await applicationServices.updateApplicationStatus(
     applicationId,
     status as ApplicationStatus,
-    user.id,
     user.role,
+    user.id,
   );
 
   return sendResponse({
@@ -115,21 +117,22 @@ const updateAppliedJobStatus = catchAsync(async (req, routeCtx) => {
   });
 });
 
-const getSingleJobApplicant = catchAsync(async (req, routeCtx) => {
-  const user = await withAuth(["candidate", "recruiter", "admin"]);
+//job/id/applicants
+const getJobByIdApplicants = catchAsync(async (req, routeCtx) => {
+  const user = await withAuth(["recruiter", "admin"]);
 
-  const { applicationId } = await routeCtx.params;
+  const { id: jobId } = await routeCtx.params;
 
-  const result = await applicationServices.getSingleApplicants(
-    applicationId,
-    user.role,
+  const result = await applicationServices.getJobApplicantsById(
+    jobId,
     user.id,
+    user.role,
   );
 
   return sendResponse({
     success: true,
     statusCode: httpStatus.OK,
-    message: "Successfully get single application",
+    message: "Successfully get applicants for the job",
     data: result,
   });
 });
@@ -137,7 +140,7 @@ const getSingleJobApplicant = catchAsync(async (req, routeCtx) => {
 const withdrawAppliedJob = catchAsync(async (req, routeCtx) => {
   const user = await withAuth(["candidate"]);
 
-  const { applicationId } = await routeCtx.params;
+  const { id: applicationId } = await routeCtx.params;
 
   const result = await applicationServices.withdrawApplication(
     applicationId,
@@ -156,8 +159,8 @@ export const applicationControllers = {
   createApplication,
   getAllAppliedJobs,
   getMyApplications,
-  getApplicantsForJob,
   updateAppliedJobStatus,
-  getSingleJobApplicant,
+  getSingleApplicantById,
+  getJobByIdApplicants,
   withdrawAppliedJob,
 };
