@@ -14,6 +14,11 @@ const UserSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
+    company: {
+      type: String,
+      required: false,
+      default: null,
+    },
     password: {
       type: String,
       require: [true, "Password is required"],

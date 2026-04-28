@@ -14,10 +14,6 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt",
     maxAge: 60 * 60 * 24 * 30, // 30 days
   },
-  // pages: {
-  //   signIn: "/login",
-  //   error: "/login",
-  // },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -53,9 +49,10 @@ export const authConfig: NextAuthConfig = {
         }
 
         return {
-          id: user.id,
+          id: user._id.toString(),
           email: user.email,
           name: user.name,
+          company: user.company,
           avatar: user.avatar,
           role: user.role,
         };
@@ -77,8 +74,14 @@ export const authConfig: NextAuthConfig = {
             email: user.email as string,
             avatar: (user.image as string) ?? undefined,
           });
-          user.id = dbUser.id.toString();
-          user.role = dbUser.role;
+          if (dbUser && dbUser._id) {
+            user.id = dbUser._id.toString();
+            user.role = dbUser.role;
+            return false;
+          }
+          console.error(
+            "Google login: User could not be found or created in DB",
+          );
           return true;
         } catch {
           return false;
@@ -93,6 +96,7 @@ export const authConfig: NextAuthConfig = {
         token.role = user.role;
         token.name = user.name;
         token.email = user.email;
+        token.company = user.company;
         token.avatar = user.avatar;
       }
       return token;
@@ -103,6 +107,7 @@ export const authConfig: NextAuthConfig = {
         session.user.id = token.id as string;
         session.user.role = token.role;
         session.user.name = token.name as string;
+        session.user.company = token.company as string;
         session.user.email = token.email as string;
         session.user.avatar = token.avatar as string;
       }

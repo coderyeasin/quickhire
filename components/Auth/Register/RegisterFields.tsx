@@ -6,7 +6,7 @@ const inputCls =
   "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigoTags/70 transition-all";
 
 interface FieldsProps {
-  register: UseFormRegister<RegisterInput | LoginInput>;
+  register: UseFormRegister<any>;
   errors: FieldErrors<RegisterInput | LoginInput>;
   isPending: boolean;
   errorMessage?: string;
@@ -83,6 +83,7 @@ const RegisterFields = (props: UserRegister) => {
           )}
         </div>
       )}
+
       <div>
         <input
           {...register("email")}
@@ -95,6 +96,21 @@ const RegisterFields = (props: UserRegister) => {
           </p>
         )}
       </div>
+
+      {props.variant === "register" && props.role === "recruiter" && (
+        <div>
+          <input
+            {...register("company")}
+            placeholder="Your Company Name"
+            className={inputCls}
+          />
+          {registerErrors.company && (
+            <p className="text-red-400 text-xs mt-1">
+              {registerErrors.company.message}
+            </p>
+          )}
+        </div>
+      )}
 
       {props.variant === "register" && (
         <div>

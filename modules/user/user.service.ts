@@ -2,7 +2,14 @@ import { connectToDB } from "@/lib/mongodb";
 import { UserModel } from "./user.model";
 import bcrypt from "bcryptjs";
 import { UserRole } from "./user.interface";
+import AppError from "@/lib/AppError";
+import httpStatus from "http-status";
 
+// Get users
+export async function getAllUsers() {
+  await connectToDB();
+  return await UserModel.find().sort({ createdAt: -1 });
+}
 // Get user by email
 export async function getUserByEmail(email: string) {
   await connectToDB();
@@ -19,6 +26,7 @@ export async function getUserById(id: string) {
 export async function createUser(userData: {
   name: string;
   email: string;
+  company?: string;
   password: string;
   avatar?: string;
   role?: UserRole;
@@ -27,7 +35,7 @@ export async function createUser(userData: {
   const existingUser = await UserModel.findOne({ email: userData.email });
 
   if (existingUser) {
-    throw new Error("Email already in use");
+    throw new AppError(httpStatus.BAD_REQUEST, "Already Email in use");
   }
 
   const hashedPassword = await bcrypt.hash(userData.password, 12);
@@ -35,6 +43,7 @@ export async function createUser(userData: {
   const newUser = await UserModel.create({
     name: userData.name,
     email: userData.email,
+    company: userData.company,
     password: hashedPassword,
     avatar: userData.avatar ?? null,
     role: userData.role ?? "candidate",
@@ -44,7 +53,6 @@ export async function createUser(userData: {
 }
 
 // update user profile for OAuth users
-
 export async function findCreateOAuthUser(userData: {
   name: string;
   email: string;

@@ -1,7 +1,7 @@
 import React from "react";
 
-const TopHeader = ({ role }: { role: string }) => {
-  console.log("User Role in TopHeader:", role); // Debugging line to check the role value
+const TopHeader = () => {
+  // console.log("User Role in TopHeader:", role); // Debugging line to check the role value
   return (
     <header className="h-20 bg-white border-b border-footer-gray flex items-center justify-between px-10 sticky top-0 z-40">
       <div className="flex flex-col">

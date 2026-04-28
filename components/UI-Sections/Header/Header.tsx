@@ -8,6 +8,11 @@ import { useState } from "react";
 import Modal from "@/shared/Modal";
 import UserProfile from "@/shared/UserProfile";
 
+const routes = [
+  { name: "Find Jobs", path: "/jobs" },
+  { name: "Browse Companies", path: "/companies" },
+];
+
 export default function Header() {
   const { status } = useSession();
   const [open, setOpen] = useState(false);
@@ -30,22 +35,16 @@ export default function Header() {
               />
             </Link>
             <ul className="flex space-x-10 text-md font-normal font-epilogue mt-2">
-              <li>
-                <Link
-                  href="/jobs"
-                  className="text-primary-gray hover:text-dark-text transition-colors"
-                >
-                  Find Jobs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-primary-gray hover:text-dark-text transition-colors"
-                >
-                  Browse Companies
-                </Link>
-              </li>
+              {routes.map((route) => (
+                <li key={route.path}>
+                  <Link
+                    href={route.path}
+                    className="text-primary-gray hover:text-dark-text transition-colors"
+                  >
+                    {route.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

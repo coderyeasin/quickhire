@@ -81,15 +81,9 @@ export default function UserProfile() {
               Profile
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={`${dashboard}/profile`} className={`${commonDropCls} `}>
-              <CgProfile className="w-4 h-4" />
-              Settings
-            </Link>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className="border-t-2 border-dashed border-primary-gray/20">
           <DropdownMenuItem
             variant="destructive"
             onClick={() => signOut({ callbackUrl: "/" })}
