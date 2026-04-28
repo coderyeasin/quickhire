@@ -1,6 +1,6 @@
 import React from "react";
 
-const appliedJobs = () => {
+const CandidateApplications = () => {
   return (
     <div>
       <h3>User Should be see their appliedJobs list</h3>
@@ -8,4 +8,4 @@ const appliedJobs = () => {
   );
 };
 
-export default appliedJobs;
+export default CandidateApplications;
