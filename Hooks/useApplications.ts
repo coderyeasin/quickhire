@@ -52,6 +52,8 @@ export function useApplications() {
   return useQuery({
     queryKey: ["applications"],
     queryFn: fetchAllApplications,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -59,6 +61,8 @@ export function useMyApplications() {
   return useQuery({
     queryKey: ["applications", "mine"],
     queryFn: fetchMyApplications,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -66,6 +70,7 @@ export function useApplicationById(id: string) {
   return useQuery({
     queryKey: ["application", id],
     queryFn: () => fetchApplicationById(id),
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -73,6 +78,7 @@ export function useApplicationsByJobId(jobId: string) {
   return useQuery({
     queryKey: ["applications", "job", jobId],
     queryFn: () => fetchApplicationsByJobId(jobId),
+    refetchOnWindowFocus: false,
   });
 }
 

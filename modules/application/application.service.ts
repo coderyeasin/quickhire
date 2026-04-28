@@ -68,7 +68,10 @@ const getAllApplications = async () => {
 // candidate get own application
 const getOwnApplications = async (candidateId: string) => {
   await connectToDB();
-  return ApplicationModel.find({ candidateId });
+  return ApplicationModel.find({ candidateId })
+    .populate("jobId")
+    .sort({ appliedAt: -1 })
+    .lean();
 };
 
 // get single application details
