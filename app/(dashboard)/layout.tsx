@@ -10,12 +10,6 @@ export default async function DashboardLayout({
 }) {
   const session = await auth();
   if (!session?.user) redirect("/");
-  // role={session.user.role}
-
-  // global error handling
-  // not found - route handling
-  // responsiveness ensure
-  // catchAsync - function create to reduce
 
   return (
     <div className="flex min-h-screen bg-[#F8F8FD]">
