@@ -15,7 +15,7 @@ import StatsCard from "@/shared/StatusCard";
 import DataTable from "@/shared/DataTable";
 import { useMemo } from "react";
 
-type JobRow = {
+type upComingJobsType = {
   _id: string;
   title: string;
   company: string;
@@ -24,18 +24,31 @@ type JobRow = {
   createdAt: string;
 };
 
-const col = createColumnHelper<JobRow>();
+const col = createColumnHelper<upComingJobsType>();
 
 export default function AdminBoard() {
   const { data: jobsData, isLoading: jobsLoading } = useJobs();
-  const { data: appsData, isLoading: appsLoading } = useApplications();
+  const { data: applicantsData, isLoading: applicantsLoading } =
+    useApplications();
   const updateStatus = useUpdateJobStatus();
 
-  const jobs: JobRow[] = jobsData?.jobs ?? [];
-  const apps = appsData?.applications ?? [];
+  console.log("jobs:", jobsData?.jobs);
+  console.log("applications:", applicantsData?.applications);
 
-  const pendingJobs = jobs.filter((j) => j.status === "pending");
-  const approvedJobs = jobs.filter((j) => j.status === "approved");
+  const jobs: upComingJobsType[] = useMemo(
+    () => jobsData?.jobs ?? [],
+    [jobsData],
+  );
+  const applicants = useMemo(
+    () => applicantsData?.applications ?? [],
+    [applicantsData],
+  );
+
+  const jobsStatus = useMemo(() => {
+    const pendingJobs = jobs.filter((j) => j.status === "pending");
+    const approvedJobs = jobs.filter((j) => j.status === "approved");
+    return { pendingJobs, approvedJobs };
+  }, [jobs]);
 
   const columns = useMemo(
     () => [
@@ -86,7 +99,7 @@ export default function AdminBoard() {
         },
       }),
     ],
-    [],
+    [updateStatus],
   );
 
   const tableData = useMemo(() => jobs.slice(0, 8), [jobs]);
@@ -104,7 +117,6 @@ export default function AdminBoard() {
         sub="Monitor and manage the entire platform"
       />
 
-      {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <StatsCard
           label="Total Jobs"
@@ -114,26 +126,25 @@ export default function AdminBoard() {
         />
         <StatsCard
           label="Approved Jobs"
-          value={jobsLoading ? "—" : approvedJobs.length}
+          value={jobsLoading ? "—" : jobsStatus.approvedJobs.length}
           color="emerald"
           icon={<FiCheckCircle />}
         />
         <StatsCard
           label="Pending Review"
-          value={jobsLoading ? "—" : pendingJobs.length}
+          value={jobsLoading ? "—" : jobsStatus.pendingJobs.length}
           sub="Needs your action"
           color="amber"
           icon={<FiClock />}
         />
         <StatsCard
           label="Total Applications"
-          value={appsLoading ? "—" : apps.length}
+          value={applicantsLoading ? "—" : applicants.length}
           color="indigo"
           icon={<FiUsers />}
         />
       </div>
 
-      {/* Recent jobs table */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-dark-text">
