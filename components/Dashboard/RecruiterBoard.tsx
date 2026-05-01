@@ -16,21 +16,27 @@ import StatsCard from "@/shared/StatusCard";
 import DataTable from "@/shared/DataTable";
 import { useMemo } from "react";
 
-type JobRow = {
+type PostedJobsType = {
   _id: string;
   title: string;
   type: string;
   status: string;
   createdAt: string;
 };
-const col = createColumnHelper<JobRow>();
+const col = createColumnHelper<PostedJobsType>();
 
 export default function RecruiterBoard() {
   const { data, isLoading } = useMyJobs();
-  const jobs: JobRow[] = data ?? [];
+  const jobs: PostedJobsType[] = useMemo(() => data?.data ?? [], [data]);
 
-  const pending = jobs.filter((j) => j.status === "pending").length;
-  const approved = jobs.filter((j) => j.status === "approved").length;
+  const jobsStatus = useMemo(() => {
+    const pendingJobs = jobs.filter((j) => j.status === "pending");
+    const approvedJobs = jobs.filter((j) => j.status === "approved");
+    return { pendingJobs, approvedJobs };
+  }, [jobs]);
+
+  // const pending = jobs.filter((j) => j.status === "pending").length;
+  // const approved = jobs.filter((j) => j.status === "approved").length;
 
   const columns = useMemo(
     () => [
@@ -97,13 +103,13 @@ export default function RecruiterBoard() {
         />
         <StatsCard
           label="Live Jobs"
-          value={isLoading ? "—" : approved}
+          value={isLoading ? "—" : jobsStatus.approvedJobs.length}
           color="emerald"
           icon={<FiUsers />}
         />
         <StatsCard
           label="Pending Review"
-          value={isLoading ? "—" : pending}
+          value={isLoading ? "—" : jobsStatus.pendingJobs.length}
           color="amber"
           icon={<FiClock />}
         />

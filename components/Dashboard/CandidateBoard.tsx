@@ -33,8 +33,6 @@ export default function CandidateBoard() {
   const { mutate, isPending } = useWithdrawApplication();
   const { data, isLoading } = useMyApplications();
 
-  console.log("My applications:", data);
-
   const appliedJobs = useMemo(() => data?.data ?? [], [data]);
 
   const jobStatus = useMemo(() => {

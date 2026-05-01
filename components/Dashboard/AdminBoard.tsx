@@ -32,15 +32,12 @@ export default function AdminBoard() {
     useApplications();
   const updateStatus = useUpdateJobStatus();
 
-  console.log("jobs:", jobsData?.jobs);
-  console.log("applications:", applicantsData?.applications);
-
   const jobs: upComingJobsType[] = useMemo(
-    () => jobsData?.jobs ?? [],
+    () => jobsData?.data ?? [],
     [jobsData],
   );
   const applicants = useMemo(
-    () => applicantsData?.applications ?? [],
+    () => applicantsData?.data ?? [],
     [applicantsData],
   );
 
@@ -102,7 +99,7 @@ export default function AdminBoard() {
     [updateStatus],
   );
 
-  const tableData = useMemo(() => jobs.slice(0, 8), [jobs]);
+  const tableData = useMemo(() => jobs.slice(0, 10), [jobs]);
 
   const table = useReactTable({
     data: tableData,
