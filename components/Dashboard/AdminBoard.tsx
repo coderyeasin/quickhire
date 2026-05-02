@@ -74,7 +74,7 @@ export default function AdminBoard() {
                     onClick={() =>
                       updateStatus.mutate({ id: job._id, status: "approved" })
                     }
-                    className="px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors"
+                    className="px-3 py-1 text-xs font-medium cursor-pointer bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors"
                   >
                     Approve
                   </button>
@@ -82,7 +82,7 @@ export default function AdminBoard() {
                     onClick={() =>
                       updateStatus.mutate({ id: job._id, status: "rejected" })
                     }
-                    className="px-3 py-1 text-xs font-medium bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                    className="px-3 py-1 text-xs font-medium cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
                   >
                     Reject
                   </button>
@@ -99,7 +99,7 @@ export default function AdminBoard() {
     [updateStatus],
   );
 
-  const tableData = useMemo(() => jobs.slice(0, 10), [jobs]);
+  const tableData = useMemo(() => jobs.slice(0, 5), [jobs]);
 
   const table = useReactTable({
     data: tableData,

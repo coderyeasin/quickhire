@@ -35,9 +35,6 @@ export default function RecruiterBoard() {
     return { pendingJobs, approvedJobs };
   }, [jobs]);
 
-  // const pending = jobs.filter((j) => j.status === "pending").length;
-  // const approved = jobs.filter((j) => j.status === "approved").length;
-
   const columns = useMemo(
     () => [
       col.accessor("title", {
