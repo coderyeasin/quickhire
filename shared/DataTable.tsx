@@ -1,16 +1,16 @@
 import { flexRender, Table as TanTable } from "@tanstack/react-table";
 
-interface DataTableProps<T> {
+interface tableType<T> {
   table: TanTable<T>;
   isLoading?: boolean;
   emptyMessage?: string;
 }
 
-export default function DataTable<T>({
+const ReusableTable = <T,>({
   table,
   isLoading,
   emptyMessage = "No data found",
-}: DataTableProps<T>) {
+}: tableType<T>) => {
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
@@ -75,4 +75,6 @@ export default function DataTable<T>({
       </div>
     </div>
   );
-}
+};
+
+export default ReusableTable;

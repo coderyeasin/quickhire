@@ -13,8 +13,9 @@ import { useMyJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 import PageHeader from "@/shared/PageHeader";
 import StatsCard from "@/shared/StatusCard";
-import DataTable from "@/shared/DataTable";
+
 import { useMemo } from "react";
+import ReusableTable from "@/shared/DataTable";
 
 type PostedJobsType = {
   _id: string;
@@ -124,7 +125,7 @@ const RecruiterBoard = () => {
             View all →
           </Link>
         </div>
-        <DataTable
+        <ReusableTable
           table={table}
           isLoading={isLoading}
           emptyMessage="You haven't posted any jobs yet"

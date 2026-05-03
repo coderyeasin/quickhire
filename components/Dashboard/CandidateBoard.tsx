@@ -15,10 +15,10 @@ import {
 import StatusBadge from "@/shared/StatusBadge";
 import PageHeader from "@/shared/PageHeader";
 import StatsCard from "@/shared/StatusCard";
-import DataTable from "@/shared/DataTable";
 import { FaCircleNotch } from "react-icons/fa6";
 import { useMemo } from "react";
 import { IApplication } from "@/modules/application/application.interface";
+import ReusableTable from "@/shared/DataTable";
 
 type CurrentJobsType = {
   _id: string;
@@ -196,7 +196,7 @@ const CandidateBoard = () => {
             View all →
           </Link>
         </div>
-        <DataTable
+        <ReusableTable
           table={table}
           isLoading={isLoading}
           emptyMessage="You haven't applied to any jobs yet"

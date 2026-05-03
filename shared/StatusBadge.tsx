@@ -33,7 +33,7 @@ const statusConfig: Record<string, { label: string; cls: string }> = {
   },
 };
 
-export default function StatusBadge({ status }: { status: string }) {
+const StatusBadge = ({ status }: { status: string }) => {
   const badge = statusConfig[status.toLowerCase()] ?? {
     label: status,
     cls: "bg-slate-100 text-slate-600 border-slate-200",
@@ -45,4 +45,6 @@ export default function StatusBadge({ status }: { status: string }) {
       {badge.label}
     </span>
   );
-}
+};
+
+export default StatusBadge;
