@@ -14,11 +14,11 @@ import {
 } from "@/Hooks/useApplications";
 import StatusBadge from "@/shared/StatusBadge";
 import PageHeader from "@/shared/PageHeader";
-import StatsCard from "@/shared/StatusCard";
 import { FaCircleNotch } from "react-icons/fa6";
 import { useMemo } from "react";
 import { IApplication } from "@/modules/application/application.interface";
 import ReusableTable from "@/shared/DataTable";
+import StatusCard from "@/shared/StatusCard";
 
 type CurrentJobsType = {
   _id: string;
@@ -150,33 +150,33 @@ const CandidateBoard = () => {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-5">
-        <StatsCard
+        <StatusCard
           label="Applied"
           value={isLoading ? "—" : appliedJobs.length}
           color="indigo"
           icon={<FiFileText />}
         />
 
-        <StatsCard
+        <StatusCard
           label="Pending"
           value={isLoading ? "—" : jobStatus?.pending}
           color="amber"
           icon={<FiClock />}
         />
-        <StatsCard
+        <StatusCard
           label="Reviewing"
           value={isLoading ? "—" : jobStatus?.reviewing}
           color="amber"
           icon={<FaCircleNotch />}
         />
-        <StatsCard
+        <StatusCard
           label="Shortlisted"
           value={isLoading ? "—" : jobStatus?.shortlisted}
           color="emerald"
           icon={<FiCheckCircle />}
           sub="Looking good!"
         />
-        <StatsCard
+        <StatusCard
           label="Rejected"
           value={isLoading ? "—" : jobStatus?.rejected}
           color="red"

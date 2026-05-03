@@ -11,9 +11,9 @@ import { useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import { useApplications } from "@/Hooks/useApplications";
 import StatusBadge from "@/shared/StatusBadge";
 import PageHeader from "@/shared/PageHeader";
-import StatsCard from "@/shared/StatusCard";
 import { useMemo } from "react";
 import ReusableTable from "@/shared/DataTable";
+import StatusCard from "@/shared/StatusCard";
 
 type upComingJobsType = {
   _id: string;
@@ -115,26 +115,26 @@ const AdminBoard = () => {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-        <StatsCard
+        <StatusCard
           label="Total Jobs"
           value={jobsLoading ? "—" : jobs.length}
           color="indigo"
           icon={<FiBriefcase />}
         />
-        <StatsCard
+        <StatusCard
           label="Approved Jobs"
           value={jobsLoading ? "—" : jobsStatus.approvedJobs.length}
           color="emerald"
           icon={<FiCheckCircle />}
         />
-        <StatsCard
+        <StatusCard
           label="Pending Review"
           value={jobsLoading ? "—" : jobsStatus.pendingJobs.length}
           sub="Needs your action"
           color="amber"
           icon={<FiClock />}
         />
-        <StatsCard
+        <StatusCard
           label="Total Applications"
           value={applicantsLoading ? "—" : applicants.length}
           color="indigo"

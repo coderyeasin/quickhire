@@ -1,4 +1,4 @@
-interface StatsCardProps {
+interface IStatusCard {
   label: string;
   value: string | number;
   sub?: string;
@@ -13,13 +13,13 @@ const colorMap = {
   red: "text-red-500     bg-red-50",
 };
 
-export default function StatsCard({
+const StatusCard = ({
   label,
   value,
   sub,
   color = "indigo",
   icon,
-}: StatsCardProps) {
+}: IStatusCard) => {
   const commonCls = colorMap[color];
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
@@ -37,4 +37,5 @@ export default function StatsCard({
       </div>
     </div>
   );
-}
+};
+export default StatusCard;

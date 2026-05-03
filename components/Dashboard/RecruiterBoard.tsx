@@ -12,10 +12,10 @@ import { FiPlus } from "react-icons/fi";
 import { useMyJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 import PageHeader from "@/shared/PageHeader";
-import StatsCard from "@/shared/StatusCard";
 
 import { useMemo } from "react";
 import ReusableTable from "@/shared/DataTable";
+import StatusCard from "@/shared/StatusCard";
 
 type PostedJobsType = {
   _id: string;
@@ -93,19 +93,19 @@ const RecruiterBoard = () => {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <StatsCard
+        <StatusCard
           label="My Jobs"
           value={isLoading ? "—" : jobs.length}
           color="indigo"
           icon={<FiBriefcase />}
         />
-        <StatsCard
+        <StatusCard
           label="Live Jobs"
           value={isLoading ? "—" : jobsStatus.approvedJobs.length}
           color="emerald"
           icon={<FiUsers />}
         />
-        <StatsCard
+        <StatusCard
           label="Pending Review"
           value={isLoading ? "—" : jobsStatus.pendingJobs.length}
           color="amber"
