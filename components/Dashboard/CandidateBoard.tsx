@@ -29,7 +29,7 @@ type CurrentJobsType = {
 
 const col = createColumnHelper<CurrentJobsType>();
 
-export default function CandidateBoard() {
+const CandidateBoard = () => {
   const { mutate, isPending } = useWithdrawApplication();
   const { data, isLoading } = useMyApplications();
 
@@ -204,4 +204,5 @@ export default function CandidateBoard() {
       </div>
     </div>
   );
-}
+};
+export default CandidateBoard;

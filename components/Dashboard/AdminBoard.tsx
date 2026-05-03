@@ -26,7 +26,7 @@ type upComingJobsType = {
 
 const col = createColumnHelper<upComingJobsType>();
 
-export default function AdminBoard() {
+const AdminBoard = () => {
   const { data: jobsData, isLoading: jobsLoading } = useJobs();
   const { data: applicantsData, isLoading: applicantsLoading } =
     useApplications();
@@ -162,4 +162,5 @@ export default function AdminBoard() {
       </div>
     </div>
   );
-}
+};
+export default AdminBoard;

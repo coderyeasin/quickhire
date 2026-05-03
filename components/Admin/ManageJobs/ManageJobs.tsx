@@ -26,7 +26,8 @@ type JobRow = {
 
 const col = createColumnHelper<JobRow>();
 
-export default function ManageJobsPage() {
+const ManageJobs = () => {
+  // const {isOpen, setIsOpen} = useState(false);
   const { data, isLoading } = useJobs();
   const updateStatus = useUpdateJobStatus();
   const deleteJob = useDeleteJob();
@@ -143,6 +144,9 @@ export default function ManageJobsPage() {
         isLoading={isLoading}
         emptyMessage="No jobs yet"
       />
+      {/* <CustomModal /> */}
     </div>
   );
-}
+};
+
+export default ManageJobs;

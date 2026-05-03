@@ -25,7 +25,7 @@ type PostedJobsType = {
 };
 const col = createColumnHelper<PostedJobsType>();
 
-export default function RecruiterBoard() {
+const RecruiterBoard = () => {
   const { data, isLoading } = useMyJobs();
   const jobs: PostedJobsType[] = useMemo(() => data?.data ?? [], [data]);
 
@@ -132,4 +132,5 @@ export default function RecruiterBoard() {
       </div>
     </div>
   );
-}
+};
+export default RecruiterBoard;
