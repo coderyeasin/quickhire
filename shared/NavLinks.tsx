@@ -28,7 +28,11 @@ export function getNavItems(role: string): {
         { href: "/admin/add", label: "Post New Job", icon: <FiPlusCircle /> },
       ],
       organization: [
-        { href: "/admin/candidates", label: "Applications", icon: <FiUsers /> },
+        {
+          href: "/admin/applications",
+          label: "Applications",
+          icon: <FiUsers />,
+        },
         { href: "/admin/profile", label: "Settings", icon: <FiSettings /> },
       ],
     };

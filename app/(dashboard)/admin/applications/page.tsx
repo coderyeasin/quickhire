@@ -1,11 +1,7 @@
-import React from "react";
+import Applications from "@/components/Dashboard/Applications";
 
 const AdminApplicationsPage = () => {
-  return (
-    <div>
-      <h3>AdminApplicationsPage</h3>
-    </div>
-  );
+  return <Applications />;
 };
 
 export default AdminApplicationsPage;
