@@ -33,3 +33,21 @@ export interface JobCardType {
   shortDescription: string;
   image: string;
 }
+
+// Real Types
+
+interface JobsType {
+  _id: string;
+  title: string;
+  description: string;
+  company: string;
+  companyLogo: string;
+  location: string;
+  type: string;
+  skills: string[];
+  category: string[];
+  salary?: string;
+  status: string;
+  deadline?: string;
+  createdAt: string;
+}

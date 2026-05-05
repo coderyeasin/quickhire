@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -11,34 +11,36 @@ import toast from "react-hot-toast";
 import { useDeleteJob, useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 import DataTable from "@/shared/DataTable";
+import Modal from "@/shared/Modal";
+import { JobsType } from "@/types/interfaces";
 
-type JobType = {
-  _id: string;
-  title: string;
-  company: string;
-  type: string;
-  status: string;
-  createdAt: string;
-};
-
-const col = createColumnHelper<JobType>();
+const col = createColumnHelper<JobsType>();
 
 const ManageJobs = () => {
-  // const {isOpen, setIsOpen} = useState(false);
+  const [open, setOpen] = useState(false);
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [mode, setMode] = useState<"login" | "register" | "jobs">("jobs");
   const { data, isLoading } = useJobs();
   const updateStatus = useUpdateJobStatus();
   const deleteJob = useDeleteJob();
 
-  const jobs: JobType[] = useMemo(() => data?.data ?? [], [data]);
-
-  console.log("Jobs data:", jobs);
+  const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
   const columns = useMemo(
     () => [
       col.accessor("title", {
         header: "Job Title",
         cell: (i) => (
-          <span className="font-medium text-dark-text">{i.getValue()}</span>
+          <button
+            onClick={() => {
+              setMode("jobs");
+              setOpen(true);
+              setJobId(i.row.original._id);
+            }}
+            className="font-medium text-dark-text cursor-pointer hover:text-indigoTags transition-colors text-left"
+          >
+            {i.getValue()}
+          </button>
         ),
       }),
       col.accessor("company", { header: "Company" }),
@@ -134,7 +136,13 @@ const ManageJobs = () => {
         isLoading={isLoading}
         emptyMessage="No jobs yet"
       />
-      {/* <CustomModal /> */}
+      <Modal
+        open={open}
+        onOpenChange={setOpen}
+        mode={mode}
+        setMode={setMode}
+        jobId={jobId}
+      />
     </div>
   );
 };

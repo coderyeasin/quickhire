@@ -16,7 +16,7 @@ const routes = [
 export default function Header() {
   const { status } = useSession();
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<"login" | "register" | "jobs">("login");
 
   const isLoggedIn = status === "authenticated";
 
