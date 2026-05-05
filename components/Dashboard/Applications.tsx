@@ -5,7 +5,7 @@ import {
   useUpdateApplicationStatus,
 } from "@/Hooks/useApplications";
 import ReusableTable from "@/shared/DataTable";
-import PageHeader from "@/shared/PageHeader";
+import Spinner from "@/shared/Spinner";
 import StatusBadge from "@/shared/StatusBadge";
 import {
   createColumnHelper,
@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-type AppRow = {
+type ApplicationType = {
   _id: string;
   jobId: { title: string; company: string } | null;
   candidateId: { name: string; email: string } | null;
@@ -30,13 +30,13 @@ const NEXT_STATUSES: Record<string, string[]> = {
   hired: [],
 };
 
-const col = createColumnHelper<AppRow>();
+const col = createColumnHelper<ApplicationType>();
 
 const Applications = () => {
   const { data, isLoading } = useApplications();
   const updateStatus = useUpdateApplicationStatus();
 
-  const apps: AppRow[] = data?.data ?? [];
+  const apps: ApplicationType[] = data?.data ?? [];
 
   const columns = [
     col.display({
@@ -129,12 +129,13 @@ const Applications = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className="space-y-6">
-      <PageHeader
-        title="All Applications"
-        sub={`${apps.length} total applications across the platform`}
-      />
+      <h3 className="text-lg font-semibold text-dark-text text-center ">
+        Total Applications: {apps.length}
+      </h3>
       <ReusableTable
         table={table}
         isLoading={isLoading}

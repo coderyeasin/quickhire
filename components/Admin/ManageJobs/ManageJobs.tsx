@@ -31,6 +31,8 @@ const ManageJobs = () => {
 
   const jobs: JobType[] = useMemo(() => data?.data ?? [], [data]);
 
+  console.log("Jobs data:", jobs);
+
   const columns = useMemo(
     () => [
       col.accessor("title", {
