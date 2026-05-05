@@ -4,8 +4,8 @@ import {
   FiPlusCircle,
   FiUsers,
   FiSettings,
-  FiLogOut,
   FiFileText,
+  FiTrash2,
 } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,7 @@ export interface INavItems {
 
 export function getNavItems(role: string): {
   main: INavItems[];
-  organization: INavItems[];
+  controls: INavItems[];
 } {
   if (role === "admin") {
     return {
@@ -27,17 +27,24 @@ export function getNavItems(role: string): {
         { href: "/admin/jobs", label: "Manage Jobs", icon: <FiBriefcase /> },
         { href: "/admin/add", label: "Post New Job", icon: <FiPlusCircle /> },
       ],
-      organization: [
+      controls: [
         {
+          href: "/admin/applications",
+          label: "Applications",
+          icon: <FiUsers />,
+        },
+        {
+          // "/admin/approvedJobs"
           href: "/admin/approvedJobs",
           label: "Approved Jobs",
           icon: <FiBriefcase />,
         },
 
         {
-          href: "/admin/applications",
-          label: "Applications",
-          icon: <FiUsers />,
+          // "/admin/trash"
+          href: "/admin/trash",
+          label: "Trash Jobs",
+          icon: <FiTrash2 />,
         },
         {
           href: "/admin/profile",
@@ -57,7 +64,7 @@ export function getNavItems(role: string): {
           icon: <FiPlusCircle />,
         },
       ],
-      organization: [
+      controls: [
         {
           href: "/recruiter/applications",
           label: "Applications",
@@ -85,7 +92,7 @@ export function getNavItems(role: string): {
           icon: <FiFileText />,
         },
       ],
-      organization: [
+      controls: [
         {
           href: "/candidate/profile",
           label: "Account Settings",
@@ -94,7 +101,7 @@ export function getNavItems(role: string): {
       ],
     };
   } else {
-    return { main: [], organization: [] };
+    return { main: [], controls: [] };
   }
 }
 

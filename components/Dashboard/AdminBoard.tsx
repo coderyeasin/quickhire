@@ -10,7 +10,6 @@ import Link from "next/link";
 import { useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import { useApplications } from "@/Hooks/useApplications";
 import StatusBadge from "@/shared/StatusBadge";
-import PageHeader from "@/shared/PageHeader";
 import { useMemo } from "react";
 import ReusableTable from "@/shared/DataTable";
 import StatusCard from "@/shared/StatusCard";
@@ -109,11 +108,6 @@ const AdminBoard = () => {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Platform Overview"
-        sub="Monitor and manage the entire platform"
-      />
-
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <StatusCard
           label="Total Jobs"

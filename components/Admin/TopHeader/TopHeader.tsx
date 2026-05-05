@@ -5,7 +5,10 @@ import { FiBell } from "react-icons/fi";
 import Image from "next/image";
 
 const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
-  "/admin": { title: "Dashboard", sub: "Platform overview" },
+  "/admin": {
+    title: "Overview",
+    sub: "Monitor and manage the entire platform",
+  },
   "/admin/jobs": { title: "Manage Jobs", sub: "Review and control all jobs" },
   "/admin/add": {
     title: "Post New Job",

@@ -54,7 +54,7 @@ export default function Sidebar({ role, user }: NavLinksProps) {
 }
 
 function SidebarContent({ role, user }: NavLinksProps) {
-  const { main, organization } = getNavItems(role);
+  const { main, controls } = getNavItems(role);
 
   return (
     <aside className="w-64 bg-indigoTags text-white flex flex-col h-full">
@@ -84,12 +84,12 @@ function SidebarContent({ role, user }: NavLinksProps) {
           <NavLinks key={item.href} {...item} />
         ))}
 
-        {organization.length > 0 && (
+        {controls.length > 0 && (
           <div className="pt-6">
             <p className="text-[11px] font-bold text-white/40 uppercase px-4 mb-3 tracking-wider">
-              Organization
+              Controls
             </p>
-            {organization.map((item) => (
+            {controls.map((item) => (
               <NavLinks key={item.href} {...item} />
             ))}
           </div>

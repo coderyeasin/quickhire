@@ -1,21 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import Link from "next/link";
-import { FiPlus, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { useDeleteJob, useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
-import PageHeader from "@/shared/PageHeader";
 import DataTable from "@/shared/DataTable";
-import CustomModal from "@/shared/CustomModal";
 
-type JobRow = {
+type JobType = {
   _id: string;
   title: string;
   company: string;
@@ -24,7 +21,7 @@ type JobRow = {
   createdAt: string;
 };
 
-const col = createColumnHelper<JobRow>();
+const col = createColumnHelper<JobType>();
 
 const ManageJobs = () => {
   // const {isOpen, setIsOpen} = useState(false);
@@ -32,7 +29,7 @@ const ManageJobs = () => {
   const updateStatus = useUpdateJobStatus();
   const deleteJob = useDeleteJob();
 
-  const jobs: JobRow[] = useMemo(() => data?.data ?? [], [data]);
+  const jobs: JobType[] = useMemo(() => data?.data ?? [], [data]);
 
   const columns = useMemo(
     () => [
@@ -127,18 +124,9 @@ const ManageJobs = () => {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Manage Jobs"
-        sub={`${jobs.length} total jobs`}
-        action={
-          <Link
-            href="/admin/add"
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigoTags text-white text-sm font-medium rounded-lg hover:bg-indigoTags/90 transition-colors"
-          >
-            <FiPlus /> Post New Job
-          </Link>
-        }
-      />
+      <h3 className="text-lg font-semibold text-dark-text text-center ">
+        Total Jobs: {jobs.length}
+      </h3>
       <DataTable
         table={table}
         isLoading={isLoading}
