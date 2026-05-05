@@ -7,12 +7,27 @@ import Image from "next/image";
 const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
   "/admin": { title: "Dashboard", sub: "Platform overview" },
   "/admin/jobs": { title: "Manage Jobs", sub: "Review and control all jobs" },
-  "/admin/add": { title: "Post New Job", sub: "Create a new listing" },
-  "/admin/profile": { title: "Settings", sub: "Account preferences" },
+  "/admin/add": {
+    title: "Post New Job",
+    sub: "Post a new job - it goes to admin review before going live",
+  },
+  "/admin/approvedJobs": {
+    title: "Approved Jobs",
+    sub: "Manage your approved job listings and apply as a candidate",
+  },
+  "/admin/applications": {
+    title: "Applications",
+    sub: "Track your applications",
+  },
+  "/admin/profile": {
+    title: "My Profile",
+    sub: "Keep your information up to date",
+  },
   "/recruiter": { title: "Dashboard", sub: "Your recruitment overview" },
   "/recruiter/jobs": { title: "My Jobs", sub: "Jobs you've posted" },
   "/recruiter/add": { title: "Post a Job", sub: "Create a new listing" },
   "/recruiter/profile": { title: "Profile", sub: "Your public profile" },
+
   "/candidate": { title: "Dashboard", sub: "Your job search overview" },
   "/candidate/jobs": {
     title: "Available Jobs",

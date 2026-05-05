@@ -88,10 +88,10 @@ export default function PostedJob({ redirectTo }: PostJobFormProps) {
 
   return (
     <div className="max-w-3xl">
-      <PageHeader
+      {/* <PageHeader
         title="Post a New Job"
         sub="Fill in the details --- it goes to admin review before going live"
-      />
+      /> */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5">

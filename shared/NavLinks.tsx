@@ -29,11 +29,21 @@ export function getNavItems(role: string): {
       ],
       organization: [
         {
+          href: "/admin/approvedJobs",
+          label: "Approved Jobs",
+          icon: <FiBriefcase />,
+        },
+
+        {
           href: "/admin/applications",
           label: "Applications",
           icon: <FiUsers />,
         },
-        { href: "/admin/profile", label: "Settings", icon: <FiSettings /> },
+        {
+          href: "/admin/profile",
+          label: "Account Settings",
+          icon: <FiSettings />,
+        },
       ],
     };
   } else if (role === "recruiter") {
@@ -53,7 +63,11 @@ export function getNavItems(role: string): {
           label: "Applications",
           icon: <FiUsers />,
         },
-        { href: "/recruiter/profile", label: "Settings", icon: <FiSettings /> },
+        {
+          href: "/recruiter/profile",
+          label: "Account Settings",
+          icon: <FiSettings />,
+        },
       ],
     };
   } else if (role === "candidate") {
@@ -72,7 +86,11 @@ export function getNavItems(role: string): {
         },
       ],
       organization: [
-        { href: "/candidate/profile", label: "Settings", icon: <FiSettings /> },
+        {
+          href: "/candidate/profile",
+          label: "Account Settings",
+          icon: <FiSettings />,
+        },
       ],
     };
   } else {

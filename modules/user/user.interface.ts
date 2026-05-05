@@ -9,4 +9,5 @@ export interface IUser {
   confirmPassword: string;
   avatar?: string | null;
   role: UserRole;
+  createdAt?: string;
 }

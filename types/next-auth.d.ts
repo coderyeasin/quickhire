@@ -11,6 +11,7 @@ declare module "next-auth" {
       company?: string;
       role: UserRole;
       avatar?: string;
+      createdAt?: string;
     };
   }
   interface User {
@@ -18,6 +19,7 @@ declare module "next-auth" {
     role: UserRole;
     avatar?: string;
     company?: string;
+    createdAt?: string;
   }
 }
 
@@ -26,5 +28,6 @@ declare module "next-auth/jwt" {
     id: string;
     role: UserRole;
     avatar?: string;
+    createdAt?: string;
   }
 }
