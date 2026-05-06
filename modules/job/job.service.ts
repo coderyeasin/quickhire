@@ -14,7 +14,7 @@ async function createJobIntoDB(payload: CreatedJobType) {
 //get all jobs - with all statuses only for --- admin --- for approved
 export async function getAllJobsFromDB() {
   await connectToDB();
-  const res = await JobModel.find();
+  const res = await JobModel.find().sort({ createdAt: -1 }).lean();
   return res;
 }
 
@@ -23,7 +23,7 @@ export async function getAllApprovedJobs() {
   await connectToDB();
 
   const query: Record<string, any> = { status: "approved" };
-  const res = await JobModel.find(query).lean();
+  const res = await JobModel.find(query).sort({ createdAt: -1 }).lean();
   return res;
 }
 

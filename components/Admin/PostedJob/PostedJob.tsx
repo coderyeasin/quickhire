@@ -6,7 +6,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
 
-const schema = z.object({
+const createJobSchema = z.object({
   title: z.string().min(3, "Title required"),
   description: z.string().min(20, "Description must be at least 20 characters"),
   company: z.string().min(2, "Company required"),
@@ -21,7 +21,7 @@ const schema = z.object({
   deadline: z.string().optional(),
 });
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof createJobSchema>;
 
 const inputCls =
   "w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-dark-text focus:outline-none focus:border-indigoTags/50 focus:ring-2 focus:ring-indigoTags/10 transition-all bg-white";
@@ -29,11 +29,7 @@ const labelCls =
   "block text-xs font-semibold text-primary-gray uppercase tracking-wide mb-1.5";
 const errorCls = "text-red-500 text-xs mt-1";
 
-interface PostJobFormProps {
-  redirectTo: string;
-}
-
-export default function PostedJob({ redirectTo }: PostJobFormProps) {
+export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
   const createJob = useCreateJob();
 
@@ -42,56 +38,50 @@ export default function PostedJob({ redirectTo }: PostJobFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(createJobSchema),
   });
 
   const onSubmit = async (data: FormData) => {
     try {
-      // const file = data.companyLogo[0];
+      const file = data.companyLogo?.[0];
 
-      console.log("Form data:", data);
-      // const uploaded = await uploadCloudinary(file);
-      // const logoUrl = uploaded.secure_url;
+      const formData = new FormData();
 
-      // const skillsArray = data.skills
-      //   .split(",")
-      //   .map((s) => s.trim())
-      //   .filter(Boolean);
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("company", data.company);
+      formData.append("location", data.location);
+      formData.append("type", data.type);
 
-      // const categoryArray = data.category
-      //   .split(",")
-      //   .map((c) => c.trim())
-      //   .filter(Boolean);
+      if (data.salary) formData.append("salary", data.salary);
+      if (data.deadline) formData.append("deadline", data.deadline);
 
-      // createJob.mutate(
-      //   {
-      //     title: data.title,
-      //     description: data.description,
-      //     company: data.company,
-      //     companyLogo: logoUrl,
-      //     category: categoryArray,
-      //     location: data.location,
-      //     type: data.type,
-      //     salary: data.salary || "Negotiable",
-      //     skills: skillsArray,
-      //     deadline: data.deadline ? new Date(data.deadline) : undefined,
-      //   },
-      //   {
-      //     onSuccess: () => router.push(redirectTo),
-      //   }
-      // );
+      data.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .forEach((skill) => formData.append("skills", skill));
+
+      data.category
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean)
+        .forEach((cat) => formData.append("category", cat));
+
+      if (file) {
+        formData.append("companyLogo", file);
+      }
+
+      createJob.mutate(formData, {
+        onSuccess: () => router.push(redirectTo),
+      });
     } catch (err) {
-      console.error("Upload failed", err);
+      console.error(err);
     }
   };
 
   return (
     <div className="max-w-3xl">
-      {/* <PageHeader
-        title="Post a New Job"
-        sub="Fill in the details --- it goes to admin review before going live"
-      /> */}
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5">
           <h3 className="text-sm font-semibold text-dark-text border-b border-slate-100 pb-3">

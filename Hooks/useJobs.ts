@@ -58,13 +58,10 @@ export function useJobById(id: string) {
 export function useCreateJob() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (body) => {
+    mutationFn: async (body: FormData) => {
       const res = await fetch("/api/jobs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
+        body,
       });
       const data = await res.json();
       if (!data)
