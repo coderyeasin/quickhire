@@ -13,7 +13,6 @@ import {
   useWithdrawApplication,
 } from "@/Hooks/useApplications";
 import StatusBadge from "@/shared/StatusBadge";
-import PageHeader from "@/shared/PageHeader";
 import { FaCircleNotch } from "react-icons/fa6";
 import { useMemo } from "react";
 import { IApplication } from "@/modules/application/application.interface";
@@ -136,7 +135,7 @@ const CandidateBoard = () => {
 
   return (
     <div className="space-y-8">
-      <PageHeader
+      {/* <PageHeader
         title="My Activities"
         sub="Track your job applications and progress"
         action={
@@ -147,7 +146,7 @@ const CandidateBoard = () => {
             Browse Jobs
           </Link>
         }
-      />
+      /> */}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-5">
         <StatusCard

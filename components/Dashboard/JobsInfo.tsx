@@ -5,11 +5,7 @@ import Image from "next/image";
 import { useMemo } from "react";
 import { FiMapPin, FiBriefcase, FiClock, FiDollarSign } from "react-icons/fi";
 
-export default function JobCard({
-  jobId,
-}: {
-  jobId: string | null | undefined;
-}) {
+const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const { data, isLoading } = useJobs();
   const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
@@ -155,4 +151,5 @@ export default function JobCard({
       </div>
     </div>
   );
-}
+};
+export default JobsInfo;

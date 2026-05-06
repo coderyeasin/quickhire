@@ -2,7 +2,7 @@
 
 import LoginForm from "@/components/Auth/Login/Login";
 import RegisterForm from "@/components/Auth/Register/Register";
-import JobCard from "@/components/Dashboard/JobsInfo";
+import JobsInfo from "@/components/Dashboard/JobsInfo";
 import { Dialog, DialogContent } from "@/components/Shadcn/dialog";
 
 export type AuthMode = "login" | "register" | "jobs";
@@ -26,7 +26,7 @@ export default function Modal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {mode === "jobs" ? (
         <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">
-          <JobCard jobId={jobId} />
+          <JobsInfo jobId={jobId} />
         </DialogContent>
       ) : (
         <DialogContent className="sm:max-w-sm p-0 bg-[#0f1117]/90 border-white/10 [&>button]:text-white/30 [&>button]:hover:text-white [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">

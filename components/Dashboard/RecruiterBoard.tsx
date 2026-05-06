@@ -11,7 +11,6 @@ import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { useMyJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
-import PageHeader from "@/shared/PageHeader";
 
 import { useMemo } from "react";
 import ReusableTable from "@/shared/DataTable";
@@ -79,7 +78,7 @@ const RecruiterBoard = () => {
 
   return (
     <div className="space-y-8">
-      <PageHeader
+      {/* <PageHeader
         title="Recruiter Dashboard"
         sub="Manage your job posts and review applicants"
         action={
@@ -90,7 +89,7 @@ const RecruiterBoard = () => {
             <FiPlus /> Post a Job
           </Link>
         }
-      />
+      /> */}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <StatusCard

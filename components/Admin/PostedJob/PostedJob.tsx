@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
-import PageHeader from "@/shared/PageHeader";
 
 const schema = z.object({
   title: z.string().min(3, "Title required"),
