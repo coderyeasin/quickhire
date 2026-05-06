@@ -54,7 +54,6 @@ export function useJobById(id: string) {
 
 // Mutations (create, update, delete)
 
-//-------- need to include--------- formdata format --- need to include
 export function useCreateJob() {
   const qc = useQueryClient();
   return useMutation({
@@ -89,7 +88,7 @@ export function useUpdateJob() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body,
       });
       const data = await res.json();
       if (!data)

@@ -44,7 +44,10 @@ const ManageJobs = () => {
         ),
       }),
       col.accessor("company", { header: "Company" }),
-      col.accessor("type", { header: "Type" }),
+      col.accessor("type", {
+        header: "Type",
+        cell: (i) => <span className="capitalize">{i.getValue()}</span>,
+      }),
       col.accessor("status", {
         header: "Status",
         cell: (i) => <StatusBadge status={i.getValue()} />,

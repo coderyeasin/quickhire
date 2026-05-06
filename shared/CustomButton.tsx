@@ -6,6 +6,7 @@ const CustomButton = (props: CustomButtonProps) => {
       type={props.type || "button"}
       className={`px-6 py-3 cursor-pointer ${props.className || "w-20"}`}
       onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.children || props.label}
     </button>

@@ -5,7 +5,13 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { FiBriefcase, FiUsers, FiClock, FiCheckCircle } from "react-icons/fi";
+import {
+  FiBriefcase,
+  FiUsers,
+  FiClock,
+  FiCheckCircle,
+  FiXCircle,
+} from "react-icons/fi";
 import Link from "next/link";
 import { useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import { useApplications } from "@/Hooks/useApplications";
@@ -29,7 +35,7 @@ const AdminBoard = () => {
   const { data: jobsData, isLoading: jobsLoading } = useJobs();
   const { data: applicantsData, isLoading: applicantsLoading } =
     useApplications();
-  const updateStatus = useUpdateJobStatus();
+  // const updateStatus = useUpdateJobStatus();
 
   const jobs: upComingJobsType[] = useMemo(
     () => jobsData?.data ?? [],
@@ -43,7 +49,8 @@ const AdminBoard = () => {
   const jobsStatus = useMemo(() => {
     const pendingJobs = jobs.filter((j) => j.status === "pending");
     const approvedJobs = jobs.filter((j) => j.status === "approved");
-    return { pendingJobs, approvedJobs };
+    const rejectedJobs = jobs.filter((j) => j.status === "rejected");
+    return { pendingJobs, approvedJobs, rejectedJobs };
   }, [jobs]);
 
   const columns = useMemo(
@@ -55,47 +62,50 @@ const AdminBoard = () => {
         ),
       }),
       col.accessor("company", { header: "Company" }),
-      col.accessor("type", { header: "Type" }),
+      col.accessor("type", {
+        header: "Type",
+        cell: (i) => <span className="capitalize">{i.getValue()}</span>,
+      }),
       col.accessor("status", {
         header: "Status",
         cell: (i) => <StatusBadge status={i.getValue()} />,
       }),
-      col.display({
-        id: "actions",
-        header: "Actions",
-        cell: (i) => {
-          const job = i.row.original;
-          return (
-            <div className="flex items-center gap-2">
-              {job.status === "pending" && (
-                <>
-                  <button
-                    onClick={() =>
-                      updateStatus.mutate({ id: job._id, status: "approved" })
-                    }
-                    className="px-3 py-1 text-xs font-medium cursor-pointer bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() =>
-                      updateStatus.mutate({ id: job._id, status: "rejected" })
-                    }
-                    className="px-3 py-1 text-xs font-medium cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
-                  >
-                    Reject
-                  </button>
-                </>
-              )}
-              {job.status !== "pending" && (
-                <span className="text-xs text-primary-gray">—</span>
-              )}
-            </div>
-          );
-        },
-      }),
+      // col.display({
+      //   id: "actions",
+      //   header: "Actions",
+      //   cell: (i) => {
+      //     const job = i.row.original;
+      //     return (
+      //       <div className="flex items-center gap-2">
+      //         {job.status === "pending" && (
+      //           <>
+      //             <button
+      //               onClick={() =>
+      //                 updateStatus.mutate({ id: job._id, status: "approved" })
+      //               }
+      //               className="px-3 py-1 text-xs font-medium cursor-pointer bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors"
+      //             >
+      //               Approve
+      //             </button>
+      //             <button
+      //               onClick={() =>
+      //                 updateStatus.mutate({ id: job._id, status: "rejected" })
+      //               }
+      //               className="px-3 py-1 text-xs font-medium cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+      //             >
+      //               Reject
+      //             </button>
+      //           </>
+      //         )}
+      //         {job.status !== "pending" && (
+      //           <span className="text-xs text-primary-gray">—</span>
+      //         )}
+      //       </div>
+      //     );
+      //   },
+      // }),
     ],
-    [updateStatus],
+    [],
   );
 
   const tableData = useMemo(() => jobs.slice(0, 5), [jobs]);
@@ -113,12 +123,14 @@ const AdminBoard = () => {
           label="Total Jobs"
           value={jobsLoading ? "—" : jobs.length}
           color="indigo"
+          sub="All posted jobs"
           icon={<FiBriefcase />}
         />
         <StatusCard
           label="Approved Jobs"
           value={jobsLoading ? "—" : jobsStatus.approvedJobs.length}
           color="emerald"
+          sub="Published jobs"
           icon={<FiCheckCircle />}
         />
         <StatusCard
@@ -129,9 +141,17 @@ const AdminBoard = () => {
           icon={<FiClock />}
         />
         <StatusCard
-          label="Total Applications"
+          label="Rejected Jobs"
+          value={jobsLoading ? "—" : jobsStatus.rejectedJobs.length}
+          sub="No longer active"
+          color="red"
+          icon={<FiXCircle />}
+        />
+        <StatusCard
+          label="Candidate Applied"
           value={applicantsLoading ? "—" : applicants.length}
           color="indigo"
+          sub="Total applications received "
           icon={<FiUsers />}
         />
       </div>

@@ -12,7 +12,7 @@ import { applicationServices } from "./application.service";
 import { ApplicationStatus } from "./application.interface";
 
 const createApplication = catchAsync(async (req: NextRequest) => {
-  const user = await withAuth(["candidate"]);
+  const user = await withAuth(["candidate", "admin"]);
 
   const body = await req.json();
 

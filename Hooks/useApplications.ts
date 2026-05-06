@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import AppError from "@/lib/AppError";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { ApplicationPayload } from "@/types/types";
 
 // GET APIs
 async function fetchAllApplications() {
@@ -86,7 +87,7 @@ export function useApplicationsByJobId(jobId: string) {
 export const useCreateApplication = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (body) => {
+    mutationFn: async (body: ApplicationPayload) => {
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: {
