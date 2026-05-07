@@ -1,7 +1,9 @@
-import PostedJob from "@/components/Admin/PostedJob/PostedJob";
-
 const jobPost = () => {
-  return <PostedJob redirectTo="/recruiter/jobs" />;
+  return (
+    <>
+      <h3>all posted jobs</h3>
+    </>
+  );
 };
 
 export default jobPost;

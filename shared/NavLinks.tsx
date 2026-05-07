@@ -34,14 +34,12 @@ export function getNavItems(role: string): {
       ],
       controls: [
         {
-          // "/admin/approvedJobs"
-          href: "/admin/approvedJobs",
+          href: "/admin/approved",
           label: "Approved Jobs",
           icon: <FiBriefcase />,
         },
 
         {
-          // "/admin/trash"
           href: "/admin/trash",
           label: "Trash Jobs",
           icon: <FiTrash2 />,

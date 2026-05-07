@@ -5,17 +5,7 @@ import RegisterForm from "@/components/Auth/Register/Register";
 import JobsInfo from "@/components/Dashboard/JobsInfo";
 import WholeApplication from "@/components/Dashboard/WholeApplication";
 import { Dialog, DialogContent } from "@/components/Shadcn/dialog";
-
-export type AuthMode = "login" | "register" | "jobs" | "applicants";
-
-interface ModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  mode: AuthMode;
-  setMode: (mode: AuthMode) => void;
-  jobId?: string | null;
-  applicantsId?: string | null;
-}
+import { ModalType } from "@/types/types";
 
 export default function Modal({
   open,
@@ -24,8 +14,7 @@ export default function Modal({
   setMode,
   jobId,
   applicantsId,
-}: ModalProps) {
-  console.log("id", applicantsId);
+}: ModalType) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {mode === "jobs" ? (

@@ -1,6 +1,6 @@
 import React from "react";
 
-const candidateProfile = () => {
+const candidatesProfile = () => {
   return (
     <div>
       <h3>candidateProfiles view</h3>
@@ -12,4 +12,4 @@ const candidateProfile = () => {
   );
 };
 
-export default candidateProfile;
+export default candidatesProfile;

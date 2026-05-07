@@ -2,27 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
 import { errorCls, inputCls, labelCls } from "@/shared/ApplyForm";
-
-const createJobSchema = z.object({
-  title: z.string().min(3, "Title required"),
-  description: z.string().min(20, "Description must be at least 20 characters"),
-  company: z.string().min(2, "Company required"),
-  companyLogo: z
-    .any()
-    .refine((file) => file?.length === 1, "Company logo is required"),
-  category: z.string().min(1, "Enter at least one category"),
-  location: z.string().min(2, "Location required"),
-  type: z.enum(["full-time", "part-time", "remote", "intern"]),
-  skills: z.string().min(1, "Enter at least one skill"),
-  salary: z.string().optional(),
-  deadline: z.string().optional(),
-});
-
-type FormData = z.infer<typeof createJobSchema>;
+import { createJobSchema, CreateJobsTypes } from "@/types/constraints";
 
 export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
@@ -32,11 +15,11 @@ export default function PostedJob({ redirectTo }: { redirectTo: string }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<CreateJobsTypes>({
     resolver: zodResolver(createJobSchema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: CreateJobsTypes) => {
     try {
       const file = data.companyLogo?.[0];
 

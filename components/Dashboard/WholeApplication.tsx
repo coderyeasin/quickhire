@@ -48,6 +48,8 @@ const WholeApplication = ({
 
   const applicants = applications.find((j) => j._id === applicantsId);
 
+  //   console.log("description", applicants.jobId?.description); ---will add des
+
   return isLoading ? (
     <Spinner />
   ) : (
@@ -111,6 +113,21 @@ const WholeApplication = ({
                 </div>
               </div>
             </div>
+
+            {/* <div className="border border-gray-100 rounded-2xl p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <FiFile className="text-gray-500" />
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Job Description
+                </h3>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-gray-700 leading-7 whitespace-pre-line">
+                  {applicants?.jobId?.description}
+                </p>
+              </div>
+            </div> */}
 
             <div className="border border-gray-100 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">

@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Modal from "@/shared/Modal";
 import UserProfile from "@/shared/UserProfile";
+import { ModalMode } from "@/types/types";
 
 const routes = [
   { name: "Find Jobs", path: "/jobs" },
@@ -16,7 +17,7 @@ const routes = [
 export default function Header() {
   const { status } = useSession();
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<"login" | "register" | "jobs">("login");
+  const [mode, setMode] = useState<ModalMode>("login");
 
   const isLoggedIn = status === "authenticated";
 

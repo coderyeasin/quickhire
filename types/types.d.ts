@@ -1,3 +1,14 @@
+export type ModalMode = "login" | "register" | "jobs" | "applicants";
+
+interface ModalType {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  mode: ModalMode;
+  setMode: (mode: ModalMode) => void;
+  jobId?: string | null;
+  applicantsId?: string | null;
+}
+
 export type JobsType = {
   _id: string;
   title: string;

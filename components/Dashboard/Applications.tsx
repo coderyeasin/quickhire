@@ -9,6 +9,7 @@ import Modal from "@/shared/Modal";
 import Spinner from "@/shared/Spinner";
 import StatusBadge from "@/shared/StatusBadge";
 import { ApplicationsType } from "@/types/interfaces";
+import { ModalMode } from "@/types/types";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -29,9 +30,7 @@ const col = createColumnHelper<ApplicationsType>();
 const Applications = () => {
   const [open, setOpen] = useState(false);
   const [applicantsId, setApplicantsId] = useState<string | null>(null);
-  const [mode, setMode] = useState<
-    "login" | "register" | "jobs" | "applicants"
-  >("applicants");
+  const [mode, setMode] = useState<ModalMode>("applicants");
   const { data, isLoading } = useApplications();
   const updateStatus = useUpdateApplicationStatus();
 
