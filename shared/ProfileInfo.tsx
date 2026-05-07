@@ -8,12 +8,7 @@ import { useSession } from "next-auth/react";
 import { RegisterInput } from "@/modules/user/UserValidators";
 import CustomButton from "./CustomButton";
 import Spinner from "./Spinner";
-
-const inputCls =
-  "w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-dark-text placeholder:text-slate-400 focus:outline-none focus:border-indigoTags/50 focus:ring-2 focus:ring-indigoTags/10 transition-all bg-white";
-const labelCls =
-  "block text-xs font-semibold text-primary-gray uppercase tracking-wide mb-1.5";
-const errorCls = "text-red-500 text-xs mt-1";
+import { errorCls, inputCls, labelCls } from "./ApplyForm";
 
 const ProfileForm = () => {
   const { data: session, status } = useSession();

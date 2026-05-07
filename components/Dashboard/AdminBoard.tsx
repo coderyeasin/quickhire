@@ -13,7 +13,7 @@ import {
   FiXCircle,
 } from "react-icons/fi";
 import Link from "next/link";
-import { useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
+import { useJobs } from "@/Hooks/useJobs";
 import { useApplications } from "@/Hooks/useApplications";
 import StatusBadge from "@/shared/StatusBadge";
 import { useMemo } from "react";

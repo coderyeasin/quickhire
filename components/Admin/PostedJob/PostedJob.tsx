@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
+import { errorCls, inputCls, labelCls } from "@/shared/ApplyForm";
 
 const createJobSchema = z.object({
   title: z.string().min(3, "Title required"),
@@ -22,12 +23,6 @@ const createJobSchema = z.object({
 });
 
 type FormData = z.infer<typeof createJobSchema>;
-
-const inputCls =
-  "w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-dark-text focus:outline-none focus:border-indigoTags/50 focus:ring-2 focus:ring-indigoTags/10 transition-all bg-white";
-const labelCls =
-  "block text-xs font-semibold text-primary-gray uppercase tracking-wide mb-1.5";
-const errorCls = "text-red-500 text-xs mt-1";
 
 export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();

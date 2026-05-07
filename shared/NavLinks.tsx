@@ -25,14 +25,14 @@ export function getNavItems(role: string): {
       main: [
         { href: "/admin", label: "Dashboard", icon: <FiGrid /> },
         { href: "/admin/jobs", label: "Manage Jobs", icon: <FiBriefcase /> },
-        { href: "/admin/add", label: "Post New Job", icon: <FiPlusCircle /> },
-      ],
-      controls: [
         {
           href: "/admin/applications",
           label: "Applications",
           icon: <FiUsers />,
         },
+        { href: "/admin/add", label: "Post New Job", icon: <FiPlusCircle /> },
+      ],
+      controls: [
         {
           // "/admin/approvedJobs"
           href: "/admin/approvedJobs",

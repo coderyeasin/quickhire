@@ -12,14 +12,16 @@ import { useDeleteJob, useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
-import { JobsType } from "@/types/interfaces";
+import { JobsType } from "@/types/types";
 
 const col = createColumnHelper<JobsType>();
 
 const ManageJobs = () => {
   const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
-  const [mode, setMode] = useState<"login" | "register" | "jobs">("jobs");
+  const [mode, setMode] = useState<
+    "login" | "register" | "jobs" | "applicants"
+  >("jobs");
   const { data, isLoading } = useJobs();
   const updateStatus = useUpdateJobStatus();
   const deleteJob = useDeleteJob();
@@ -88,7 +90,9 @@ const ManageJobs = () => {
                   toast(
                     (t) => (
                       <div className="flex flex-col gap-2">
-                        <p className="text-sm font-medium">Delete this job?</p>
+                        <p className="text-sm font-medium">
+                          Are you sure you want to permanently delete this job?
+                        </p>
                         <div className="flex gap-2">
                           <button
                             onClick={() => {
@@ -124,7 +128,7 @@ const ManageJobs = () => {
   );
 
   const table = useReactTable({
-    data: jobs,
+    data: jobs ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });

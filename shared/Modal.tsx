@@ -3,9 +3,10 @@
 import LoginForm from "@/components/Auth/Login/Login";
 import RegisterForm from "@/components/Auth/Register/Register";
 import JobsInfo from "@/components/Dashboard/JobsInfo";
+import WholeApplication from "@/components/Dashboard/WholeApplication";
 import { Dialog, DialogContent } from "@/components/Shadcn/dialog";
 
-export type AuthMode = "login" | "register" | "jobs";
+export type AuthMode = "login" | "register" | "jobs" | "applicants";
 
 interface ModalProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface ModalProps {
   mode: AuthMode;
   setMode: (mode: AuthMode) => void;
   jobId?: string | null;
+  applicantsId?: string | null;
 }
 
 export default function Modal({
@@ -21,12 +23,18 @@ export default function Modal({
   mode,
   setMode,
   jobId,
+  applicantsId,
 }: ModalProps) {
+  console.log("id", applicantsId);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {mode === "jobs" ? (
         <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">
           <JobsInfo jobId={jobId} />
+        </DialogContent>
+      ) : mode === "applicants" ? (
+        <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">
+          <WholeApplication applicantsId={applicantsId} />
         </DialogContent>
       ) : (
         <DialogContent className="sm:max-w-sm p-0 bg-[#0f1117]/90 border-white/10 [&>button]:text-white/30 [&>button]:hover:text-white [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">

@@ -1,10 +1,9 @@
-'use client";';
-import { useCreateApplication } from "@/Hooks/useApplications";
+"use client";
 import { useJobs } from "@/Hooks/useJobs";
 import ApplyForm from "@/shared/ApplyForm";
 import CustomButton from "@/shared/CustomButton";
 import Spinner from "@/shared/Spinner";
-import { JobsType } from "@/types/interfaces";
+import { JobsType } from "@/types/types";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { FiMapPin, FiBriefcase, FiClock, FiDollarSign } from "react-icons/fi";
@@ -12,7 +11,6 @@ import { FiMapPin, FiBriefcase, FiClock, FiDollarSign } from "react-icons/fi";
 const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const [isApply, setIsApply] = useState(false);
   const { data, isLoading } = useJobs();
-  console.log("Form Data:", jobId);
 
   const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 

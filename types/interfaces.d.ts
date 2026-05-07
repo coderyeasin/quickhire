@@ -1,3 +1,5 @@
+import { JobsType } from "./types";
+
 export interface CustomButtonProps {
   label: string;
   onClick?: () => void;
@@ -35,20 +37,29 @@ export interface JobCardType {
   image: string;
 }
 
-// Real Types
+//----------------- Real Types -----------------
 
-interface JobsType {
-  _id: string;
-  title: string;
-  description: string;
+export interface ICandidate {
+  _id?: string;
+  name: string;
+  email: string;
+}
+
+export interface IRecruiter {
+  _id?: string;
+  name: string;
   company: string;
-  companyLogo: string;
-  location: string;
-  type: string;
-  skills: string[];
-  category: string[];
-  salary?: string;
+}
+
+export interface ApplicationsType {
+  _id: string;
+
+  coverLetter: string;
+  resumeUrl: string;
   status: string;
-  deadline?: string;
-  createdAt: string;
+  appliedAt: string;
+
+  candidateId: ICandidate | null;
+  recruiterId: IRecruiter | null;
+  jobId: JobsType | null;
 }

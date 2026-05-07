@@ -4,12 +4,8 @@ export const createApplicationValidationSchema = z.object({
   jobId: z.string().min(1, "Job ID is required"),
   coverLetter: z
     .string()
-    .max(1000, "Cover letter must be at most 1000 characters")
-    .optional(),
-  resumeUrl: z
-    .string()
-    .url("Resume URL must be a valid URL (Drive URL)")
-    .optional(),
+    .max(200, "Cover letter must be at most 200 characters"),
+  resumeUrl: z.string().url("Resume URL must be a valid URL (Drive URL)"),
 });
 
 export const updateApplicationStatusValidationSchema = z.object({
