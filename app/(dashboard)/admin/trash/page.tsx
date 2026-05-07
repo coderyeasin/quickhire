@@ -1,9 +1,7 @@
-const ExpiredJobs = () => {
-  return (
-    <div>
-      <h3>ExpiredJobs-wll lists</h3>
-    </div>
-  );
+import TrashJobsPage from "@/components/Dashboard/TrashJobsPage";
+
+const TrashJobsHome = () => {
+  return <TrashJobsPage />;
 };
 
-export default ExpiredJobs;
+export default TrashJobsHome;

@@ -1,4 +1,6 @@
-const ApprovedJobsPage = () => {
+import ApprovedJobsPage from "@/components/Dashboard/ApprovedJobsPage";
+
+const ApprovedJobsHome = () => {
   return (
     <div>
       <ApprovedJobsPage />
@@ -6,4 +8,4 @@ const ApprovedJobsPage = () => {
   );
 };
 
-export default ApprovedJobsPage;
+export default ApprovedJobsHome;
