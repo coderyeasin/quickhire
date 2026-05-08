@@ -8,13 +8,13 @@ import {
 import { FiBriefcase, FiUsers, FiClock } from "react-icons/fi";
 
 import Link from "next/link";
-import { FiPlus } from "react-icons/fi";
 import { useMyJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 
 import { useMemo } from "react";
 import ReusableTable from "@/shared/DataTable";
 import StatusCard from "@/shared/StatusCard";
+import { useApplicationsByJobId } from "@/Hooks/useApplications";
 
 type PostedJobsType = {
   _id: string;
@@ -27,7 +27,16 @@ const col = createColumnHelper<PostedJobsType>();
 
 const RecruiterBoard = () => {
   const { data, isLoading } = useMyJobs();
+
   const jobs: PostedJobsType[] = useMemo(() => data?.data ?? [], [data]);
+  const jobIds = jobs.map((job) => job._id);
+  const { data: applicantsData, isLoading: applicantsLoading } =
+    useApplicationsByJobId(jobIds as string[]);
+
+  const applicants = useMemo(
+    () => applicantsData?.data ?? [],
+    [applicantsData],
+  );
 
   const jobsStatus = useMemo(() => {
     const pendingJobs = jobs.filter((j) => j.status === "pending");
@@ -52,18 +61,18 @@ const RecruiterBoard = () => {
         header: "Posted",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
-      col.display({
-        id: "actions",
-        header: "",
-        cell: (i) => (
-          <Link
-            href={`/recruiter/jobs/${i.row.original._id}/applicants`}
-            className="text-sm text-indigoTags hover:underline font-medium"
-          >
-            View applicants →
-          </Link>
-        ),
-      }),
+      // col.display({
+      //   id: "actions",
+      //   header: "",
+      //   cell: (i) => (
+      //     <Link
+      //       href={`/recruiter/jobs/${i.row.original._id}/applicants`}
+      //       className="text-sm text-indigoTags hover:underline font-medium"
+      //     >
+      //       View applicants →
+      //     </Link>
+      //   ),
+      // }),
     ],
     [],
   );
@@ -78,19 +87,6 @@ const RecruiterBoard = () => {
 
   return (
     <div className="space-y-8">
-      {/* <PageHeader
-        title="Recruiter Dashboard"
-        sub="Manage your job posts and review applicants"
-        action={
-          <Link
-            href="/recruiter/add"
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigoTags text-white text-sm font-medium rounded-lg hover:bg-indigoTags/90 transition-colors"
-          >
-            <FiPlus /> Post a Job
-          </Link>
-        }
-      /> */}
-
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <StatusCard
           label="My Jobs"
@@ -109,6 +105,13 @@ const RecruiterBoard = () => {
           value={isLoading ? "—" : jobsStatus.pendingJobs.length}
           color="amber"
           icon={<FiClock />}
+        />
+        <StatusCard
+          label="Candidate Applied"
+          value={applicantsLoading ? "—" : applicants.length}
+          color="indigo"
+          sub="Total applications received "
+          icon={<FiUsers />}
         />
       </div>
 

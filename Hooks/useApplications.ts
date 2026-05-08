@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import AppError from "@/lib/AppError";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { ApplicationPayload } from "@/types/types";
+import { ApplicationsType } from "@/types/interfaces";
 
 // GET APIs
 async function fetchAllApplications() {
@@ -36,7 +36,7 @@ async function fetchApplicationById(id: string) {
   return data;
 }
 
-async function fetchApplicationsByJobId(jobId: string) {
+async function fetchApplicationsByJobId(jobId) {
   const res = await fetch(`/api/jobs/${jobId}/applicants`);
   const data = await res.json();
 
@@ -75,11 +75,12 @@ export function useApplicationById(id: string) {
   });
 }
 
-export function useApplicationsByJobId(jobId: string) {
+export function useApplicationsByJobId(jobId: string[]) {
   return useQuery({
     queryKey: ["applications", "job", jobId],
     queryFn: () => fetchApplicationsByJobId(jobId),
     refetchOnWindowFocus: false,
+    enabled: jobId.length > 0,
   });
 }
 
@@ -87,7 +88,7 @@ export function useApplicationsByJobId(jobId: string) {
 export const useCreateApplication = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (body: ApplicationPayload) => {
+    mutationFn: async (body: ApplicationsType) => {
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: {

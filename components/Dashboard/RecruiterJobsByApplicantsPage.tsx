@@ -1,9 +1,10 @@
 "use client";
 
 import {
-  useApplications,
+  useApplicationsByJobId,
   useUpdateApplicationStatus,
 } from "@/Hooks/useApplications";
+import { useMyJobs } from "@/Hooks/useJobs";
 import ReusableTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
 import Spinner from "@/shared/Spinner";
@@ -15,7 +16,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const applicantStatus: Record<string, string[]> = {
   pending: ["reviewing", "rejected"],
@@ -27,16 +28,23 @@ const applicantStatus: Record<string, string[]> = {
 
 const col = createColumnHelper<ApplicationsType>();
 
-const Applications = () => {
+const RecruiterJobsByApplicantsPage = () => {
   const [open, setOpen] = useState(false);
   const [applicantsId, setApplicantsId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("applicants");
-  const { data, isLoading } = useApplications();
+
+  const { data, isLoading } = useMyJobs();
+
+  const jobs: ApplicationsType[] = useMemo(() => data?.data ?? [], [data]);
+  const jobIds = jobs.map((job) => job._id);
+
   const updateStatus = useUpdateApplicationStatus();
+  const { data: applicantsData, isLoading: applicantsLoading } =
+    useApplicationsByJobId(jobIds as string[]);
 
   const applicants: ApplicationsType[] = useMemo(
-    () => data?.data ?? [],
-    [data],
+    () => applicantsData?.data ?? [],
+    [applicantsData],
   );
 
   const columns = useMemo(
@@ -146,7 +154,7 @@ const Applications = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return isLoading ? (
+  return isLoading || applicantsLoading ? (
     <Spinner />
   ) : (
     <div className="space-y-6">
@@ -155,7 +163,7 @@ const Applications = () => {
       </h3>
       <ReusableTable
         table={table}
-        isLoading={isLoading}
+        isLoading={applicantsLoading}
         emptyMessage="No applications yet"
       />
       <Modal
@@ -169,4 +177,4 @@ const Applications = () => {
   );
 };
 
-export default Applications;
+export default RecruiterJobsByApplicantsPage;

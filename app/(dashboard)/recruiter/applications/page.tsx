@@ -1,7 +1,7 @@
-import Applications from "@/components/Dashboard/Applications";
+import RecruiterJobsByApplicantsPage from "@/components/Dashboard/RecruiterJobsByApplicantsPage";
 
-const AdminApplicationsPage = () => {
-  return <Applications />;
+const RecruiterJobsByApplicantsHome = () => {
+  return <RecruiterJobsByApplicantsPage />;
 };
 
-export default AdminApplicationsPage;
+export default RecruiterJobsByApplicantsHome;

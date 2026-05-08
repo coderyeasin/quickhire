@@ -22,7 +22,7 @@ export default function Modal({
           <JobsInfo jobId={jobId} />
         </DialogContent>
       ) : mode === "applicants" ? (
-        <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">
+        <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-6 [&>button]:top-6 [&>button]:cursor-pointer">
           <WholeApplication applicantsId={applicantsId} />
         </DialogContent>
       ) : (

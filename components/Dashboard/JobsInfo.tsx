@@ -4,12 +4,15 @@ import ApplyForm from "@/shared/ApplyForm";
 import CustomButton from "@/shared/CustomButton";
 import Spinner from "@/shared/Spinner";
 import { JobsType } from "@/types/types";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { FiMapPin, FiBriefcase, FiClock, FiDollarSign } from "react-icons/fi";
 
 const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const [isApply, setIsApply] = useState(false);
+  const { data: session } = useSession();
+  const role = session?.user.role;
   const { data, isLoading } = useJobs();
 
   const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
@@ -148,7 +151,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               </div>
             </div>
           </div>
-          {job.status === "approved" && (
+          {job.status === "approved" && role === "admin" && (
             <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
               <CustomButton
                 onClick={() => setIsApply(true)}

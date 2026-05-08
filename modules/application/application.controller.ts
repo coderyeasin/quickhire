@@ -21,8 +21,6 @@ const createApplication = catchAsync(async (req: NextRequest) => {
   if (!parsedData.success)
     throw new AppError(httpStatus.BAD_REQUEST, "Data is not parsed");
 
-  console.log("Received application data:", parsedData.data);
-
   const result = await applicationServices.applyToJob(
     user.id,
     parsedData.data?.jobId as string,
@@ -39,7 +37,7 @@ const createApplication = catchAsync(async (req: NextRequest) => {
 });
 
 const getAllAppliedJobs = catchAsync(async () => {
-  await withAuth(["admin"]);
+  await withAuth(["admin", "recruiter"]);
 
   const result = await applicationServices.getAllApplications();
 
@@ -122,9 +120,10 @@ const getJobByIdApplicants = catchAsync(async (req, routeCtx) => {
   const user = await withAuth(["recruiter", "admin"]);
 
   const { id: jobId } = await routeCtx.params;
+  const ids = jobId.split(",");
 
   const result = await applicationServices.getJobApplicantsById(
-    jobId,
+    ids,
     user.id,
     user.role,
   );

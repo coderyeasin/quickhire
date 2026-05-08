@@ -1,7 +1,7 @@
-import Applications from "@/components/Dashboard/Applications";
+import AdminApplicants from "@/components/Dashboard/AdminApplicants";
 
 const AdminApplicationsPage = () => {
-  return <Applications />;
+  return <AdminApplicants />;
 };
 
 export default AdminApplicationsPage;

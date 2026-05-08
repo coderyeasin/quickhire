@@ -18,6 +18,7 @@ import {
 import { ApplicationsType } from "@/types/interfaces";
 import { useApplications } from "@/Hooks/useApplications";
 import Spinner from "@/shared/Spinner";
+import { useSession } from "next-auth/react";
 
 const statusStyles = {
   pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
@@ -40,6 +41,8 @@ const WholeApplication = ({
 }: {
   applicantsId: string | null | undefined;
 }) => {
+  const { data: session } = useSession();
+  const recruiterEmail = session?.user?.email;
   const { data, isLoading } = useApplications();
   const applications: ApplicationsType[] = useMemo(
     () => data?.data ?? [],
@@ -53,21 +56,21 @@ const WholeApplication = ({
   return isLoading ? (
     <Spinner />
   ) : (
-    <div className="max-w-5xl mx-auto p-4 md:p-8">
-      <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
-        <div className="border-b border-gray-100 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="max-w-7xl mx-auto p-4 md:p-5">
+      <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="border-b border-gray-100 px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">
               Application Details
             </h2>
 
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-third-gray mt-1">
               Review candidate application information
             </p>
           </div>
 
           <div
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium w-fit ${
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm font-medium w-fit ${
               statusStyles[
                 (applicants?.status || "default") as keyof typeof statusStyles
               ]
@@ -78,181 +81,193 @@ const WholeApplication = ({
                 (applicants?.status || "default") as keyof typeof statusIcons
               ]
             }
+
             <span className="capitalize">{applicants?.status as string}</span>
           </div>
         </div>
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 p-4 md:p-5">
+          <div className="xl:col-span-3 space-y-4">
+            <div className="border border-gray-100 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <FiBriefcase className="text-third-gray" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiBriefcase className="text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900">
                   Job Information
                 </h3>
               </div>
 
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Position</p>
-                  <h4 className="text-lg font-semibold text-gray-800">
+                  <p className="text-xs text-third-gray mb-1">Position</p>
+
+                  <h4 className="text-base font-semibold text-gray-800">
                     {applicants?.jobId?.title}
                   </h4>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-500">Company</p>
-                  <p className="text-gray-700">{applicants?.jobId?.company}</p>
+                  <p className="text-xs text-third-gray mb-1">Company</p>
+
+                  <p className="text-sm text-dark-text">
+                    {applicants?.jobId?.company}
+                  </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-500">Job ID</p>
-                  <p className="text-gray-700 break-all">
+                  <p className="text-xs text-third-gray mb-1">Job ID</p>
+
+                  <p className="text-sm text-dark-text break-all">
                     {applicants?.jobId?._id}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiFile className="text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Job Description
-                </h3>
-              </div>
+            <div className="border border-gray-100 rounded-xl p-4">
+              <h2 className="text-base font-semibold text-gray-900 mb-3">
+                Required Skills
+              </h2>
 
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-gray-700 leading-7 whitespace-pre-line">
-                  {applicants?.jobId?.description}
-                </p>
+              <div className="flex flex-wrap gap-2">
+                {applicants?.jobId?.skills?.map((skill) => (
+                  <span
+                    key={skill}
+                    className="px-2.5 py-0.5 bg-indigo-50 text-indigoTags text-xs rounded-full font-medium"
+                  >
+                    {skill}
+                  </span>
+                ))}
               </div>
-            </div> */}
+            </div>
+            <div className="border border-gray-100 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <FiFileText className="text-third-gray" />
 
-            <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiFileText className="text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900">
                   Cover Letter
                 </h3>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-gray-700 leading-7 whitespace-pre-line">
+                <p className="text-sm text-dark-text leading-7 whitespace-pre-line">
                   {applicants?.coverLetter}
                 </p>
               </div>
             </div>
+            <div className="border border-gray-100 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <FiExternalLink className="text-third-gray" />
 
-            <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiExternalLink className="text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-base md:text-lg font-semibold text-dark-text">
                   Resume / CV
                 </h3>
               </div>
 
-              <Link
-                href={applicants?.resumeUrl as string}
-                target="_blank"
-                className="inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition"
-              >
-                Open Resume
-                <FiExternalLink />
-              </Link>
+              {applicants?.resumeUrl && (
+                <Link
+                  href={applicants.resumeUrl}
+                  target="_blank"
+                  className="inline-flex items-center gap-2 bg-dark-text text-white px-4 py-2.5 rounded-xl hover:opacity-90 transition text-sm"
+                >
+                  Open Resume
+                  <FiExternalLink />
+                </Link>
+              )}
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiUser className="text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Candidate
-                </h3>
+          <div className="space-y-4">
+            <div className="border border-gray-100 rounded-xl p-4 space-y-5">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <FiUser className="text-third-gray" />
+
+                  <h3 className="text-base font-semibold text-gray-900">
+                    Candidate
+                  </h3>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs text-third-gray mb-1">Name</p>
+
+                    <p className="text-sm font-medium text-gray-800">
+                      {applicants?.candidateId?.name}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-third-gray flex items-center gap-1 mb-1">
+                      <FiMail className="size-3.5" />
+                      Email
+                    </p>
+
+                    <p className="text-sm text-dark-text break-all">
+                      {applicants?.candidateId?.email}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-third-gray mb-1">Candidate ID</p>
+
+                    <p className="text-sm text-dark-text break-all">
+                      {applicants?.candidateId?._id}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-500">Name</p>
-                  <p className="font-medium text-gray-800">
-                    {applicants?.candidateId?.name}
-                  </p>
+              <div className="border-t border-gray-100 pt-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <FiUser className="text-third-gray" />
+                  <h3 className="text-base font-semibold text-gray-900">
+                    Recruiter
+                  </h3>
                 </div>
 
-                <div>
-                  <p className="text-sm text-gray-500 flex items-center gap-1">
-                    <FiMail className="size-4" />
-                    Email
-                  </p>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs text-third-gray mb-1">Name</p>
+                    <p className="text-sm font-medium text-gray-800">
+                      {applicants?.recruiterId?.name}
+                    </p>
+                  </div>
 
-                  <p className="text-gray-700 break-all">
-                    {applicants?.candidateId?.email}
-                  </p>
-                </div>
+                  <div>
+                    <p className="text-xs text-third-gray flex items-center gap-1 mb-1">
+                      <FiMail className="size-3.5" />
+                      Recruiter Email
+                    </p>
+                    <p className="text-sm text-dark-text break-all">
+                      {recruiterEmail ? recruiterEmail : "-"}
+                    </p>
+                  </div>
 
-                <div>
-                  <p className="text-sm text-gray-500">Candidate ID</p>
+                  <div>
+                    <p className="text-xs text-third-gray mb-1">Recruiter ID</p>
 
-                  <p className="text-gray-700 break-all">
-                    {applicants?.candidateId?._id}
-                  </p>
+                    <p className="text-sm text-dark-text break-all">
+                      {applicants?.recruiterId?._id}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiUser className="text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Recruiter
-                </h3>
-              </div>
+            <div className="border border-gray-100 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <FiCalendar className="text-third-gray" />
 
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-500">Name</p>
-
-                  <p className="font-medium text-gray-800">
-                    {applicants?.recruiterId?.name}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm text-gray-500 flex items-center gap-1">
-                    <FiMail className="size-4" />
-                    Email
-                  </p>
-
-                  <p className="text-gray-700 break-all">
-                    {applicants?.recruiterId?.company}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm text-gray-500">Recruiter ID</p>
-
-                  <p className="text-gray-700 break-all">
-                    {applicants?.recruiterId?._id}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border border-gray-100 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <FiCalendar className="text-gray-500" />
-
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-base font-semibold text-gray-900">
                   Timeline
                 </h3>
               </div>
 
               <div>
-                <p className="text-sm text-gray-500">Applied At</p>
+                <p className="text-xs text-third-gray mb-1">Applied At</p>
 
-                <p className="text-gray-700 font-medium">
-                  {new Date(applicants?.appliedAt as string).toLocaleString()}
+                <p className="text-sm text-dark-text font-medium">
+                  {applicants?.appliedAt
+                    ? new Date(applicants.appliedAt).toLocaleString()
+                    : "N/A"}
                 </p>
               </div>
             </div>

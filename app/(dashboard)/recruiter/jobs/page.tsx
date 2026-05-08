@@ -1,9 +1,7 @@
-const jobPost = () => {
-  return (
-    <>
-      <h3>all posted jobs</h3>
-    </>
-  );
+import MineRecruiterPostedJobsPage from "@/components/Dashboard/RecruiterPostedJobs";
+
+const MyJobsHome = () => {
+  return <MineRecruiterPostedJobsPage />;
 };
 
-export default jobPost;
+export default MyJobsHome;
