@@ -66,6 +66,11 @@ const CandidateBoard = () => {
       col.accessor((row) => row.jobId?.type, {
         id: "type",
         header: "Type",
+        cell: (i) => (
+          <span className="text-xs text-primary-gray capitalize">
+            {i.getValue()}
+          </span>
+        ),
       }),
       col.accessor("status", {
         header: "Status",
@@ -77,7 +82,7 @@ const CandidateBoard = () => {
       }),
       col.display({
         id: "actions",
-        header: "",
+        header: "Actions",
         cell: (i) => {
           const app = i.row.original;
           const canWithdraw = ["pending", "reviewing"].includes(app.status);
@@ -135,19 +140,6 @@ const CandidateBoard = () => {
 
   return (
     <div className="space-y-8">
-      {/* <PageHeader
-        title="My Activities"
-        sub="Track your job applications and progress"
-        action={
-          <Link
-            href="/candidate/jobs"
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigoTags text-white text-sm font-medium rounded-lg hover:bg-indigoTags/90 transition-colors"
-          >
-            Browse Jobs
-          </Link>
-        }
-      /> */}
-
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-5">
         <StatusCard
           label="Applied"

@@ -26,12 +26,12 @@ const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
     title: "My Profile",
     sub: "Keep your information up to date",
   },
-  "/recruiter": { title: "Dashboard", sub: "Your recruitment overview" },
+  "/recruiter": { title: "Overview", sub: "Your recruitment overview" },
   "/recruiter/jobs": { title: "My Jobs", sub: "Jobs you've posted" },
   "/recruiter/add": { title: "Post a Job", sub: "Create a new listing" },
   "/recruiter/profile": { title: "Profile", sub: "Your public profile" },
 
-  "/candidate": { title: "Dashboard", sub: "Your job search overview" },
+  "/candidate": { title: "Overview", sub: "Your job search overview" },
   "/candidate/jobs": {
     title: "Available Jobs",
     sub: "Available jobs to apply",
@@ -54,7 +54,14 @@ interface ITopHeader {
 
 export default function TopHeader({ user }: ITopHeader) {
   const pathname = usePathname();
-  const pageInfo = PAGE_TITLES[pathname] ?? { title: "Dashboard", sub: "" };
+  let pageInfo = PAGE_TITLES[pathname] ?? { title: "Dashboard", sub: "" };
+
+  if (pathname.startsWith("/candidate/jobs/")) {
+    pageInfo = {
+      title: "Job Details",
+      sub: "See Job Full Job Description & Requirements",
+    };
+  }
 
   return (
     <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-10 sticky top-0 z-40 shrink-0">

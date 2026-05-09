@@ -12,15 +12,9 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const [isApply, setIsApply] = useState(false);
   const { data: session } = useSession();
   const role = session?.user.role;
-  // const { data, isLoading } = useJobs();
 
-  // -------- tested below api works --- if needed allow above api
-  // to remove below api
-  // ------------it works for candidate apply--------
   const { data, isLoading } = useJobById(jobId as string);
   const job = useMemo(() => data?.data ?? [], [data]);
-
-  // const job = jobs.find((j) => j._id === jobId);
 
   if (!job) {
     return null;
@@ -155,16 +149,16 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               </div>
             </div>
           </div>
-          {(job.status === "approved" && role === "admin") ||
-            (role === "candidate" && (
-              <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
-                <CustomButton
-                  onClick={() => setIsApply(true)}
-                  label=" Apply Now"
-                  className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
-                />
-              </div>
-            ))}
+          {((role === "candidate" && job.status === "approved") ||
+            role === "admin") && (
+            <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
+              <CustomButton
+                onClick={() => setIsApply(true)}
+                label=" Apply Now"
+                className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
+              />
+            </div>
+          )}
         </div>
       ) : (
         <div className="p-6 md:p-8 bg-white rounded-xl mx-auto shadow-sm">

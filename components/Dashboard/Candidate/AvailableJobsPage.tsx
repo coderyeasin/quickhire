@@ -2,11 +2,14 @@
 import { useJobs } from "@/Hooks/useJobs";
 import Spinner from "@/shared/Spinner";
 import { JobsType } from "@/types/types";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
 const AvailableJobsPage = () => {
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const { data, isLoading } = useJobs();
 
   const jobs = useMemo(
@@ -21,7 +24,7 @@ const AvailableJobsPage = () => {
     <section className="">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
         {jobs.map((job: JobsType) => (
-          <Link href={`/candidate/${job._id}`} key={job._id}>
+          <Link href={`/${userRole}/jobs/${job._id}`} key={job._id}>
             <div className="flex flex-col items-start gap-4 px-4 md:px-5 py-5 space-y-3 border border-third-gray/20 cursor-pointer transition-transform duration-300 hover:scale-105">
               <div className="flex items-start justify-between w-full gap-3">
                 <Image
@@ -70,21 +73,10 @@ const AvailableJobsPage = () => {
                         px-2 md:px-3 py-1 md:py-2 rounded-full`}
                     >
                       {type}
-                      {/* {type.replace(/"/g, "").replace(",", "")} */}
                     </p>
                   ))}
                 </div>
               </div>
-              {/* <div className="flex flex-wrap gap-2">
-              {job?.skills?.map((skill) => (
-                <span
-                  key={skill}
-                  className="px-2.5 py-0.5 bg-indigo-50 text-indigoTags text-xs rounded-full font-medium"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div> */}
             </div>
           </Link>
         ))}

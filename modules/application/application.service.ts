@@ -59,7 +59,7 @@ const getAllApplications = async () => {
   await connectToDB();
   return ApplicationModel.find()
     .populate("candidateId", "name email ")
-    .populate("jobId", "title company skills")
+    .populate("jobId")
     .populate("recruiterId", "name email")
     .sort({ appliedAt: -1 })
     .lean();

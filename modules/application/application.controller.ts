@@ -37,7 +37,7 @@ const createApplication = catchAsync(async (req: NextRequest) => {
 });
 
 const getAllAppliedJobs = catchAsync(async () => {
-  await withAuth(["admin", "recruiter"]);
+  await withAuth(["admin", "recruiter", "candidate"]);
 
   const result = await applicationServices.getAllApplications();
 

@@ -36,7 +36,7 @@ async function fetchApplicationById(id: string) {
   return data;
 }
 
-async function fetchApplicationsByJobId(jobId) {
+async function fetchApplicationsByJobId(jobId: string[]) {
   const res = await fetch(`/api/jobs/${jobId}/applicants`);
   const data = await res.json();
 

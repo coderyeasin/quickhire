@@ -1,11 +1,8 @@
+import CandidateApplicationsPage from "@/components/Dashboard/Candidate/CandidateApplications";
 import React from "react";
 
-const CandidateApplications = () => {
-  return (
-    <div>
-      <h3>User Should be see their appliedJobs list</h3>
-    </div>
-  );
+const CandidateApplicationsHome = () => {
+  return <CandidateApplicationsPage />;
 };
 
-export default CandidateApplications;
+export default CandidateApplicationsHome;

@@ -1,7 +1,14 @@
+"use client";
 import { FiCheckCircle } from "react-icons/fi";
 import JobsInfo from "../JobsInfo";
+import { IoArrowBackCircle } from "react-icons/io5";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const JobDetails = ({ jobId }: { jobId: string | null }) => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   return (
     <div className="mx-auto px-4 md:px-6">
       <div className="flex gap-6">
@@ -10,6 +17,19 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
         </div>
 
         <div className="space-y-6 ">
+          <div className="flex justify-end">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/${userRole}/jobs`);
+              }}
+              className="inline-flex items-center text-right gap-2 text-indigoTags cursor-pointer"
+            >
+              <IoArrowBackCircle size={22} />
+              Back To Jobs
+            </button>
+          </div>
+
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-5">
               Facilities & Perks
