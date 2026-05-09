@@ -52,7 +52,14 @@ const RecruiterBoard = () => {
           <span className="font-medium text-dark-text">{i.getValue()}</span>
         ),
       }),
-      col.accessor("type", { header: "Type" }),
+      col.accessor("type", {
+        header: "Type",
+        cell: (i) => (
+          <span className="font-medium text-dark-text capitalize">
+            {i.getValue()}
+          </span>
+        ),
+      }),
       col.accessor("status", {
         header: "Status",
         cell: (i) => <StatusBadge status={i.getValue()} />,

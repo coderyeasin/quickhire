@@ -53,7 +53,6 @@ export function useJobById(id: string) {
 }
 
 // Mutations (create, update, delete)
-
 export function useCreateJob() {
   const qc = useQueryClient();
   return useMutation({

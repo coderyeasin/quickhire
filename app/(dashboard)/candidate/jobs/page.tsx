@@ -1,11 +1,7 @@
-import React from "react";
+import AvailableJobsPage from "@/components/Dashboard/Candidate/AvailableJobsPage";
 
-const CandidateJobs = () => {
-  return (
-    <div>
-      <h3>Available Jobs</h3>
-    </div>
-  );
+const AvailableJobsHome = () => {
+  return <AvailableJobsPage />;
 };
 
-export default CandidateJobs;
+export default AvailableJobsHome;

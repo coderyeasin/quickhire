@@ -1,23 +1,26 @@
 "use client";
-import { useJobs } from "@/Hooks/useJobs";
+import { useJobById } from "@/Hooks/useJobs";
 import ApplyForm from "@/shared/ApplyForm";
 import CustomButton from "@/shared/CustomButton";
 import Spinner from "@/shared/Spinner";
-import { JobsType } from "@/types/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { FiMapPin, FiBriefcase, FiClock, FiDollarSign } from "react-icons/fi";
+import { FiMapPin, FiClock, FiDollarSign } from "react-icons/fi";
 
 const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const [isApply, setIsApply] = useState(false);
   const { data: session } = useSession();
   const role = session?.user.role;
-  const { data, isLoading } = useJobs();
+  // const { data, isLoading } = useJobs();
 
-  const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
+  // -------- tested below api works --- if needed allow above api
+  // to remove below api
+  // ------------it works for candidate apply--------
+  const { data, isLoading } = useJobById(jobId as string);
+  const job = useMemo(() => data?.data ?? [], [data]);
 
-  const job = jobs.find((j) => j._id === jobId);
+  // const job = jobs.find((j) => j._id === jobId);
 
   if (!job) {
     return null;
@@ -47,7 +50,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
       {!isApply ? (
         <div className="rounded-2xl overflow-hidden mx-auto">
           <div className="p-6 md:p-8 border-b border-slate-100">
-            <div className="flex items-start gap-5">
+            <div className="flex items-center gap-5">
               <Image
                 src={job.companyLogo}
                 alt={job.company}
@@ -57,6 +60,11 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               />
 
               <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <span className="px-3 py-1 bg-indigo-50 text-indigoTags rounded-full text-xs font-semibold capitalize">
+                    {job.type}
+                  </span>
+                </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-dark-text">
                   {job.title}
                 </h1>
@@ -65,10 +73,6 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                 <div className="flex flex-wrap gap-4 mt-4 text-sm text-third-gray">
                   <span className="flex items-center gap-1.5">
                     <FiMapPin /> {job.location}
-                  </span>
-
-                  <span className="flex items-center gap-1.5">
-                    <FiBriefcase /> {job.type}
                   </span>
 
                   {job.salary && (
@@ -151,15 +155,16 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               </div>
             </div>
           </div>
-          {job.status === "approved" && role === "admin" && (
-            <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
-              <CustomButton
-                onClick={() => setIsApply(true)}
-                label=" Apply Now"
-                className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
-              />
-            </div>
-          )}
+          {(job.status === "approved" && role === "admin") ||
+            (role === "candidate" && (
+              <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
+                <CustomButton
+                  onClick={() => setIsApply(true)}
+                  label=" Apply Now"
+                  className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
+                />
+              </div>
+            ))}
         </div>
       ) : (
         <div className="p-6 md:p-8 bg-white rounded-xl mx-auto shadow-sm">
