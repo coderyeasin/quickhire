@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { FiTrash2 } from "react-icons/fi";
+import { FiExternalLink, FiTrash2 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { useDeleteJob, useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
@@ -37,9 +37,10 @@ const ManageJobs = () => {
               setOpen(true);
               setJobId(i.row.original._id);
             }}
-            className="font-medium text-dark-text cursor-pointer hover:text-indigoTags transition-colors text-left"
+            className="flex gap-2 font-medium hover:text-dark-text cursor-pointer text-indigoTags transition-colors text-left"
           >
             {i.getValue()}
+            <FiExternalLink className="size-4 hover:text-primary-gray text-indigoTags" />
           </button>
         ),
       }),

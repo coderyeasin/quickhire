@@ -13,6 +13,7 @@ import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
 import Spinner from "@/shared/Spinner";
+import { FiExternalLink } from "react-icons/fi";
 
 const col = createColumnHelper<JobsType>();
 
@@ -39,9 +40,10 @@ const ApprovedJobsPage = () => {
               setOpen(true);
               setJobId(i.row.original._id);
             }}
-            className="font-medium text-dark-text hover:text-indigoTags transition-colors text-left cursor-pointer"
+            className="font-medium flex gap-2 hover:text-dark-text text-indigoTags transition-colors text-left cursor-pointer"
           >
             {i.getValue()}
+            <FiExternalLink className="size-4 hover:text-primary-gray text-indigoTags" />
           </button>
         ),
       }),
