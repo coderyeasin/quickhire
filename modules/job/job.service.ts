@@ -32,7 +32,7 @@ export async function getJobById(id: string) {
   await connectToDB();
 
   const res = await JobModel.findById(id)
-    .populate("recruiterId", "name email")
+    .populate("recruiterId", "name company")
     .lean();
 
   if (!res) {

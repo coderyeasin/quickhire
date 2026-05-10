@@ -1,8 +1,10 @@
 "use client";
+import { useMyApplications } from "@/Hooks/useApplications";
 import { useJobById } from "@/Hooks/useJobs";
 import ApplyForm from "@/shared/ApplyForm";
 import CustomButton from "@/shared/CustomButton";
 import Spinner from "@/shared/Spinner";
+import { ApplicationsType } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
@@ -13,8 +15,14 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const [isApply, setIsApply] = useState(false);
   const { data: session } = useSession();
   const role = session?.user.role;
-
   const { data, isLoading } = useJobById(jobId as string);
+  const { data: applicantsData } = useMyApplications();
+
+  const appData: ApplicationsType[] = useMemo(
+    () => applicantsData?.data ?? [],
+    [applicantsData],
+  );
+
   const job = useMemo(() => data?.data ?? [], [data]);
 
   if (!job) {
@@ -34,6 +42,14 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   };
   const canApply =
     (role === "admin" && job.status === "approved") || role === "candidate";
+
+  const alreadyApplied = appData?.some(
+    (item) =>
+      String(item?.candidateId?._id || item?.candidateId) ===
+        String(session?.user?.id) &&
+      String(item?.jobId?._id || item?.jobId) === String(job?._id),
+  );
+
   const skills = parseArray(job.skills);
   const categories = parseArray(job.category);
 
@@ -48,7 +64,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
           <div className="p-6 md:p-8 border-b border-slate-100">
             <div className="flex items-center gap-5">
               <Image
-                src={job.companyLogo}
+                src={job?.companyLogo ? job.companyLogo : "I"}
                 alt={job.company}
                 width={70}
                 height={70}
@@ -94,7 +110,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                 Job Description
               </h2>
               <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                {job.description}
+                {job?.description?.slice(0, 200)}...
               </p>
             </div>
             <div>
@@ -153,17 +169,35 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
           </div>
           <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
             <CustomButton
+              disabled={alreadyApplied}
               onClick={() => {
+                if (alreadyApplied) {
+                  toast.error("You already applied for this job");
+                  return;
+                }
+
                 if (canApply) {
                   setIsApply(true);
+                  return;
                 }
-                if (!canApply && role !== "admin")
+
+                if (!role) {
                   toast.error("You need to login or register first");
-                if (!canApply && role === "admin")
+                  return;
+                }
+
+                if (role === "admin") {
                   toast.error("You need to change job status");
+                  return;
+                }
+
+                if (role === "recruiter") {
+                  toast.error("Can not apply as a recruiter");
+                  return;
+                }
               }}
-              label="Apply Now"
-              className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
+              label={alreadyApplied ? "Already Applied" : "Apply Now"}
+              className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         </div>

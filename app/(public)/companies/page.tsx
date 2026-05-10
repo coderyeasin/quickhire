@@ -1,10 +1,10 @@
-import React from "react";
+import CompaniesJobs from "@/components/Pages/CompaniesJobs/CompaniesJobs";
 
 const CompaniesHome = () => {
   return (
-    <div>
-      <h3>CompaniesHome</h3>
-    </div>
+    <section className="container-layout h-screen">
+      <CompaniesJobs />
+    </section>
   );
 };
 
