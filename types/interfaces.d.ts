@@ -39,6 +39,15 @@ export interface JobCardType {
 
 //----------------- Real Types -----------------
 
+export interface ITopHeaderUser {
+  user: {
+    name?: string | null;
+    email?: string | null;
+    avatar?: string | null;
+    role?: string;
+  };
+}
+
 export interface ICandidate {
   _id?: string;
   name: string;

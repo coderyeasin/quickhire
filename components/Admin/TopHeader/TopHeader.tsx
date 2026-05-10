@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { FiBell } from "react-icons/fi";
 import Image from "next/image";
+import { ITopHeaderUser } from "@/types/interfaces";
 
 const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
   "/admin": {
@@ -43,16 +44,7 @@ const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
   "/candidate/profile": { title: "Profile", sub: "Your candidate profile" },
 };
 
-interface ITopHeader {
-  user: {
-    name?: string | null;
-    email?: string | null;
-    avatar?: string | null;
-    role?: string;
-  };
-}
-
-export default function TopHeader({ user }: ITopHeader) {
+export default function TopHeader({ user }: ITopHeaderUser) {
   const pathname = usePathname();
   let pageInfo = PAGE_TITLES[pathname] ?? { title: "Dashboard", sub: "" };
 
