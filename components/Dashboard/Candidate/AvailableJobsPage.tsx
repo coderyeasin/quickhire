@@ -24,7 +24,12 @@ const AvailableJobsPage = () => {
     <section className="">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
         {jobs.map((job: JobsType) => (
-          <Link href={`/${userRole}/jobs/${job._id}`} key={job._id}>
+          <Link
+            href={
+              userRole ? `/${userRole}/jobs/${job._id}` : `/jobs/${job._id}`
+            }
+            key={job._id}
+          >
             <div className="flex flex-col items-start gap-4 px-4 md:px-5 py-5 space-y-3 border border-third-gray/20 cursor-pointer transition-transform duration-300 hover:scale-105">
               <div className="flex items-start justify-between w-full gap-3">
                 <Image

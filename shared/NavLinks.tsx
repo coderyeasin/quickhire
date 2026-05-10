@@ -111,7 +111,11 @@ export function getNavItemsForRole(role: string) {
 
 function NavLinks({ href, label, icon }: INavItems) {
   const pathName = usePathname();
-  const isActive = pathName === href;
+  let isActive = pathName === href;
+
+  if (pathName.startsWith("/candidate/jobs/")) {
+    isActive = href === "/candidate/jobs";
+  }
   return (
     <Link
       href={href}

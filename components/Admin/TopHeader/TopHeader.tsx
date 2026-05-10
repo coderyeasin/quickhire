@@ -45,10 +45,10 @@ const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
 };
 
 export default function TopHeader({ user }: ITopHeaderUser) {
-  const pathname = usePathname();
-  let pageInfo = PAGE_TITLES[pathname] ?? { title: "Dashboard", sub: "" };
+  const pathName = usePathname();
+  let pageInfo = PAGE_TITLES[pathName] ?? { title: "Dashboard", sub: "" };
 
-  if (pathname.startsWith("/candidate/jobs/")) {
+  if (pathName.startsWith("/candidate/jobs/")) {
     pageInfo = {
       title: "Job Details",
       sub: "See Job Full Job Description & Requirements",

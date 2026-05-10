@@ -6,6 +6,7 @@ import Spinner from "@/shared/Spinner";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import { FiMapPin, FiClock, FiDollarSign } from "react-icons/fi";
 
 const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
@@ -31,7 +32,8 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
         .filter(Boolean),
     );
   };
-
+  const canApply =
+    (role === "admin" && job.status === "approved") || role === "candidate";
   const skills = parseArray(job.skills);
   const categories = parseArray(job.category);
 
@@ -40,7 +42,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   }
 
   return (
-    <div className="max-w-5xl ">
+    <div className={role ? "max-w-5xl" : "contain-layout"}>
       {!isApply ? (
         <div className="rounded-2xl overflow-hidden mx-auto">
           <div className="p-6 md:p-8 border-b border-slate-100">
@@ -149,16 +151,21 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               </div>
             </div>
           </div>
-          {((role === "candidate" && job.status === "approved") ||
-            role === "admin") && (
-            <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
-              <CustomButton
-                onClick={() => setIsApply(true)}
-                label=" Apply Now"
-                className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
-              />
-            </div>
-          )}
+          <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
+            <CustomButton
+              onClick={() => {
+                if (canApply) {
+                  setIsApply(true);
+                }
+                if (!canApply && role !== "admin")
+                  toast.error("You need to login or register first");
+                if (!canApply && role === "admin")
+                  toast.error("You need to change job status");
+              }}
+              label="Apply Now"
+              className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition"
+            />
+          </div>
         </div>
       ) : (
         <div className="p-6 md:p-8 bg-white rounded-xl mx-auto shadow-sm">

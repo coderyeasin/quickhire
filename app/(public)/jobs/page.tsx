@@ -1,5 +1,4 @@
 import AvailableJobsPage from "@/components/Dashboard/Candidate/AvailableJobsPage";
-// import AllJobs from "@/components/Pages/AllJobs/AllJobs";
 
 const JobsHome = () => {
   return (

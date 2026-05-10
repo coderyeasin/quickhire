@@ -10,7 +10,9 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
   const { data: session } = useSession();
   const userRole = session?.user?.role;
   return (
-    <div className="mx-auto px-4 md:px-6">
+    <div
+      className={userRole ? "mx-auto px-4 md:px-6" : "container-layout py-8"}
+    >
       <div className="flex gap-6">
         <div className="flex-1 bg-white rounded-3xl border border-gray-100 shadow-sm">
           <JobsInfo jobId={jobId} />
@@ -21,7 +23,7 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(`/${userRole}/jobs`);
+                router.push(userRole ? `/${userRole}/jobs/` : `/jobs/`);
               }}
               className="inline-flex items-center text-right gap-2 text-indigoTags cursor-pointer"
             >
