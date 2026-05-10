@@ -17,6 +17,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useMemo, useState } from "react";
+import { FiExternalLink } from "react-icons/fi";
 
 const applicantStatus: Record<string, string[]> = {
   pending: ["reviewing", "rejected"],
@@ -76,14 +77,17 @@ const RecruiterJobsByApplicantsPage = () => {
                 setOpen(true);
                 setApplicantsId(i.row.original._id);
               }}
-              className="font-medium cursor-pointer transition-colors text-left"
+              className="flex items-center gap-2 font-medium cursor-pointer transition-colors text-left"
             >
-              <p className="font-medium text-dark-text text-sm hover:text-indigoTags">
-                {j.title}
-              </p>
-              <p className="text-xs text-primary-gray hover:text-indigoTags">
-                {j.company}
-              </p>
+              <div>
+                <p className="font-medium hover:text-dark-text text-sm text-indigoTags">
+                  {j.title}
+                </p>
+                <p className="text-xs hover:text-primary-gray text-indigoTags">
+                  {j.company}
+                </p>
+              </div>
+              <FiExternalLink className="size-4 text-indigoTags" />
             </div>
           ) : (
             <span className="text-xs text-primary-gray">Job removed</span>

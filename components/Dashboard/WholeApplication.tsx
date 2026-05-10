@@ -192,7 +192,7 @@ const WholeApplication = ({
 
                   <div className="bg-gray-50 rounded-xl p-4">
                     <p className="text-sm text-dark-text leading-7 whitespace-pre-line">
-                      {applicants?.coverLetter}
+                      {applicants?.coverLetter?.slice(0, 50)}
                     </p>
                   </div>
                 </div>
