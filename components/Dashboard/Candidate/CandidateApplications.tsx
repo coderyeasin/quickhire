@@ -27,8 +27,6 @@ const CandidateApplicationsPage = () => {
     [data],
   );
 
-  console.log("applicantsId", applicantsId);
-
   const columns = useMemo(
     () => [
       col.display({
@@ -42,19 +40,18 @@ const CandidateApplicationsPage = () => {
                 setMode("applicants");
                 setOpen(true);
                 setApplicantsId(i.row.original._id);
-                console.log("id", i.row.original._id);
               }}
               className="font-medium cursor-pointer transition-colors text-left flex items-start gap-3"
             >
               <div>
-                <p className="font-medium text-dark-text text-sm hover:text-indigoTags">
+                <p className="font-medium hover:text-dark-text text-sm text-indigoTags">
                   {j.title}
                 </p>
-                <p className="text-xs text-primary-gray hover:text-indigoTags">
+                <p className="text-xs hover:text-primary-gray text-indigoTags">
                   {j.company}
                 </p>
               </div>
-              <FiExternalLink className="size-4" />
+              <FiExternalLink className="size-4 hover:text-primary-gray text-indigoTags" />
             </div>
           ) : (
             <span className="text-xs text-primary-gray">Job removed</span>

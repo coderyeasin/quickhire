@@ -15,11 +15,11 @@ const routes = [
 ];
 
 export default function Header() {
-  const { status } = useSession();
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<ModalMode>("login");
 
-  const isLoggedIn = status === "authenticated";
+  const isLoggedIn = !!session;
 
   return (
     <section>
@@ -50,13 +50,9 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-3 font-epilogue">
-            {status === "loading" && (
-              <div className="w-9 h-9 rounded-full bg-gray-200 animate-pulse" />
-            )}
-
-            {isLoggedIn && <UserProfile />}
-
-            {status === "unauthenticated" && (
+            {isLoggedIn ? (
+              <UserProfile />
+            ) : (
               <div className="flex items-center gap-3 divide-x divide-gray-300">
                 <CustomButton
                   label="Login"

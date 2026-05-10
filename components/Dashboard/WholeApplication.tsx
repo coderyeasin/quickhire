@@ -128,7 +128,7 @@ const WholeApplication = ({
                   <p className="text-xs text-third-gray mb-1">Job ID</p>
 
                   <Link
-                    href={`/${userRole}/${applicants?.jobId?._id}`}
+                    href={`/${userRole}/jobs/${applicants?.jobId?._id}`}
                     className="text-sm text-indigo-600 hover:underline break-all"
                   >
                     {applicants?.jobId?._id}
@@ -234,7 +234,7 @@ const WholeApplication = ({
                   </p>
 
                   <Link
-                    href={`/${userRole}/${applicants?.jobId?._id}`}
+                    href={`/${userRole}/jobs/${applicants?.jobId?._id}`}
                     className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-indigo-600 hover:underline"
                   >
                     View Full Job Details
