@@ -1,9 +1,10 @@
-import AllJobs from "@/components/Pages/AllJobs/AllJobs";
+import AvailableJobsPage from "@/components/Dashboard/Candidate/AvailableJobsPage";
+// import AllJobs from "@/components/Pages/AllJobs/AllJobs";
 
 const JobsHome = () => {
   return (
     <section className="container-layout h-screen">
-      <AllJobs />
+      <AvailableJobsPage />
     </section>
   );
 };

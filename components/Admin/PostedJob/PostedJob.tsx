@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
 import { errorCls, inputCls, labelCls } from "@/shared/ApplyForm";
-import { createJobSchema, CreateJobsTypes } from "@/types/constraints";
+import { createJobSchema, CreateJobsTypes } from "@/utils/schemaValidate";
 
 export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
