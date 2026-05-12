@@ -1,5 +1,6 @@
 import latestJobCardsData from "@/utils/latestJobCard";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { IoArrowForwardSharp } from "react-icons/io5";
 
@@ -11,10 +12,12 @@ const LatestJobs = () => {
           <h2 className="text-dark-text text-[48px] font-semibold font-clash leading-[160%]">
             Latest <span className="text-blue-text"> jobs open</span>
           </h2>
-          <div className="flex items-end gap-3 text-indigoTags cursor-pointer">
-            <h3 className=" text-md font-medium">Show all jobs</h3>
-            <IoArrowForwardSharp className="text-xl" />
-          </div>
+          <Link href={"/jobs"}>
+            <div className="flex items-end gap-3 text-indigoTags cursor-pointer">
+              <h3 className=" text-md font-medium">Show all jobs</h3>
+              <IoArrowForwardSharp className="text-xl" />
+            </div>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full mx-auto">

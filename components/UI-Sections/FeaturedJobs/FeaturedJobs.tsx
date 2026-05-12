@@ -1,5 +1,6 @@
 import featuredJobCardsData from "@/utils/featuredCard";
 import Image from "next/image";
+import Link from "next/link";
 import { IoArrowForwardSharp } from "react-icons/io5";
 
 const FeaturedJobs = () => {
@@ -9,10 +10,13 @@ const FeaturedJobs = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] font-semibold font-clash leading-tight md:leading-[160%]">
           Featured <span className="text-blue-text"> jobs</span>
         </h2>
-        <div className="flex items-center gap-2 text-indigoTags cursor-pointer text-sm md:text-md">
-          <h3 className="font-medium">Show all jobs</h3>
-          <IoArrowForwardSharp className="text-lg" />
-        </div>
+
+        <Link href={"/jobs"}>
+          <div className="flex items-center gap-2 text-indigoTags cursor-pointer text-sm md:text-md">
+            <h3 className="font-medium">Show all jobs</h3>
+            <IoArrowForwardSharp className="text-lg" />
+          </div>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
