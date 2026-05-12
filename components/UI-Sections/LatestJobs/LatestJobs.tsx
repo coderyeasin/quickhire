@@ -1,11 +1,24 @@
-import latestJobCardsData from "@/utils/latestJobCard";
+"use client";
+import { useJobs } from "@/Hooks/useJobs";
+import Spinner from "@/shared/Spinner";
+import { JobsType } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useMemo } from "react";
 import { IoArrowForwardSharp } from "react-icons/io5";
 
 const LatestJobs = () => {
-  return (
+  const { data, isLoading } = useJobs();
+
+  const latestJobs = useMemo(
+    () =>
+      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
+    [data],
+  );
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <section className="bg-[#F8F8FD] bg-[url(/images/hero/Pattern.png)] bg-no-repeat bg-contain bg-right lg:[clip-path:polygon(10%_0%,80%_0%,100%_0%,100%_80%,100%_100%,0%_100%,0%_80%,0%_20%)]">
       <div className="container-layout py-14 ">
         <div className="flex justify-between items-center">
@@ -21,15 +34,15 @@ const LatestJobs = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full mx-auto">
-          {latestJobCardsData.map((job) => (
+          {latestJobs.slice(0, 8).map((job: JobsType) => (
             <div
-              key={job.id}
+              key={job._id}
               className="flex items-start gap-6 bg-white p-6 border border-gray-100 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             >
               <div className="shrink-0">
                 <Image
-                  src={job.image}
-                  alt={job.title}
+                  src={job.companyLogo}
+                  alt={job.company}
                   className="object-contain"
                   width={64}
                   height={84}
@@ -46,8 +59,8 @@ const LatestJobs = () => {
                 </p>
 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <p className="bg-greenTags/10 rounded-full text-greenTags px-3 py-1 text-sm">
-                    {job.workType}
+                  <p className="bg-greenTags/10 rounded-full capitalize text-greenTags px-3 py-1 text-sm">
+                    {job.type}
                   </p>
                   {job.category.map((type) => (
                     <span
