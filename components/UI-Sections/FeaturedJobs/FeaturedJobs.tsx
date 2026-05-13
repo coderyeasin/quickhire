@@ -1,10 +1,25 @@
-import featuredJobCardsData from "@/utils/featuredCard";
+"use client";
+
+import { useJobs } from "@/Hooks/useJobs";
+import Spinner from "@/shared/Spinner";
+import { JobsType } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 import { IoArrowForwardSharp } from "react-icons/io5";
 
 const FeaturedJobs = () => {
-  return (
+  const { data, isLoading } = useJobs();
+
+  const featuredJobs = useMemo(
+    () =>
+      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
+    [data],
+  );
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <section className="container-layout py-8 md:py-14">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] font-semibold font-clash leading-tight md:leading-[160%]">
@@ -20,14 +35,14 @@ const FeaturedJobs = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
-        {featuredJobCardsData.map((job) => (
+        {featuredJobs.slice(8, 16).map((job: JobsType) => (
           <div
-            key={job.id}
+            key={job._id}
             className="flex flex-col items-start gap-4 px-4 md:px-5 py-5 space-y-3 border border-third-gray/20 cursor-pointer transition-transform duration-300 hover:scale-105"
           >
             <div className="flex items-start justify-between w-full gap-3">
               <Image
-                src={job.image}
+                src={job.companyLogo}
                 alt={job.title}
                 className="object-contain w-12 md:w-16 h-auto shrink-0"
                 width={64}
@@ -35,7 +50,7 @@ const FeaturedJobs = () => {
                 priority
               />
               <p className="border-2 border-indigoTags text-indigoTags px-2 py-1 md:px-2 md:py-2 text-xs md:text-sm">
-                {job.workType}
+                {job.type}
               </p>
             </div>
             <div className="w-full">
@@ -46,7 +61,7 @@ const FeaturedJobs = () => {
                 {job.company} • {job.location}
               </p>
               <p className="text-third-gray py-2 md:py-3 text-sm truncate">
-                {job.shortDescription}
+                {job.description}
               </p>
             </div>
             <div className="w-full">

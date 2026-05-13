@@ -1,52 +1,107 @@
+"use client";
+import { useJobs } from "@/Hooks/useJobs";
 import CustomButton from "@/shared/CustomButton";
+import Spinner from "@/shared/Spinner";
+import { JobsType } from "@/types/types";
 import { categoryCardsData } from "@/utils/category";
 import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
 
 import { IoArrowForwardSharp } from "react-icons/io5";
+import {
+  MdOutlineDesignServices,
+  MdOutlineCampaign,
+  MdOutlineCode,
+  MdOutlineBarChart,
+} from "react-icons/md";
+
+const CatIcons: Record<string, React.ElementType> = {
+  Marketing: MdOutlineCampaign,
+  Design: MdOutlineDesignServices,
+  Development: MdOutlineCode,
+  Analytics: MdOutlineBarChart,
+  Default: MdOutlineCampaign,
+};
 
 const Categories = () => {
-  return (
+  const { data, isLoading } = useJobs();
+
+  const jobs = useMemo(
+    () =>
+      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
+    [data],
+  );
+  console.log("job cat", jobs);
+
+  const categoryCounts = jobs.reduce(
+    (acc: Record<string, number>, job: JobsType) => {
+      job.category.forEach((cat: string) => {
+        acc[cat] = (acc[cat] || 0) + 1;
+      });
+      return acc;
+    },
+    {},
+  );
+
+  const categoryCardsData = Object.entries(categoryCounts).map(
+    ([name, count], index) => ({
+      id: index,
+      title: name,
+      jobs: `${count} Jobs Available`,
+      Icon: CatIcons[name] || CatIcons.Default,
+    }),
+  );
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <section className="container-layout py-8 md:py-14">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] font-semibold font-clash leading-tight md:leading-[160%]">
           Explore by <span className="text-blue-text">Category</span>
         </h2>
-        <div className="flex items-center gap-2 text-indigoTags cursor-pointer text-sm md:text-md">
-          <h3 className="font-medium">Show all jobs</h3>
-          <IoArrowForwardSharp className="text-lg" />
-        </div>
+        <Link href="/jobs">
+          <div className="flex items-center gap-2 text-indigoTags cursor-pointer text-sm md:text-md">
+            <h3 className="font-medium">Show all jobs</h3>
+            <IoArrowForwardSharp className="text-lg" />
+          </div>
+        </Link>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
-        {categoryCardsData.map((card) => (
-          <div
-            key={card.id}
-            className={`${card.id === 3 ? "bg-indigoTags text-white" : "bg-white"} flex flex-col items-center gap-4 px-4 md:px-5 py-5 space-y-3 border border-third-gray/30 cursor-pointer transition-transform duration-300 hover:scale-105`}
-          >
-            <Image
-              src={card.image}
-              alt={card.title}
-              className="object-contain w-12 md:w-16 h-auto"
-              width={64}
-              height={64}
-              priority
-            />
-            <div className="text-center">
-              <h4
-                className={`text-base md:text-lg font-semibold ${card.id === 3 ? "text-white" : "text-dark-text"}`}
+        {categoryCardsData.map((card) => {
+          const isHighlighted = card.id === 2; // Index 2 is the 3rd card
+          const IconComponent = card.Icon;
+
+          return (
+            <div
+              key={card.title}
+              className={`flex flex-col items-center gap-4 px-4 md:px-5 py-6 border border-third-gray/15 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg
+          ${isHighlighted ? "bg-indigoTags text-white" : "bg-white text-dark-text"}
+        `}
+            >
+              {/* Dynamic Icon Rendering */}
+              <div
+                className={`p-3 rounded-lg ${isHighlighted ? "bg-white/20" : "bg-indigoTags/10"}`}
               >
-                {card.title}
-              </h4>
-              <div className="flex gap-4 md:gap-7 pt-2 justify-center items-center">
-                <p
-                  className={`text-xs md:text-sm ${card.id === 3 ? "text-white" : "text-third-gray"}`}
-                >
-                  {card.jobs}
-                </p>
-                <IoArrowForwardSharp className="text-lg" />
+                <IconComponent
+                  className={`text-3xl md:text-4xl ${isHighlighted ? "text-white" : "text-indigoTags"}`}
+                />
+              </div>
+
+              <div className="text-center">
+                <h4 className="text-base md:text-lg font-semibold">
+                  {card.title}
+                </h4>
+                <div className="flex gap-3 pt-2 justify-center items-center opacity-80">
+                  <p className="text-xs md:text-sm">{card.jobs}</p>
+                  <IoArrowForwardSharp className="text-lg transition-transform group-hover:translate-x-1" />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div
@@ -68,7 +123,7 @@ const Categories = () => {
             className="bg-white text-indigoTags font-epilogue font-bold leading-[160%] px-4 py-2 w-full md:w-auto"
           />
         </div>
-        <div className="mt-6 md:mt-0 md:mt-14 w-full md:w-auto flex justify-center">
+        <div className="mt-6 md:mt-14 w-full md:w-auto flex justify-center">
           <Image
             src={`/images/hero/dashboard.png`}
             alt="dashboard"
