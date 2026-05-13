@@ -8,6 +8,7 @@ import { useState } from "react";
 import Modal from "@/shared/Modal";
 import UserProfile from "@/shared/UserProfile";
 import { ModalMode } from "@/types/types";
+import { usePathname } from "next/navigation";
 
 const routes = [
   { name: "Find Jobs", path: "/jobs" },
@@ -15,15 +16,26 @@ const routes = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<ModalMode>("login");
 
+  const isHomePage = pathname === "/";
   const isLoggedIn = !!session;
 
   return (
     <section>
-      <header className="bg-[#f8f8fd]">
+      <header
+        className={`
+        w-full z-50
+        ${
+          isHomePage
+            ? "absolute top-0 left-0 bg-transparent"
+            : "sticky top-0 bg-white"
+        }
+      `}
+      >
         <nav className="container-layout flex justify-between items-center py-5">
           <div className="flex items-center gap-12">
             <Link href="/">
