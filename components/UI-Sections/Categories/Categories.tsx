@@ -3,24 +3,31 @@ import { useJobs } from "@/Hooks/useJobs";
 import CustomButton from "@/shared/CustomButton";
 import Spinner from "@/shared/Spinner";
 import { JobsType } from "@/types/types";
-import { categoryCardsData } from "@/utils/category";
+import {
+  Banknote,
+  BriefcaseBusiness,
+  ChartNoAxesCombined,
+  CodeXml,
+  Megaphone,
+  Monitor,
+  PencilRuler,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
-
+import { FaUsers } from "react-icons/fa6";
 import { IoArrowForwardSharp } from "react-icons/io5";
-import {
-  MdOutlineDesignServices,
-  MdOutlineCampaign,
-  MdOutlineCode,
-  MdOutlineBarChart,
-} from "react-icons/md";
+import { MdOutlineCampaign } from "react-icons/md";
 
 const CatIcons: Record<string, React.ElementType> = {
-  Marketing: MdOutlineCampaign,
-  Design: MdOutlineDesignServices,
-  Development: MdOutlineCode,
-  Analytics: MdOutlineBarChart,
+  Design: PencilRuler,
+  Sales: ChartNoAxesCombined,
+  Marketing: Megaphone,
+  Finance: Banknote,
+  Technology: Monitor,
+  Engineering: CodeXml,
+  Business: BriefcaseBusiness,
+  "Human Resource": FaUsers,
   Default: MdOutlineCampaign,
 };
 
@@ -32,9 +39,8 @@ const Categories = () => {
       (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
     [data],
   );
-  console.log("job cat", jobs);
 
-  const categoryCounts = jobs.reduce(
+  const categoriesCount = jobs.reduce(
     (acc: Record<string, number>, job: JobsType) => {
       job.category.forEach((cat: string) => {
         acc[cat] = (acc[cat] || 0) + 1;
@@ -44,7 +50,7 @@ const Categories = () => {
     {},
   );
 
-  const categoryCardsData = Object.entries(categoryCounts).map(
+  const categoryCardsData = Object.entries(categoriesCount).map(
     ([name, count], index) => ({
       id: index,
       title: name,
@@ -71,7 +77,7 @@ const Categories = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
         {categoryCardsData.map((card) => {
-          const isHighlighted = card.id === 2; // Index 2 is the 3rd card
+          const isHighlighted = card.id === 2;
           const IconComponent = card.Icon;
 
           return (
@@ -81,12 +87,9 @@ const Categories = () => {
           ${isHighlighted ? "bg-indigoTags text-white" : "bg-white text-dark-text"}
         `}
             >
-              {/* Dynamic Icon Rendering */}
-              <div
-                className={`p-3 rounded-lg ${isHighlighted ? "bg-white/20" : "bg-indigoTags/10"}`}
-              >
+              <div className={`p-3 rounded-lg `}>
                 <IconComponent
-                  className={`text-3xl md:text-4xl ${isHighlighted ? "text-white" : "text-indigoTags"}`}
+                  className={`size-24 md:text-4xl ${isHighlighted ? "text-white" : "text-indigoTags"}`}
                 />
               </div>
 

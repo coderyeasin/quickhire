@@ -49,7 +49,7 @@ const FeaturedJobs = () => {
                 height={64}
                 priority
               />
-              <p className="border-2 border-indigoTags text-indigoTags px-2 py-1 md:px-2 md:py-2 text-xs md:text-sm">
+              <p className="border-2 border-indigoTags capitalize text-indigoTags px-2 py-1 md:px-2 md:py-2 text-xs md:text-sm">
                 {job.type}
               </p>
             </div>
@@ -66,27 +66,27 @@ const FeaturedJobs = () => {
             </div>
             <div className="w-full">
               <div className="flex flex-wrap gap-2 pt-2">
-                {job.category.map((type) => (
+                {job.category.map((cat) => (
                   <p
-                    key={type}
+                    key={cat}
                     className={`text-xs font-semibold ${
-                      type.includes("Marketing")
+                      cat.includes("Marketing")
                         ? "bg-ylwTags/10 border-ylwTags text-ylwTags"
-                        : type.includes("Technology") ||
-                            type.includes("Data Science") ||
-                            type.includes("Research")
+                        : cat.includes("Technology") ||
+                            cat.includes("Data Science") ||
+                            cat.includes("Research")
                           ? "bg-redTags/10  border-redTags text-redTags"
-                          : type.includes("Business") ||
-                              type.includes("Sales") ||
-                              type.includes("Finance")
+                          : cat.includes("Business") ||
+                              cat.includes("Sales") ||
+                              cat.includes("Finance")
                             ? "bg-indigoTags/10 border-indigoTags text-indigoTags"
-                            : type.includes("Design")
+                            : cat.includes("Design")
                               ? "bg-greenTags/10 border-greenTags text-greenTags"
-                              : ""
+                              : "bg-third-gray/10 text-primary-gray/70"
                     } 
                         px-2 md:px-3 py-1 md:py-2 rounded-full`}
                   >
-                    {type}
+                    {cat}
                   </p>
                 ))}
               </div>

@@ -62,26 +62,26 @@ const LatestJobs = () => {
                   <p className="bg-greenTags/10 rounded-full capitalize text-greenTags px-3 py-1 text-sm">
                     {job.type}
                   </p>
-                  {job.category.map((type) => (
+                  {job.category.map((cat) => (
                     <span
-                      key={type}
+                      key={cat}
                       className={` text-xs font-semibold ${
-                        type.includes("Marketing")
+                        cat.includes("Marketing")
                           ? "bg-ylwTags/10 border-2 border-ylwTags text-ylwTags"
-                          : type.includes("Technology") ||
-                              type.includes("Data Science") ||
-                              type.includes("Research")
+                          : cat.includes("Technology") ||
+                              cat.includes("Data Science") ||
+                              cat.includes("Research")
                             ? "bg-redTags/10 border-2 border-redTags text-redTags"
-                            : type.includes("Business") ||
-                                type.includes("Sales") ||
-                                type.includes("Finance") ||
-                                type.includes("Design")
+                            : cat.includes("Business") ||
+                                cat.includes("Sales") ||
+                                cat.includes("Finance") ||
+                                cat.includes("Design")
                               ? "bg-indigoTags/10 border-2 border-indigoTags text-indigoTags"
-                              : ""
+                              : "bg-third-gray/10 text-primary-gray/70"
                       } 
                         px-3 py-1 rounded-full`}
                     >
-                      {type}
+                      {cat}
                     </span>
                   ))}
                 </div>
