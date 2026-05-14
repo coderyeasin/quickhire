@@ -1,8 +1,9 @@
 "use client";
 import { useJobs } from "@/Hooks/useJobs";
 import CustomButton from "@/shared/CustomButton";
+import Modal from "@/shared/Modal";
 import Spinner from "@/shared/Spinner";
-import { JobsType } from "@/types/types";
+import { JobsType, ModalMode } from "@/types/types";
 import {
   Banknote,
   BriefcaseBusiness,
@@ -14,7 +15,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { FaUsers } from "react-icons/fa6";
 import { IoArrowForwardSharp } from "react-icons/io5";
 import { MdOutlineCampaign } from "react-icons/md";
@@ -32,6 +33,8 @@ const CatIcons: Record<string, React.ElementType> = {
 };
 
 const Categories = () => {
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<ModalMode>("login");
   const { data, isLoading } = useJobs();
 
   const jobs = useMemo(
@@ -122,6 +125,10 @@ const Categories = () => {
             Start posting jobs for only $10.
           </p>
           <CustomButton
+            onClick={() => {
+              setMode("register");
+              setOpen(true);
+            }}
             label="Sign Up For Free"
             className="bg-white text-indigoTags font-epilogue font-bold leading-[160%] px-4 py-2 w-full md:w-auto"
           />
@@ -137,6 +144,7 @@ const Categories = () => {
           />
         </div>
       </div>
+      <Modal open={open} onOpenChange={setOpen} mode={mode} setMode={setMode} />
     </section>
   );
 };
