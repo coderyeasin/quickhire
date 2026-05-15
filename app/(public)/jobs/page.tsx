@@ -2,7 +2,7 @@ import AvailableJobsPage from "@/components/Dashboard/Candidate/AvailableJobsPag
 
 const JobsHome = () => {
   return (
-    <section className="container-layout h-auto py-10">
+    <section className="container-layout min-h-screen py-10">
       <AvailableJobsPage />
     </section>
   );

@@ -2,6 +2,7 @@ import CustomButton from "@/shared/CustomButton";
 import Image from "next/image";
 import { FiSearch } from "react-icons/fi";
 import { SlLocationPin } from "react-icons/sl";
+import HeroJobSearch from "./HeroJobSearch";
 
 const HeroSection = () => {
   return (
@@ -24,7 +25,8 @@ const HeroSection = () => {
             Great platform for the job seeker that searching for new career
             heights and passionate about startups.
           </p>
-          <div className="flex flex-col items-start gap-5 w-full">
+          <HeroJobSearch />
+          {/* <div className="flex flex-col items-start gap-5 w-full">
             <div className="p-3 md:p-4 bg-white flex flex-col md:flex-row items-stretch md:items-end gap-3 w-full md:w-auto">
               <div className="flex items-center text-xl md:text-2xl gap-2 flex-1 md:flex-none">
                 <FiSearch className="shrink-0" />
@@ -50,7 +52,7 @@ const HeroSection = () => {
             <p className="text-sm md:text-md font-epilogue text-second-gray/70">
               Popular : UI Designer, UX Researcher, Android, Admin
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="relative flex justify-center lg:justify-end z-0 w-full lg:w-1/2 py-6 md:py-0">
