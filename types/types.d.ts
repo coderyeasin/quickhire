@@ -1,4 +1,4 @@
-export type ModalMode = "login" | "register" | "jobs" | "applicants";
+export type ModalMode = "login" | "register" | "jobs" | "applicants" | "search";
 
 interface ModalType {
   open: boolean;
@@ -7,6 +7,8 @@ interface ModalType {
   setMode: (mode: ModalMode) => void;
   jobId?: string | null;
   applicantsId?: string | null;
+  searchTxt?: string | null;
+  locationTxt?: string | null;
 }
 
 export type JobsType = {

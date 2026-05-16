@@ -5,6 +5,7 @@ import RegisterForm from "@/components/Auth/Register/Register";
 import JobsInfo from "@/components/Dashboard/JobsInfo";
 import WholeApplication from "@/components/Dashboard/WholeApplication";
 import { Dialog, DialogContent } from "@/components/Shadcn/dialog";
+import JobSearchResults from "@/components/UI-Sections/HeroSection/JobSearchResults";
 import { ModalType } from "@/types/types";
 
 export default function Modal({
@@ -14,6 +15,8 @@ export default function Modal({
   setMode,
   jobId,
   applicantsId,
+  searchTxt,
+  locationTxt,
 }: ModalType) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -24,6 +27,10 @@ export default function Modal({
       ) : mode === "applicants" ? (
         <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-6 [&>button]:top-6 [&>button]:cursor-pointer">
           <WholeApplication applicantsId={applicantsId} />
+        </DialogContent>
+      ) : mode === "search" ? (
+        <DialogContent className="sm:max-w-sm p-0 bg-white [&>button]:text-slate-700 [&>button]:hover:text-slate-700/70 [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">
+          <JobSearchResults searchTxt={searchTxt} locationTxt={locationTxt} />
         </DialogContent>
       ) : (
         <DialogContent className="sm:max-w-sm p-0 bg-[#0f1117]/90 border-white/10 [&>button]:text-white/30 [&>button]:hover:text-white [&>button]:right-4 [&>button]:top-3.5 [&>button]:cursor-pointer">
