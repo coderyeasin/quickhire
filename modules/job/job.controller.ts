@@ -73,6 +73,16 @@ const getAllJobs = catchAsync(async () => {
   });
 });
 
+const getAllRealJobs = catchAsync(async () => {
+  const result = await jobServices.getAllApprovedJobs();
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully all Real Jobs are fetched",
+    data: result,
+  });
+});
+
 export const getMyJobs = catchAsync(async () => {
   const user = await withAuth(["admin", "recruiter"]);
   const result = await jobServices.getRecruiterJobs(user.id);
@@ -157,6 +167,7 @@ export const deleteJob = catchAsync(async (req, routeCtx) => {
 export const jobControllers = {
   createJob,
   getAllJobs,
+  getAllRealJobs,
   getMyJobs,
   getSingleJobs,
   updateSingleJob,

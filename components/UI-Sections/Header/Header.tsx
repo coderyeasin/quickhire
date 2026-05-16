@@ -52,7 +52,12 @@ export default function Header() {
                 <li key={route.path}>
                   <Link
                     href={route.path}
-                    className={` ${route.path === pathName ? "text-indigoTags " : "text-primary-gray "} hover:text-dark-text transition-colors`}
+                    className={` ${
+                      route.path === pathName ||
+                      (route.path === "/jobs" && pathName.startsWith("/jobs/"))
+                        ? "text-indigoTags"
+                        : "text-primary-gray"
+                    } hover:text-dark-text transition-colors`}
                   >
                     {route.name}
                   </Link>
