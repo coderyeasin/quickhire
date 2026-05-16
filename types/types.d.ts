@@ -23,6 +23,6 @@ export type JobsType = {
   category: string[];
   salary?: string;
   status: string;
-  deadline?: string;
+  deadline: string;
   createdAt: string;
 };

@@ -8,11 +8,11 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main>
+    <>
       <Header />
       {children}
       <Toaster position="top-center" />
       <Footer />
-    </main>
+    </>
   );
 }

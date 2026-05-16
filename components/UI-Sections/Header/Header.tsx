@@ -16,12 +16,12 @@ const routes = [
 ];
 
 export default function Header() {
-  const pathname = usePathname();
+  const pathName = usePathname();
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<ModalMode>("login");
 
-  const isHomePage = pathname === "/";
+  const isHomePage = pathName === "/";
   const isLoggedIn = !!session;
 
   return (
@@ -52,7 +52,7 @@ export default function Header() {
                 <li key={route.path}>
                   <Link
                     href={route.path}
-                    className="text-primary-gray hover:text-dark-text transition-colors"
+                    className={` ${route.path === pathName ? "text-indigoTags " : "text-primary-gray "} hover:text-dark-text transition-colors`}
                   >
                     {route.name}
                   </Link>

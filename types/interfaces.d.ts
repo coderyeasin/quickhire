@@ -72,3 +72,17 @@ export interface ApplicationsType {
   recruiterId: IRecruiter | null;
   jobId: JobsType | null;
 }
+
+export interface IJobFilters {
+  search: string;
+  category: string;
+  jobType: string;
+  deadline: string;
+}
+
+export interface IJobsFilteredProps {
+  jobs: JobsType[];
+  values: IJobFilters;
+  onChange: (values: IJobFilters) => void;
+  onReset: () => void;
+}

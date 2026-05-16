@@ -64,8 +64,8 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
           <div className="p-6 md:p-8 border-b border-slate-100">
             <div className="flex items-center gap-5">
               <Image
-                src={job?.companyLogo ? job.companyLogo : "I"}
-                alt={job.company}
+                src={job?.companyLogo ? job?.companyLogo : "I"}
+                alt={job?.company}
                 width={70}
                 height={70}
                 className="rounded-xl border object-cover"

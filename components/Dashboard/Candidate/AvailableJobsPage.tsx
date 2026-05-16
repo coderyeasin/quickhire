@@ -1,29 +1,82 @@
 "use client";
-import { useJobs } from "@/Hooks/useJobs";
-import Spinner from "@/shared/Spinner";
-import { JobsType } from "@/types/types";
+
+import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useJobs } from "@/Hooks/useJobs";
+import JobsFiltered from "@/shared/JobsFiltered";
+import Spinner from "@/shared/Spinner";
+import { JobsType } from "@/types/types";
+import { IJobFilters } from "@/types/interfaces";
 
 const AvailableJobsPage = () => {
   const { data: session } = useSession();
   const userRole = session?.user?.role;
   const { data, isLoading } = useJobs();
 
-  const jobs = useMemo(
+  const [filters, setFilters] = useState<IJobFilters>({
+    search: "",
+    category: "",
+    jobType: "",
+    deadline: "",
+  });
+
+  const originalJobs: JobsType[] = useMemo(
     () =>
       (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
     [data],
   );
 
+  const filteredJobs = useMemo(() => {
+    return originalJobs.filter((job) => {
+      const matchesSearch =
+        !filters.search.trim() ||
+        job.title.toLowerCase().includes(filters.search.toLowerCase());
+
+      const matchesCategory =
+        !filters.category || job.category?.includes(filters.category);
+
+      const matchesType =
+        !filters.jobType ||
+        job.type.toLowerCase() === filters.jobType.toLowerCase();
+
+      let matchesDeadline = true;
+
+      if (filters.deadline) {
+        const selectedDate = new Date(filters.deadline).getTime();
+
+        const jobDeadline = new Date(job.deadline).getTime();
+
+        matchesDeadline = jobDeadline <= selectedDate;
+      }
+
+      return matchesSearch && matchesCategory && matchesType && matchesDeadline;
+    });
+  }, [originalJobs, filters]);
+
+  const handleResetFilters = () => {
+    setFilters({
+      search: "",
+      category: "",
+      jobType: "",
+      deadline: "",
+    });
+  };
+
   return isLoading ? (
     <Spinner />
   ) : (
-    <section className="">
+    <section>
+      <JobsFiltered
+        jobs={originalJobs}
+        values={filters}
+        onChange={setFilters}
+        onReset={handleResetFilters}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
-        {jobs.map((job: JobsType) => (
+        {filteredJobs.map((job: JobsType) => (
           <Link
             href={
               userRole ? `/${userRole}/jobs/${job._id}` : `/jobs/${job._id}`
@@ -40,21 +93,26 @@ const AvailableJobsPage = () => {
                   height={64}
                   priority
                 />
+
                 <p className="border-2 border-indigoTags text-indigoTags capitalize px-2 py-1 md:px-2 md:py-2 text-xs md:text-sm">
                   {job.type}
                 </p>
               </div>
+
               <div className="w-full">
                 <h4 className="text-base md:text-lg font-semibold text-dark-text line-clamp-2">
                   {job.title}
                 </h4>
-                <p className="text-third-gray text-sm md:text-base">
+
+                <p className="text-third-gray text-sm md:text-base truncate">
                   {job.company} • {job.location}
                 </p>
+
                 <p className="text-third-gray py-2 md:py-3 text-sm truncate">
                   {job.description}
                 </p>
               </div>
+
               <div className="w-full">
                 <div className="flex flex-wrap gap-2 pt-2">
                   {job.category.map((type) => (
@@ -66,7 +124,7 @@ const AvailableJobsPage = () => {
                           : type.includes("Technology") ||
                               type.includes("Data Science") ||
                               type.includes("Research")
-                            ? "bg-redTags/10  border-redTags text-redTags"
+                            ? "bg-redTags/10 border-redTags text-redTags"
                             : type.includes("Business") ||
                                 type.includes("Sales") ||
                                 type.includes("Finance")
@@ -74,8 +132,7 @@ const AvailableJobsPage = () => {
                               : type.includes("Design")
                                 ? "bg-greenTags/10 border-greenTags text-greenTags"
                                 : "bg-greenTags/10 border-greenTags text-greenTags"
-                      } 
-                        px-2 md:px-3 py-1 md:py-2 rounded-full`}
+                      } px-2 md:px-3 py-1 md:py-2 rounded-full`}
                     >
                       {type}
                     </p>
