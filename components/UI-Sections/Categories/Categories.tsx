@@ -1,5 +1,5 @@
 "use client";
-import { useJobs } from "@/Hooks/useJobs";
+import { useApprovedJobs } from "@/Hooks/useJobs";
 import CustomButton from "@/shared/CustomButton";
 import Modal from "@/shared/Modal";
 import Spinner from "@/shared/Spinner";
@@ -35,13 +35,9 @@ const CatIcons: Record<string, React.ElementType> = {
 const Categories = () => {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<ModalMode>("login");
-  const { data, isLoading } = useJobs();
+  const { data, isLoading } = useApprovedJobs();
 
-  const jobs = useMemo(
-    () =>
-      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
-    [data],
-  );
+  const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
   const categoriesCount = jobs.reduce(
     (acc: Record<string, number>, job: JobsType) => {

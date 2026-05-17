@@ -1,6 +1,6 @@
 "use client";
 
-import { useJobs } from "@/Hooks/useJobs";
+import { useApprovedJobs } from "@/Hooks/useJobs";
 import Spinner from "@/shared/Spinner";
 import { JobsType } from "@/types/types";
 import Image from "next/image";
@@ -9,13 +9,8 @@ import { useMemo } from "react";
 import { IoArrowForwardSharp } from "react-icons/io5";
 
 const FeaturedJobs = () => {
-  const { data, isLoading } = useJobs();
-
-  const featuredJobs = useMemo(
-    () =>
-      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
-    [data],
-  );
+  const { data, isLoading } = useApprovedJobs();
+  const featuredJobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
   return isLoading ? (
     <Spinner />

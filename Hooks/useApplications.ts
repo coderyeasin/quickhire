@@ -1,6 +1,11 @@
 import httpStatus from "http-status";
 import AppError from "@/lib/AppError";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { ApplicationsType } from "@/types/interfaces";
 
@@ -53,17 +58,18 @@ export function useApplications() {
   return useQuery({
     queryKey: ["applications"],
     queryFn: fetchAllApplications,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
 }
 
-export function useMyApplications() {
+export function useMyApplications(
+  options?: Omit<UseQueryOptions<any, Error>, "queryKey" | "queryFn">,
+) {
   return useQuery({
     queryKey: ["applications", "mine"],
     queryFn: fetchMyApplications,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    refetchOnWindowFocus: false,
+    ...options,
   });
 }
 

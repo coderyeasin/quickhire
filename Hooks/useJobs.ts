@@ -12,6 +12,14 @@ async function fetchJobs() {
   return data;
 }
 
+async function fetchApprovedJobs() {
+  const res = await fetch("/api/jobs/approved");
+  const data = await res.json();
+
+  if (!data) throw new AppError(httpStatus.BAD_REQUEST, "Failed to fetch jobs");
+  return data;
+}
+
 async function fetchMyJobs() {
   const res = await fetch("/api/jobs/mine");
   const data = await res.json();
@@ -35,6 +43,13 @@ export function useJobs() {
   return useQuery({
     queryKey: ["jobs"],
     queryFn: fetchJobs,
+  });
+}
+
+export function useApprovedJobs() {
+  return useQuery({
+    queryKey: ["jobs"],
+    queryFn: fetchApprovedJobs,
   });
 }
 

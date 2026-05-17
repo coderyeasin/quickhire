@@ -102,7 +102,7 @@ const JobsFiltered = ({
 
             onReset();
           }}
-          className="text-xs font-semibold text-redTags bg-redTags/5 border border-redTags/10 rounded-xl px-4 py-3 hover:bg-redTags/10 transition-all active:scale-95 duration-200 whitespace-nowrap"
+          className="text-xs font-semibold text-redTags bg-redTags/5 cursor-pointer border border-redTags/10 rounded-xl px-4 py-3 hover:bg-redTags/10 transition-all active:scale-95 duration-200 whitespace-nowrap"
         >
           Clear
         </button>

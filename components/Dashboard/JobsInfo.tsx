@@ -16,7 +16,10 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const { data: session } = useSession();
   const role = session?.user.role;
   const { data, isLoading } = useJobById(jobId as string);
-  const { data: applicantsData } = useMyApplications();
+
+  const { data: applicantsData } = useMyApplications({
+    enabled: !!session?.user,
+  });
 
   const appData: ApplicationsType[] = useMemo(
     () => applicantsData?.data ?? [],

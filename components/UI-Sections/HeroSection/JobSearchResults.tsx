@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { JobsType } from "@/types/types";
-import { useJobs } from "@/Hooks/useJobs";
+import { useApprovedJobs } from "@/Hooks/useJobs";
 import Spinner from "@/shared/Spinner";
 import { FaArrowRight } from "react-icons/fa6";
 
@@ -13,12 +13,9 @@ interface IJobSearchResults {
 }
 
 const JobSearchResults = ({ searchTxt, locationTxt }: IJobSearchResults) => {
-  const { data, isLoading } = useJobs();
-  const jobs: JobsType[] = useMemo(
-    () =>
-      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
-    [data],
-  );
+  const { data, isLoading } = useApprovedJobs();
+
+  const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
   const filteredJobs = useMemo(() => {
     const cleanSearch = searchTxt?.trim() || "";
