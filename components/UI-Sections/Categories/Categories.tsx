@@ -76,27 +76,26 @@ const Categories = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
         {categoryCardsData.map((card) => {
-          const isHighlighted = card.id === 2;
           const IconComponent = card.Icon;
 
           return (
             <div
               key={card.title}
-              className={`flex flex-col items-center gap-4 px-4 md:px-5 py-6 border border-third-gray/15 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg
-          ${isHighlighted ? "bg-indigoTags text-white" : "bg-white text-dark-text"}
-        `}
+              className={`group flex flex-col items-center gap-4 px-4 md:px-5 py-6 
+                border border-third-gray/15 cursor-pointer transition-all duration-300 
+                hover:scale-105 hover:shadow-lg bg-white text-dark-text hover:bg-indigoTags
+                 hover:text-white`}
             >
-              <div className={`p-3 rounded-lg `}>
-                <IconComponent
-                  className={`size-24 md:text-4xl ${isHighlighted ? "text-white" : "text-indigoTags"}`}
-                />
+              <div className="p-3 rounded-lg text-indigoTags group-hover:text-white transition-colors duration-300">
+                <IconComponent className="size-24 md:text-4xl" />
               </div>
 
               <div className="text-center">
                 <h4 className="text-base md:text-lg font-semibold">
                   {card.title}
                 </h4>
-                <div className="flex gap-3 pt-2 justify-center items-center opacity-80">
+
+                <div className="flex gap-3 pt-2 justify-center items-center opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                   <p className="text-xs md:text-sm">{card.jobs}</p>
                   <IoArrowForwardSharp className="text-lg transition-transform group-hover:translate-x-1" />
                 </div>
