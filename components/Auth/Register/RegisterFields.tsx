@@ -1,8 +1,11 @@
 import { LoginInput, RegisterInput } from "@/modules/user/UserValidators";
-import { inputCls } from "@/shared/ApplyForm";
+import { errorCls } from "@/shared/ApplyForm";
 import { UserRegister } from "@/types/types";
 import { FieldErrors } from "react-hook-form";
 import { FaArrowLeftLong } from "react-icons/fa6";
+
+const inputCls =
+  "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigoTags/70 transition-all";
 
 const RegisterFields = (props: UserRegister) => {
   const {
@@ -53,11 +56,8 @@ const RegisterFields = (props: UserRegister) => {
             className={inputCls}
           />
           {registerErrors.name && (
-            <p className="text-red-400 text-xs mt-1">
-              {registerErrors.name.message}
-            </p>
+            <p className={errorCls}>{registerErrors.name.message}</p>
           )}
-          {/* <p className={errorCls}>{errors.coverLetter.message}</p> */}
         </div>
       )}
 
@@ -68,9 +68,7 @@ const RegisterFields = (props: UserRegister) => {
           className={inputCls}
         />
         {loginErrors.email && (
-          <p className="text-red-400 text-xs mt-1">
-            {loginErrors.email.message}
-          </p>
+          <p className={errorCls}>{loginErrors.email.message}</p>
         )}
       </div>
 
@@ -82,9 +80,7 @@ const RegisterFields = (props: UserRegister) => {
             className={inputCls}
           />
           {registerErrors.company && (
-            <p className="text-red-400 text-xs mt-1">
-              {registerErrors.company.message}
-            </p>
+            <p className={errorCls}>{registerErrors.company.message}</p>
           )}
         </div>
       )}
@@ -101,7 +97,7 @@ const RegisterFields = (props: UserRegister) => {
             className="w-full text-xs text-white/50 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-indigoTags/20 file:text-white/30 hover:file:text-white hover:file:bg-indigoTags/30 file:cursor-pointer cursor-pointer"
           />
           {registerErrors.avatar && (
-            <p className="text-red-400 text-xs mt-1">
+            <p className={errorCls}>
               {registerErrors.avatar.message as string}
             </p>
           )}
@@ -116,9 +112,7 @@ const RegisterFields = (props: UserRegister) => {
           className={inputCls}
         />
         {loginErrors.password && (
-          <p className="text-red-400 text-xs mt-1">
-            {loginErrors.password.message}
-          </p>
+          <p className={errorCls}> {loginErrors.password.message}</p>
         )}
       </div>
 
@@ -131,8 +125,9 @@ const RegisterFields = (props: UserRegister) => {
             className={inputCls}
           />
           {registerErrors.confirmPassword && (
-            <p className="text-red-400 text-xs mt-1">
-              {registerErrors.confirmPassword.message}
+            <p className={errorCls}>
+              {" "}
+              {registerErrors.confirmPassword.message}{" "}
             </p>
           )}
         </div>
