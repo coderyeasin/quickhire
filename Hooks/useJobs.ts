@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import AppError from "@/lib/AppError";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

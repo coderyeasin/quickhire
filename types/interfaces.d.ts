@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { JobsType } from "./types";
 import { LoginInput, RegisterInput } from "@/modules/user/UserValidators";
@@ -9,34 +10,6 @@ export interface CustomButtonProps {
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
-}
-
-export interface CategoryCardType {
-  id: number;
-  title: string;
-  jobs: string;
-  image: string;
-}
-
-export type CategoryName =
-  | "Marketing"
-  | "Sales"
-  | "Business"
-  | "Finance"
-  | "Technology"
-  | "Design"
-  | "Data Science"
-  | "Research";
-
-export interface JobCardType {
-  id: number;
-  title: string;
-  company: string;
-  location: string;
-  category: CategoryName[];
-  workType: "Full-time" | "Part-time" | "Contract" | "Remote";
-  shortDescription: string;
-  image: string;
 }
 
 //----------------- Real Types -----------------

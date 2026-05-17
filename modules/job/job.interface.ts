@@ -2,15 +2,6 @@ import { Types } from "mongoose";
 
 export type JobType = "full-time" | "part-time" | "remote" | "intern";
 export type JobStatus = "pending" | "approved" | "rejected";
-// export type CategoryName =
-//   | "Marketing"
-//   | "Sales"
-//   | "Business"
-//   | "Finance"
-//   | "Technology"
-//   | "Design"
-//   | "Data Science"
-//   | "Research";
 
 export interface IJob {
   _id?: string;
