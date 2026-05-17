@@ -1,3 +1,7 @@
+import { ILogin, IRegister } from "./interfaces";
+
+export type UserRegister = IRegister | ILogin;
+
 export type ModalMode = "login" | "register" | "jobs" | "applicants" | "search";
 
 interface ModalType {

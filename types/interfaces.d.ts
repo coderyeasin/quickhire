@@ -1,4 +1,6 @@
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { JobsType } from "./types";
+import { LoginInput, RegisterInput } from "@/modules/user/UserValidators";
 
 export interface CustomButtonProps {
   label: string;
@@ -38,6 +40,27 @@ export interface JobCardType {
 }
 
 //----------------- Real Types -----------------
+
+// Register Interface
+
+interface IFormFields {
+  register: UseFormRegister<any>;
+  errors: FieldErrors<RegisterInput | LoginInput>;
+  isPending: boolean;
+  errorMessage?: string;
+  submitLabel?: string;
+  pendingLabel?: string;
+}
+
+export interface IRegister extends IFormFields {
+  variant: "register";
+  role: "candidate" | "recruiter";
+  onBack: () => void;
+}
+
+export interface ILogin extends IFormFields {
+  variant: "login";
+}
 
 export interface ITopHeaderUser {
   user: {

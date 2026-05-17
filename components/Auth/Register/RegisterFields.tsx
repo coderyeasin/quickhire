@@ -1,30 +1,8 @@
 import { LoginInput, RegisterInput } from "@/modules/user/UserValidators";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { inputCls } from "@/shared/ApplyForm";
+import { UserRegister } from "@/types/types";
+import { FieldErrors } from "react-hook-form";
 import { FaArrowLeftLong } from "react-icons/fa6";
-
-const inputCls =
-  "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigoTags/70 transition-all";
-
-interface FieldsProps {
-  register: UseFormRegister<any>;
-  errors: FieldErrors<RegisterInput | LoginInput>;
-  isPending: boolean;
-  errorMessage?: string;
-  submitLabel?: string;
-  pendingLabel?: string;
-}
-
-interface IRegister extends FieldsProps {
-  variant: "register";
-  role: "candidate" | "recruiter";
-  onBack: () => void;
-}
-
-interface ILogin extends FieldsProps {
-  variant: "login";
-}
-
-type UserRegister = IRegister | ILogin;
 
 const RegisterFields = (props: UserRegister) => {
   const {
@@ -61,14 +39,12 @@ const RegisterFields = (props: UserRegister) => {
         </div>
       )}
 
-      {/* server error */}
       {errorMessage && (
         <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2.5">
           <p className="text-sm text-red-400">{errorMessage}</p>
         </div>
       )}
 
-      {/* fields */}
       {props.variant === "register" && (
         <div>
           <input
@@ -81,6 +57,7 @@ const RegisterFields = (props: UserRegister) => {
               {registerErrors.name.message}
             </p>
           )}
+          {/* <p className={errorCls}>{errors.coverLetter.message}</p> */}
         </div>
       )}
 
