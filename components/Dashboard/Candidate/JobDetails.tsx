@@ -11,7 +11,11 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
   const userRole = session?.user?.role;
   return (
     <div
-      className={userRole ? "mx-auto px-4 md:px-6" : "container-layout py-8"}
+      className={
+        userRole
+          ? "container-layout  mx-auto px-4 md:px-6"
+          : "container-layout py-8"
+      }
     >
       <div className="flex gap-6">
         <div className="flex-1 bg-white rounded-3xl border border-gray-100 shadow-sm">
@@ -19,7 +23,7 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
         </div>
 
         <div className="space-y-6 ">
-          <div className="flex justify-end">
+          <div className="flex justify-start items-center">
             <button
               onClick={(e) => {
                 e.stopPropagation();

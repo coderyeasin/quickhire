@@ -75,7 +75,11 @@ const AvailableJobsPage = () => {
           {filteredJobs.map((job: JobsType) => (
             <Link
               href={
-                userRole ? `/${userRole}/jobs/${job._id}` : `/jobs/${job._id}`
+                userRole && userRole !== "recruiter"
+                  ? `/${userRole}/jobs/${job._id}`
+                  : userRole === "recruiter"
+                    ? `/jobs/${job._id}`
+                    : `/jobs/${job._id}`
               }
               key={job._id}
             >
