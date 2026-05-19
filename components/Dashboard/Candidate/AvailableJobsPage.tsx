@@ -71,7 +71,7 @@ const AvailableJobsPage = () => {
       />
 
       {filteredJobs.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 mt-6 md:mt-8 lg:mt-10">
           {filteredJobs.map((job: JobsType) => (
             <Link
               href={
@@ -83,38 +83,38 @@ const AvailableJobsPage = () => {
               }
               key={job._id}
             >
-              <div className="flex flex-col items-start gap-4 px-4 md:px-5 py-5 space-y-3 border border-third-gray/20 cursor-pointer transition-transform duration-300 hover:scale-105">
+              <div className="flex flex-col items-start gap-3 md:gap-4 px-3 md:px-4 lg:px-5 py-4 md:py-5 space-y-2 md:space-y-3 border border-third-gray/20 cursor-pointer transition-transform duration-300 hover:scale-105 rounded-lg md:rounded-xl">
                 <div className="flex items-start justify-between w-full gap-3">
                   <Image
                     src={job.companyLogo}
                     alt={job.title}
-                    className="object-contain w-12 md:w-16 h-auto shrink-0"
+                    className="object-contain w-10 md:w-12 lg:w-16 h-auto shrink-0"
                     width={64}
                     height={64}
                     priority
                   />
 
-                  <p className="border-2 border-indigoTags text-indigoTags capitalize px-2 py-1 md:px-2 md:py-2 text-xs md:text-sm">
+                  <p className="border-2 border-indigoTags text-indigoTags capitalize px-1.5 md:px-2 py-0.5 md:py-1 lg:py-2 text-xs md:text-sm font-semibold">
                     {job.type}
                   </p>
                 </div>
 
                 <div className="w-full">
-                  <h4 className="text-base md:text-lg font-semibold text-dark-text line-clamp-2">
+                  <h4 className="text-sm md:text-base lg:text-lg font-semibold text-dark-text line-clamp-2">
                     {job.title}
                   </h4>
 
-                  <p className="text-third-gray text-sm md:text-base truncate">
+                  <p className="text-third-gray text-xs md:text-sm lg:text-base truncate">
                     {job.company} • {job.location}
                   </p>
 
-                  <p className="text-third-gray py-2 md:py-3 text-sm truncate">
+                  <p className="text-third-gray py-1.5 md:py-2 lg:py-3 text-xs md:text-sm truncate">
                     {job.description}
                   </p>
                 </div>
 
                 <div className="w-full">
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap gap-1.5 md:gap-2 pt-1 md:pt-2">
                     {job.category.map((type) => (
                       <p
                         key={type}
@@ -132,7 +132,7 @@ const AvailableJobsPage = () => {
                                 : type.includes("Design")
                                   ? "bg-greenTags/10 border-greenTags text-greenTags"
                                   : "bg-greenTags/10 border-greenTags text-greenTags"
-                        } px-2 md:px-3 py-1 md:py-2 rounded-full`}
+                        } px-1.5 md:px-2 lg:px-3 py-0.5 md:py-1 lg:py-2 rounded-full`}
                       >
                         {type}
                       </p>
@@ -144,11 +144,11 @@ const AvailableJobsPage = () => {
           ))}
         </div>
       ) : (
-        <div className="py-16 text-center border border-dashed border-third-gray/15 rounded-2xl bg-white max-w-sm mx-auto">
-          <h3 className="text-base font-bold text-dark-text font-epilogue">
+        <div className="py-12 md:py-16 text-center border border-dashed border-third-gray/15 rounded-lg md:rounded-2xl bg-white max-w-sm mx-auto px-4">
+          <h3 className="text-base md:text-lg font-bold text-dark-text font-epilogue">
             No entries match
           </h3>
-          <p className="text-xs text-third-gray mt-1 px-4">
+          <p className="text-xs md:text-sm text-third-gray mt-2 px-2">
             Try adjusting your search filters.
           </p>
         </div>

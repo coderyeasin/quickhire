@@ -61,17 +61,19 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   }
 
   return (
-    <div className={role ? "max-w-5xl" : "contain-layout"}>
+    <div
+      className={`${role ? "max-w-5xl" : "contain-layout"} mx-auto w-full px-4 sm:px-6`}
+    >
       {!isApply ? (
         <div className="rounded-2xl overflow-hidden mx-auto">
-          <div className="p-6 md:p-8 border-b border-slate-100">
-            <div className="flex items-center gap-5">
+          <div className="p-4 md:p-8 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
               <Image
                 src={job?.companyLogo ? job?.companyLogo : "I"}
                 alt={job?.company}
                 width={70}
                 height={70}
-                className="rounded-xl border object-cover"
+                className="rounded-xl border object-cover w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
               />
 
               <div className="flex-1 min-w-0">
@@ -80,12 +82,12 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                     {job.type}
                   </span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-dark-text">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark-text">
                   {job.title}
                 </h1>
 
                 <p className="text-slate-600 mt-1">{job.company}</p>
-                <div className="flex flex-wrap gap-4 mt-4 text-sm text-third-gray">
+                <div className="flex flex-wrap gap-3 mt-3 text-sm text-third-gray">
                   <span className="flex items-center gap-1.5">
                     <FiMapPin /> {job.location}
                   </span>
@@ -107,9 +109,9 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               </div>
             </div>
           </div>
-          <div className="p-6 md:p-8 space-y-8">
+          <div className="p-4 md:p-8 space-y-6 md:space-y-8">
             <div>
-              <h2 className="text-lg font-semibold text-dark-text mb-3">
+              <h2 className="text-base md:text-lg font-semibold text-dark-text mb-3">
                 Job Description
               </h2>
               <p className="text-slate-600 leading-relaxed text-sm md:text-base">
@@ -151,7 +153,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                 Job Info
               </h2>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-slate-50 p-4 rounded-xl">
                   <p className="text-slate-500 text-sm">Posted On</p>
                   <p className="font-medium text-dark-text mt-1">
@@ -170,7 +172,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               </div>
             </div>
           </div>
-          <div className="p-6 md:px-8 border-t border-slate-100 flex justify-end">
+          <div className="p-4 md:px-8 border-t border-slate-100 flex justify-center sm:justify-end">
             <CustomButton
               disabled={alreadyApplied}
               onClick={() => {
@@ -200,12 +202,12 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                 }
               }}
               label={alreadyApplied ? "Already Applied" : "Apply Now"}
-              className="px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         </div>
       ) : (
-        <div className="p-6 md:p-8 bg-white rounded-xl mx-auto shadow-sm">
+        <div className="p-4 md:p-8 bg-white rounded-lg md:rounded-xl mx-auto shadow-sm w-full max-w-3xl">
           <ApplyForm jobId={job._id} />
         </div>
       )}

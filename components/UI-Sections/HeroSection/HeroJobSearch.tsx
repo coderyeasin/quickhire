@@ -38,35 +38,35 @@ const HeroJobSearch = () => {
   };
 
   return (
-    <div className="lg:w-213 flex flex-col items-start gap-5">
+    <div className="w-full lg:w-213 flex flex-col items-start gap-3 md:gap-5">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-3 md:p-4 bg-white flex flex-col md:flex-row items-stretch md:items-end gap-3 w-full"
+        className="p-2 md:p-4 bg-white flex flex-col md:flex-row items-stretch gap-2 md:gap-3 w-full rounded-lg md:rounded-xl shadow-sm"
       >
-        <div className="w-full md:w-4/12 flex items-center text-xl md:text-2xl gap-2 flex-1 md:flex-none">
-          <FiSearch className="shrink-0" />
+        <div className="w-full md:flex-1 flex items-center gap-2 border-b-2 md:border-b-0 border-gray-300 focus-within:border-indigo-text md:border-l-2 md:border-l-indigoTags px-2 md:px-3 py-2">
+          <FiSearch className="shrink-0 text-lg md:text-xl text-third-gray" />
           <input
             type="text"
             {...register("searchTxt")}
             placeholder="Job title or keyword"
-            className="outline-none font-epilogue text-third-gray text-sm w-full px-2 md:px-3 py-2 border-b-2 border-gray-300 focus:border-indigo-text transition-colors duration-300"
+            className="outline-none font-epilogue text-third-gray text-xs md:text-sm w-full placeholder-third-gray/50 focus:placeholder-third-gray/70 transition-all"
           />
         </div>
 
-        <div className="w-full md:w-4/12 flex items-center text-xl md:text-2xl gap-2 flex-1 md:flex-none">
-          <SlLocationPin className="shrink-0" />
+        <div className="w-full md:flex-1 flex items-center gap-2 border-b-2 md:border-b-0 border-gray-300 focus-within:border-indigo-text md:border-l-2 md:border-l-indigoTags px-2 md:px-3 py-2">
+          <SlLocationPin className="shrink-0 text-lg md:text-xl text-third-gray" />
           <input
             type="text"
             {...register("locationTxt")}
             placeholder="Florence, Italy"
-            className="outline-none font-epilogue text-third-gray text-sm w-full px-2 md:px-3 py-2 border-b-2 border-gray-300 focus:border-indigo-text transition-colors duration-300"
+            className="outline-none font-epilogue text-third-gray text-xs md:text-sm w-full placeholder-third-gray/50 focus:placeholder-third-gray/70 transition-all"
           />
         </div>
 
         <CustomButton
           type="submit"
           label="Search my job"
-          className="text-white font-bold bg-indigoTags w-full md:w-4/12 py-2 md:py-4 whitespace-nowrap transition-all hover:opacity-90 active:scale-95"
+          className="text-white font-bold bg-indigoTags w-full md:w-auto px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm md:text-base transition-all hover:opacity-90 active:scale-95 rounded-lg md:rounded-lg"
         />
       </form>
 

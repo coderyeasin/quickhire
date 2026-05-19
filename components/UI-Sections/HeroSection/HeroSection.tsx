@@ -3,10 +3,10 @@ import HeroJobSearch from "./HeroJobSearch";
 
 const HeroSection = () => {
   return (
-    <section className="container-layout relative py-6 md:py-10">
+    <section className="container-layout relative py-14 md:py-10">
       <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start relative gap-6 md:gap-10">
         <div className="flex flex-col items-start justify-center z-10 space-y-12 py-10 md:py-20 w-full lg:w-1/2">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[72px] font-bold text-dark-text leading-tight md:leading-20 font-clash">
+          <h1 className="text-5xl lg:text-[72px] font-bold text-dark-text leading-tight md:leading-20 font-clash">
             Discover <br /> more than <br />
             <span className="text-blue-text">5000+ Jobs</span>
             <Image
@@ -18,7 +18,8 @@ const HeroSection = () => {
               priority
             />
           </h1>
-          <p className="text-base md:text-lg lg:text-xl text-primary-gray/70 leading-relaxed md:leading-[160%]">
+
+          <p className="text-lg sm:text-xl lg:text-2xl text-primary-gray/70 leading-relaxed md:leading-[160%] max-w-xl">
             Great platform for the job seeker that searching for new career
             heights and passionate about startups.
           </p>

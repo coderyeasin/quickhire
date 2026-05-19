@@ -1,6 +1,5 @@
 import CustomButton from "@/shared/CustomButton";
 import Image from "next/image";
-import React from "react";
 import {
   FaDribbble,
   FaFacebookF,
@@ -26,8 +25,8 @@ const Footer = () => {
   return (
     <footer className="bg-second-gray w-full">
       <section className="container-layout">
-        <div className="w-full flex flex-col md:flex-row justify-between items-start gap-6 md:gap-8 lg:gap-14 border-b-2 border-third-gray pt-10 md:pt-20 pb-8 md:pb-10 text-footerTxt font-epilogue leading-[160%]">
-          <div className="w-full md:w-5/12 space-y-4 md:space-y-5">
+        <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-6 md:gap-8 lg:gap-14 border-b-2 border-third-gray pt-10 md:pt-20 pb-8 md:pb-10 text-footerTxt font-epilogue leading-[160%]">
+          <div className="w-full lg:w-5/12 space-y-4 md:space-y-5">
             <Image
               src={"/images/Logo-wht.png"}
               alt="wht-logo"
@@ -41,41 +40,46 @@ const Footer = () => {
               Find your dream job easier.
             </p>
           </div>
-          <div className="w-full sm:w-1/2 md:w-2/12">
+          <div className="flex justify-between items-start w-full space-y-3">
+            <div className="w-full">
+              <h3 className="text-base md:text-lg font-semibold text-white mb-3 md:mb-0">
+                About
+              </h3>
+              <ul>
+                {ftrLinks.slice(0, 5).map((item, i) => (
+                  <li
+                    key={i}
+                    className="py-2 cursor-pointer text-sm md:text-base hover:text-white transition-colors"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="w-full">
+              <h3 className="leading-[160%] text-base md:text-lg font-semibold text-white mb-3 md:mb-0">
+                Resources
+              </h3>
+              <ul>
+                {ftrLinks.slice(5, 9).map((item, i) => (
+                  <li
+                    key={i}
+                    className="py-2 cursor-pointer text-sm md:text-base hover:text-white transition-colors"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="w-full lg:w-4/12 space-y-4 md:space-y-5">
             <h3 className="text-base md:text-lg font-semibold text-white mb-3 md:mb-0">
-              About
+              Get Job Notifications
             </h3>
-            <ul>
-              {ftrLinks.slice(0, 5).map((item, i) => (
-                <li
-                  key={i}
-                  className="py-1 md:py-2 cursor-pointer text-sm md:text-base hover:text-white transition-colors"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="w-full sm:w-1/2 md:w-2/12">
-            <h3 className="leading-[160%] text-base md:text-lg font-semibold text-white mb-3 md:mb-0">
-              Resources
-            </h3>
-            <ul>
-              {ftrLinks.slice(5, 9).map((item, i) => (
-                <li
-                  key={i}
-                  className="py-1 md:py-2 cursor-pointer text-sm md:text-base hover:text-white transition-colors"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="w-full md:w-4/12 space-y-4 md:space-y-5">
             <p className="text-sm md:text-base">
               The latest job news, articles, sent to your inbox weekly.
             </p>
-            <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <div className="flex flex-col md:flex-row gap-2 w-full">
               <input
                 type="text"
                 placeholder="Email Address"
