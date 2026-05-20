@@ -18,13 +18,13 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
       }
     >
       <div className="flex flex-col gap-6">
-        <div className="flex justify-start items-center md:hidden">
+        <div className="flex justify-end items-center">
           <button
             onClick={(e) => {
               e.stopPropagation();
               router.push(userRole ? `/${userRole}/jobs/` : `/jobs/`);
             }}
-            className="inline-flex items-center text-right gap-2 text-indigoTags cursor-pointer"
+            className="inline-flex items-center gap-2 text-indigoTags cursor-pointer"
           >
             <IoArrowBackCircle size={22} />
             Back To Jobs
@@ -37,24 +37,10 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
           </div>
 
           <div className="flex flex-col space-y-6 md:w-87.5">
-            <div className="hidden md:flex justify-start items-center">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(userRole ? `/${userRole}/jobs/` : `/jobs/`);
-                }}
-                className="inline-flex items-center text-right gap-2 text-indigoTags cursor-pointer"
-              >
-                <IoArrowBackCircle size={22} />
-                Back To Jobs
-              </button>
-            </div>
-
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-5">
                 Facilities & Perks
               </h2>
-
               <div className="space-y-3">
                 {[
                   "High-performance working environment",
@@ -64,7 +50,6 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <FiCheckCircle className="text-green-500 mt-1 shrink-0" />
-
                     <p className="text-sm text-gray-700">{item}</p>
                   </div>
                 ))}
@@ -75,7 +60,6 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
               <h2 className="text-lg font-bold text-gray-900 mb-5">
                 Why Join?
               </h2>
-
               <div className="space-y-3">
                 {[
                   "Remote friendly environment",
@@ -85,7 +69,6 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <FiCheckCircle className="text-green-500 mt-1 shrink-0" />
-
                     <p className="text-sm text-gray-700">{item}</p>
                   </div>
                 ))}

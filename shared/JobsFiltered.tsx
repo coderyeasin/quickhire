@@ -36,14 +36,14 @@ const JobsFiltered = ({
   return (
     <div className="bg-white border border-third-gray/10 rounded-xl md:rounded-2xl p-3 md:p-4 shadow-sm">
       <div className="flex flex-col sm:flex-row md:flex-row lg:flex-row items-stretch lg:items-center gap-2 md:gap-3 lg:gap-4 w-full">
-        <div className="flex-1 flex items-center gap-2 border border-third-gray/20 rounded-lg md:rounded-xl px-3 md:px-4 py-2 md:py-3 focus-within:border-indigoTags transition-colors duration-200 min-w-0">
+        <div className="flex-1 flex items-center gap-2 border border-third-gray/20 rounded-lg md:rounded-xl px-3 md:px-4 py-2 md:py-3 focus-within:border-indigoTags transition-colors duration-200 min-w-30">
           <input
             {...register("search")}
             type="text"
             value={values.search}
             onChange={(e) => handleFieldChange("search", e.target.value)}
             placeholder="Search by title..."
-            className="w-full text-xs md:text-sm outline-none font-epilogue text-dark-text placeholder-third-gray/50 min-w-0"
+            className="w-full text-xs md:text-sm outline-none font-epilogue text-dark-text placeholder-third-gray/50 min-w-30"
           />
         </div>
 
