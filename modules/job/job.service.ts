@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import { CreatedJobType, UpdateJobType } from "./job.validation";
 import { JobModel } from "./job.model";
