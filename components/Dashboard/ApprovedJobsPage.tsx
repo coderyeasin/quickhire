@@ -7,7 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { useJobs } from "@/Hooks/useJobs";
+import { useApprovedJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
@@ -22,13 +22,8 @@ const ApprovedJobsPage = () => {
   const [jobId, setJobId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("jobs");
 
-  const { data, isLoading } = useJobs();
-
-  const jobs = useMemo(
-    () =>
-      (data?.data ?? []).filter((job: JobsType) => job.status === "approved"),
-    [data],
-  );
+  const { data, isLoading } = useApprovedJobs();
+  const jobs = useMemo(() => data?.data ?? [], [data]);
 
   const columns = useMemo(
     () => [
