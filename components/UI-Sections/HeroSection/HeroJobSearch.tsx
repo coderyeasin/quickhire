@@ -49,7 +49,7 @@ const HeroJobSearch = () => {
             type="text"
             {...register("searchTxt")}
             placeholder="Job title or keyword"
-            className="outline-none font-epilogue text-third-gray text-xs md:text-sm w-full placeholder-third-gray/50 focus:placeholder-third-gray/70 transition-all"
+            className="outline-none font-epilogue text-third-gray border-b border-third-gray/30 py-1 text-sm w-full placeholder-third-gray/50 focus:placeholder-third-gray/70 transition-all"
           />
         </div>
 
@@ -59,7 +59,7 @@ const HeroJobSearch = () => {
             type="text"
             {...register("locationTxt")}
             placeholder="Florence, Italy"
-            className="outline-none font-epilogue text-third-gray text-xs md:text-sm w-full placeholder-third-gray/50 focus:placeholder-third-gray/70 transition-all"
+            className="outline-none font-epilogue text-third-gray border-b border-third-gray/30 py-1 text-sm w-full placeholder-third-gray/50 focus:placeholder-third-gray/70 transition-all"
           />
         </div>
 
