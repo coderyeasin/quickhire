@@ -1,6 +1,7 @@
 "use client";
 import { useMyApplications } from "@/Hooks/useApplications";
-import ReusableTable from "@/shared/DataTable";
+import CustomPagination from "@/shared/CustomPagination";
+import CustomTable from "@/shared/CustomTable";
 import Modal from "@/shared/Modal";
 import Spinner from "@/shared/Spinner";
 import StatusBadge from "@/shared/StatusBadge";
@@ -9,6 +10,7 @@ import { ModalMode } from "@/types/types";
 import {
   createColumnHelper,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
@@ -20,6 +22,10 @@ const CandidateApplicationsPage = () => {
   const [open, setOpen] = useState(false);
   const [applicantsId, setApplicantsId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("applicants");
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const { data, isLoading } = useMyApplications();
 
   const applicants: ApplicationsType[] = useMemo(
@@ -98,7 +104,12 @@ const CandidateApplicationsPage = () => {
   const table = useReactTable({
     data: applicants,
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return isLoading ? (
@@ -108,10 +119,19 @@ const CandidateApplicationsPage = () => {
       <h3 className="text-lg font-semibold text-dark-text text-center ">
         Total Applications: {applicants.length}
       </h3>
-      <ReusableTable
+      <CustomTable
         table={table}
         isLoading={isLoading}
         emptyMessage="No applications yet"
+      />
+      <CustomPagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageCount={table.getPageCount()}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
+        nextPage={table.nextPage}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
       />
       <Modal
         open={open}

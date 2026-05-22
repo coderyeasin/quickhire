@@ -2,6 +2,7 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { JobsType } from "./types";
 import { LoginInput, RegisterInput } from "@/modules/user/UserValidators";
+import { Table as TanTable } from "@tanstack/react-table";
 
 export interface CustomButtonProps {
   label: string;
@@ -76,7 +77,13 @@ export interface IJobFilters {
   deadline: string;
 }
 
-export interface IJobsFilteredProps {
+interface ITableType<T> {
+  table: TanTable<T>;
+  isLoading?: boolean;
+  emptyMessage?: string;
+}
+
+export interface IJobsFiltered {
   jobs: JobsType[];
   values: IJobFilters;
   onChange: (values: IJobFilters) => void;

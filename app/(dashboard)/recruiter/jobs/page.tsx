@@ -1,7 +1,7 @@
-import MineRecruiterPostedJobsPage from "@/components/Dashboard/RecruiterPostedJobs";
+import MyPostedJobsAsRecruiter from "@/components/Dashboard/MyPostedJobsAsRecruiter";
 
 const MyJobsHome = () => {
-  return <MineRecruiterPostedJobsPage />;
+  return <MyPostedJobsAsRecruiter />;
 };
 
 export default MyJobsHome;

@@ -17,8 +17,8 @@ import { useJobs } from "@/Hooks/useJobs";
 import { useApplications } from "@/Hooks/useApplications";
 import StatusBadge from "@/shared/StatusBadge";
 import { useMemo } from "react";
-import ReusableTable from "@/shared/DataTable";
 import StatusCard from "@/shared/StatusCard";
+import CustomTable from "@/shared/CustomTable";
 
 type upComingJobsType = {
   _id: string;
@@ -168,7 +168,7 @@ const AdminBoard = () => {
             View all →
           </Link>
         </div>
-        <ReusableTable
+        <CustomTable
           table={table}
           isLoading={jobsLoading}
           emptyMessage="No jobs found"

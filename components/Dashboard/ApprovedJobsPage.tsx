@@ -10,7 +10,7 @@ import {
 
 import { useApprovedJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
-import DataTable from "@/shared/DataTable";
+import CustomTable from "@/shared/CustomTable";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
 import Spinner from "@/shared/Spinner";
@@ -90,7 +90,7 @@ const ApprovedJobsPage = () => {
         Total Approved Jobs: {jobs.length}
       </h3>
 
-      <DataTable
+      <CustomTable
         table={table}
         isLoading={isLoading}
         emptyMessage="No approved jobs found"

@@ -4,22 +4,28 @@ import { useMemo, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { FiExternalLink, FiTrash2 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { useDeleteJob, useMyJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
-import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
+import CustomPagination from "@/shared/CustomPagination";
+import CustomTable from "@/shared/CustomTable";
 
 const col = createColumnHelper<JobsType>();
 
-const MineRecruiterPostedJobsPage = () => {
+const MyPostedJobsAsRecruiter = () => {
   const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("jobs");
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const { data, isLoading } = useMyJobs();
   const updateStatus = useUpdateJobStatus();
   const deleteJob = useDeleteJob();
@@ -129,7 +135,12 @@ const MineRecruiterPostedJobsPage = () => {
   const table = useReactTable({
     data: jobs ?? [],
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -137,10 +148,19 @@ const MineRecruiterPostedJobsPage = () => {
       <h3 className="text-lg font-semibold text-dark-text text-center ">
         Total Jobs: {jobs.length}
       </h3>
-      <DataTable
+      <CustomTable
         table={table}
         isLoading={isLoading}
         emptyMessage="No jobs yet"
+      />
+      <CustomPagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageCount={table.getPageCount()}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
+        nextPage={table.nextPage}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
       />
       <Modal
         open={open}
@@ -153,4 +173,4 @@ const MineRecruiterPostedJobsPage = () => {
   );
 };
 
-export default MineRecruiterPostedJobsPage;
+export default MyPostedJobsAsRecruiter;

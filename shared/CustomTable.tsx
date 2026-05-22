@@ -1,16 +1,11 @@
-import { flexRender, Table as TanTable } from "@tanstack/react-table";
+import { ITableType } from "@/types/interfaces";
+import { flexRender } from "@tanstack/react-table";
 
-interface tableType<T> {
-  table: TanTable<T>;
-  isLoading?: boolean;
-  emptyMessage?: string;
-}
-
-const ReusableTable = <T,>({
+const CustomTable = <T,>({
   table,
   isLoading,
   emptyMessage = "No data found",
-}: tableType<T>) => {
+}: ITableType<T>) => {
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
@@ -77,4 +72,4 @@ const ReusableTable = <T,>({
   );
 };
 
-export default ReusableTable;
+export default CustomTable;

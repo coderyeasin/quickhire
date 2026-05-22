@@ -9,10 +9,10 @@ import {
 
 import { useJobs } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
-import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
 import Spinner from "@/shared/Spinner";
+import CustomTable from "@/shared/CustomTable";
 
 const col = createColumnHelper<JobsType>();
 
@@ -84,7 +84,7 @@ const TrashJobsPage = () => {
         Trash Jobs: {jobs.length}
       </h3>
 
-      <DataTable
+      <CustomTable
         table={table}
         isLoading={isLoading}
         emptyMessage="No trash jobs found"

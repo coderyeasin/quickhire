@@ -5,7 +5,8 @@ import {
   useUpdateApplicationStatus,
 } from "@/Hooks/useApplications";
 import { useMyJobs } from "@/Hooks/useJobs";
-import ReusableTable from "@/shared/DataTable";
+import CustomPagination from "@/shared/CustomPagination";
+import CustomTable from "@/shared/CustomTable";
 import Modal from "@/shared/Modal";
 import Spinner from "@/shared/Spinner";
 import StatusBadge from "@/shared/StatusBadge";
@@ -14,9 +15,10 @@ import { ModalMode } from "@/types/types";
 import {
   createColumnHelper,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 
 const applicantStatus: Record<string, string[]> = {
@@ -33,6 +35,10 @@ const RecruiterJobsByApplicantsPage = () => {
   const [open, setOpen] = useState(false);
   const [applicantsId, setApplicantsId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("applicants");
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const { data, isLoading } = useMyJobs();
 
@@ -155,7 +161,12 @@ const RecruiterJobsByApplicantsPage = () => {
   const table = useReactTable({
     data: applicants,
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return isLoading || applicantsLoading ? (
@@ -165,10 +176,19 @@ const RecruiterJobsByApplicantsPage = () => {
       <h3 className="text-lg font-semibold text-dark-text text-center ">
         Total Applications: {applicants.length}
       </h3>
-      <ReusableTable
+      <CustomTable
         table={table}
         isLoading={applicantsLoading}
         emptyMessage="No applications yet"
+      />
+      <CustomPagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageCount={table.getPageCount()}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
+        nextPage={table.nextPage}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
       />
       <Modal
         open={open}

@@ -42,14 +42,14 @@ async function fetchJobById(id: string) {
 // Queries
 export function useJobs() {
   return useQuery({
-    queryKey: ["jobs"],
+    queryKey: ["jobs", "all"],
     queryFn: fetchJobs,
   });
 }
 
 export function useApprovedJobs() {
   return useQuery({
-    queryKey: ["jobs"],
+    queryKey: ["jobs", "approved"],
     queryFn: fetchApprovedJobs,
   });
 }

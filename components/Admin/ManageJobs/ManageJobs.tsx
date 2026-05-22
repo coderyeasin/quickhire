@@ -11,10 +11,10 @@ import { FiExternalLink, FiTrash2 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { useDeleteJob, useJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
-import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
 import CustomPagination from "@/shared/CustomPagination";
+import CustomTable from "@/shared/CustomTable";
 
 const col = createColumnHelper<JobsType>();
 
@@ -22,14 +22,14 @@ const ManageJobs = () => {
   const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("jobs");
-  const { data, isLoading } = useJobs();
-  const updateStatus = useUpdateJobStatus();
-  const deleteJob = useDeleteJob();
-
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const { data, isLoading } = useJobs();
+  const updateStatus = useUpdateJobStatus();
+  const deleteJob = useDeleteJob();
 
   const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
@@ -149,7 +149,7 @@ const ManageJobs = () => {
       <h3 className="text-lg font-semibold text-dark-text text-center ">
         Total Jobs: {jobs.length}
       </h3>
-      <DataTable
+      <CustomTable
         table={table}
         isLoading={isLoading}
         emptyMessage="No jobs yet"

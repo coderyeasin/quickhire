@@ -2,14 +2,9 @@
 
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { IJobFilters, IJobsFilteredProps } from "@/types/interfaces";
+import { IJobFilters, IJobsFiltered } from "@/types/interfaces";
 
-const JobsFiltered = ({
-  jobs,
-  values,
-  onChange,
-  onReset,
-}: IJobsFilteredProps) => {
+const JobsFiltered = ({ jobs, values, onChange, onReset }: IJobsFiltered) => {
   const { register, reset } = useForm<IJobFilters>({
     values,
   });
