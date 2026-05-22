@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -14,6 +15,7 @@ import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
 import Spinner from "@/shared/Spinner";
 import { FiExternalLink } from "react-icons/fi";
+import CustomPagination from "@/shared/CustomPagination";
 
 const col = createColumnHelper<JobsType>();
 
@@ -21,6 +23,10 @@ const ApprovedJobsPage = () => {
   const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("jobs");
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const { data, isLoading } = useApprovedJobs();
   const jobs = useMemo(() => data?.data ?? [], [data]);
@@ -68,7 +74,12 @@ const ApprovedJobsPage = () => {
   const table = useReactTable({
     data: jobs,
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return isLoading ? (
@@ -83,6 +94,15 @@ const ApprovedJobsPage = () => {
         table={table}
         isLoading={isLoading}
         emptyMessage="No approved jobs found"
+      />
+      <CustomPagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageCount={table.getPageCount()}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
+        nextPage={table.nextPage}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
       />
 
       <Modal

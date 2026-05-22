@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { FiExternalLink, FiTrash2 } from "react-icons/fi";
@@ -13,6 +14,7 @@ import StatusBadge from "@/shared/StatusBadge";
 import DataTable from "@/shared/DataTable";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
+import CustomPagination from "@/shared/CustomPagination";
 
 const col = createColumnHelper<JobsType>();
 
@@ -23,6 +25,11 @@ const ManageJobs = () => {
   const { data, isLoading } = useJobs();
   const updateStatus = useUpdateJobStatus();
   const deleteJob = useDeleteJob();
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const jobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
@@ -129,7 +136,12 @@ const ManageJobs = () => {
   const table = useReactTable({
     data: jobs ?? [],
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -141,6 +153,15 @@ const ManageJobs = () => {
         table={table}
         isLoading={isLoading}
         emptyMessage="No jobs yet"
+      />
+      <CustomPagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageCount={table.getPageCount()}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
+        nextPage={table.nextPage}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
       />
       <Modal
         open={open}

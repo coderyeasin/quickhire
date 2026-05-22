@@ -82,3 +82,13 @@ export interface IJobsFilteredProps {
   onChange: (values: IJobFilters) => void;
   onReset: () => void;
 }
+
+export interface ICustomPagination {
+  pageIndex: number;
+  pageCount: number;
+  canPreviousPage: boolean;
+  canNextPage: boolean;
+  nextPage: () => void;
+  previousPage: () => void;
+  setPageIndex: (index: number) => void;
+}
