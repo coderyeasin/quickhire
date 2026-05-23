@@ -13,7 +13,7 @@ const JobDetails = ({ jobId }: { jobId: string | null }) => {
     <div
       className={
         userRole
-          ? "container-layout  mx-auto px-4 md:px-6 py-8"
+          ? "container-layout mx-auto px-4 md:px-6 py-8"
           : "container-layout py-8"
       }
     >
