@@ -1,4 +1,4 @@
-import RecruiterBoard from "@/components/Dashboard/RecruiterBoard";
+import RecruiterBoard from "@/components/Dashboard/Recruiter/RecruiterBoard";
 
 const RecruiterPage = () => {
   return <RecruiterBoard />;

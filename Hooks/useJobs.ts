@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import AppError from "@/lib/AppError";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { UpdateJobType } from "@/modules/job/job.validation";
 
 // GET APIs
 async function fetchJobs() {
@@ -65,6 +66,9 @@ export function useJobById(id: string) {
   return useQuery({
     queryKey: ["job", id],
     queryFn: () => fetchJobById(id),
+    enabled: !!id,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 }
 
@@ -93,26 +97,33 @@ export function useCreateJob() {
   });
 }
 
-//--------- need to include-------- formdata format --- need to include
+//--------- need to include-------- formdata format --- if logo need change
 export function useUpdateJob() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, body }: { id: string; body: any }) => {
+    mutationFn: async ({
+      id,
+      updateData,
+    }: {
+      id: string;
+      updateData: UpdateJobType;
+    }) => {
       const res = await fetch(`/api/jobs/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body,
+        body: JSON.stringify(updateData),
       });
       const data = await res.json();
       if (!data)
         throw new AppError(httpStatus.BAD_REQUEST, "Failed to update job");
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (id: string) => {
       toast.success("Job updated successfully");
-      qc.invalidateQueries({ queryKey: ["jobs"] });
+      qc.invalidateQueries({ queryKey: ["jobs", "mine"] });
+      qc.invalidateQueries({ queryKey: ["job", id] });
     },
     onError: (error) => {
       const err = error as AppError;

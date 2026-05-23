@@ -30,3 +30,15 @@ export type JobsType = {
   deadline: string;
   createdAt: string;
 };
+
+export interface UpdateJobForm {
+  title: string;
+  company: string;
+  location: string;
+  type: "full-time" | "part-time" | "remote" | "intern";
+  description: string;
+  salary: string;
+  deadline: string;
+  skills: string;
+  category: string;
+}

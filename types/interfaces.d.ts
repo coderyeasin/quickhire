@@ -70,6 +70,12 @@ export interface ApplicationsType {
   jobId: JobsType | null;
 }
 
+export interface IDynamicData {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
 export interface IJobFilters {
   search: string;
   category: string;
@@ -98,4 +104,9 @@ export interface ICustomPagination {
   nextPage: () => void;
   previousPage: () => void;
   setPageIndex: (index: number) => void;
+}
+
+export interface EditJobFormType {
+  jobData: JobsType;
+  redirectTo: string;
 }

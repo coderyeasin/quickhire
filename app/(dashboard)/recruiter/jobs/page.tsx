@@ -1,4 +1,4 @@
-import MyPostedJobsAsRecruiter from "@/components/Dashboard/MyPostedJobsAsRecruiter";
+import MyPostedJobsAsRecruiter from "@/components/Dashboard/Recruiter/MyPostedJobsAsRecruiter";
 
 const MyJobsHome = () => {
   return <MyPostedJobsAsRecruiter />;

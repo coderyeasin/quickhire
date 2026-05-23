@@ -1,4 +1,4 @@
-import CandidateBoard from "@/components/Dashboard/CandidateBoard";
+import CandidateBoard from "@/components/Dashboard/Candidate/CandidateBoard";
 
 const CandidateHome = () => {
   return <CandidateBoard />;

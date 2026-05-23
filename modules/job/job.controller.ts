@@ -110,7 +110,20 @@ export const updateSingleJob = catchAsync(async (req, routeCtx) => {
 
   const { id } = await routeCtx.params;
 
-  const body = await req.json();
+  const rawBody = await req.text();
+  if (!rawBody || rawBody.trim() === "") {
+    throw new AppError(httpStatus.BAD_REQUEST, "Request body cannot be empty");
+  }
+
+  let body;
+  try {
+    body = JSON.parse(rawBody);
+  } catch (error) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Malformed JSON payload provided to server",
+    );
+  }
 
   const parsedData = updateJobValidationSchema.safeParse(body);
 

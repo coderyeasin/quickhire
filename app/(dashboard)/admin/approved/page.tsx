@@ -1,4 +1,4 @@
-import ApprovedJobsPage from "@/components/Dashboard/ApprovedJobsPage";
+import ApprovedJobsPage from "@/components/Dashboard/Admin/ApprovedJobsPage";
 
 const ApprovedJobsHome = () => {
   return (

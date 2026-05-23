@@ -1,4 +1,4 @@
-import RecruiterJobsByApplicantsPage from "@/components/Dashboard/RecruiterJobsByApplicantsPage";
+import RecruiterJobsByApplicantsPage from "@/components/Dashboard/Recruiter/RecruiterJobsByApplicantsPage";
 
 const RecruiterJobsByApplicantsHome = () => {
   return <RecruiterJobsByApplicantsPage />;

@@ -7,18 +7,21 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { FiExternalLink, FiTrash2 } from "react-icons/fi";
+import { FiExternalLink, FiTrash2, FiEdit2 } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useDeleteJob, useMyJobs, useUpdateJobStatus } from "@/Hooks/useJobs";
 import StatusBadge from "@/shared/StatusBadge";
 import Modal from "@/shared/Modal";
 import { JobsType, ModalMode } from "@/types/types";
 import CustomPagination from "@/shared/CustomPagination";
 import CustomTable from "@/shared/CustomTable";
+import Spinner from "@/shared/Spinner";
 
 const col = createColumnHelper<JobsType>();
 
 const MyPostedJobsAsRecruiter = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
   const [mode, setMode] = useState<ModalMode>("jobs");
@@ -70,25 +73,22 @@ const MyPostedJobsAsRecruiter = () => {
           const job = i.row.original;
           return (
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => router.push(`/recruiter/edit/${job._id}`)}
+                className="p-1.5 text-slate-400 hover:text-indigoTags cursor-pointer hover:bg-slate-50 rounded-lg transition-colors"
+              >
+                <FiEdit2 className="text-sm" />
+              </button>
+
               {job.status === "pending" && (
-                <>
-                  {/* <button
-                    onClick={() =>
-                      updateStatus.mutate({ id: job._id, status: "approved" })
-                    }
-                    className="px-3 py-1 text-xs font-medium cursor-pointer bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors"
-                  >
-                    Approve
-                  </button> */}
-                  <button
-                    onClick={() =>
-                      updateStatus.mutate({ id: job._id, status: "rejected" })
-                    }
-                    className="px-3 py-1 text-xs font-medium cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
-                  >
-                    Reject
-                  </button>
-                </>
+                <button
+                  onClick={() =>
+                    updateStatus.mutate({ id: job._id, status: "rejected" })
+                  }
+                  className="px-3 py-1 text-xs font-medium cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                >
+                  Reject
+                </button>
               )}
               <button
                 onClick={() => {
@@ -129,7 +129,7 @@ const MyPostedJobsAsRecruiter = () => {
         },
       }),
     ],
-    [updateStatus, deleteJob],
+    [updateStatus, deleteJob, router],
   );
 
   const table = useReactTable({
@@ -145,9 +145,13 @@ const MyPostedJobsAsRecruiter = () => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-dark-text text-center ">
-        Total Jobs: {jobs.length}
-      </h3>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <h3 className="text-lg font-semibold text-dark-text text-center ">
+          Your Total Jobs: {jobs.length}
+        </h3>
+      )}
       <CustomTable
         table={table}
         isLoading={isLoading}

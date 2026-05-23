@@ -1,12 +1,7 @@
 import JobDetailsPage from "@/components/Dashboard/Candidate/JobDetails";
+import { IDynamicData } from "@/types/interfaces";
 
-interface IDynamic {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-const SingleJobHome = async ({ params }: IDynamic) => {
+const SingleJobHome = async ({ params }: IDynamicData) => {
   const { id: jobsId } = await params;
 
   return <JobDetailsPage jobId={jobsId} />;
