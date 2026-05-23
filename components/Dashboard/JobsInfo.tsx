@@ -114,9 +114,49 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
               <h2 className="text-base md:text-lg font-semibold text-dark-text mb-3">
                 Job Description
               </h2>
-              <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                {job?.description?.slice(0, 200)}...
-              </p>
+              {!role ? (
+                <div className="space-y-3 text-slate-600 leading-relaxed text-sm md:text-base">
+                  {job?.description
+                    ?.split("\n")
+                    .map((line: string, index: number) => {
+                      const trimmed = line.trim();
+                      if (!trimmed) return null;
+
+                      // Check if the line is a bullet point from the textarea
+                      if (trimmed.startsWith("*") || trimmed.startsWith("-")) {
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-start gap-2 pl-4"
+                          >
+                            <span className="text-blue-500 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+                            <span>{trimmed.replace(/^[*-\s]+/, "")}</span>
+                          </div>
+                        );
+                      }
+
+                      if (
+                        trimmed.toLowerCase().includes("responsibilities") ||
+                        trimmed.toLowerCase().includes("requirements")
+                      ) {
+                        return (
+                          <h4
+                            key={index}
+                            className="pt-4 font-semibold text-slate-800 text-base md:text-lg"
+                          >
+                            {trimmed}
+                          </h4>
+                        );
+                      }
+
+                      return <p key={index}>{trimmed}</p>;
+                    })}
+                </div>
+              ) : (
+                <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                  {job?.description?.slice(0, 200)}...
+                </p>
+              )}
             </div>
             <div>
               <h2 className="text-lg font-semibold text-dark-text mb-3">
