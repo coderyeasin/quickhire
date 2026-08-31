@@ -83,6 +83,7 @@ const RegisterFields = (props: UserRegister) => {
           )}
         </div>
       )}
+
       <div>
         <input
           {...register("email")}
@@ -95,6 +96,21 @@ const RegisterFields = (props: UserRegister) => {
           </p>
         )}
       </div>
+
+      {props.variant === "register" && props.role === "recruiter" && (
+        <div>
+          <input
+            {...register("company")}
+            placeholder="Your Company Name"
+            className={inputCls}
+          />
+          {registerErrors.company && (
+            <p className="text-red-400 text-xs mt-1">
+              {registerErrors.company.message}
+            </p>
+          )}
+        </div>
+      )}
 
       {props.variant === "register" && (
         <div>

@@ -20,6 +20,7 @@ export async function registerAction(formData: FormData) {
     const raw = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
+      company: formData.get("company") as string,
       password: formData.get("password") as string,
       confirmPassword: formData.get("confirmPassword") as string,
       role: formData.get("role") as string,
@@ -49,6 +50,7 @@ export async function registerAction(formData: FormData) {
 
     await createUser({
       ...parsedData.data,
+      company: parsedData.data.company ?? undefined,
       avatar: avatarUrl,
       role: parsedData.data.role as "candidate" | "admin" | "recruiter",
     });
