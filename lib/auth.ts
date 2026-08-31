@@ -12,7 +12,7 @@ export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
+    maxAge: 60 * 60 * 24 * 30,
   },
   providers: [
     CredentialsProvider({
@@ -55,6 +55,7 @@ export const authConfig: NextAuthConfig = {
           company: user.company,
           avatar: user.avatar,
           role: user.role,
+          createdAt: user.createdAt,
         };
       },
     }),
@@ -98,6 +99,7 @@ export const authConfig: NextAuthConfig = {
         token.email = user.email;
         token.company = user.company;
         token.avatar = user.avatar;
+        token.createdAt = user.createdAt;
       }
       return token;
     },
@@ -110,6 +112,7 @@ export const authConfig: NextAuthConfig = {
         session.user.company = token.company as string;
         session.user.email = token.email as string;
         session.user.avatar = token.avatar as string;
+        session.user.createdAt = token.createdAt as string;
       }
       return session;
     },

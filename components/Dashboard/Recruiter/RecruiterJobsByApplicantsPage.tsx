@@ -1,0 +1,204 @@
+"use client";
+
+import {
+  useApplicationsByJobId,
+  useUpdateApplicationStatus,
+} from "@/Hooks/useApplications";
+import { useMyJobs } from "@/Hooks/useJobs";
+import CustomPagination from "@/shared/CustomPagination";
+import CustomTable from "@/shared/CustomTable";
+import Modal from "@/shared/Modal";
+import Spinner from "@/shared/Spinner";
+import StatusBadge from "@/shared/StatusBadge";
+import { ApplicationsType } from "@/types/interfaces";
+import { ModalMode } from "@/types/types";
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useMemo, useState } from "react";
+import { FiExternalLink } from "react-icons/fi";
+
+const applicantStatus: Record<string, string[]> = {
+  pending: ["reviewing", "rejected"],
+  reviewing: ["shortlisted", "rejected"],
+  shortlisted: ["hired", "rejected"],
+  rejected: [],
+  hired: [],
+};
+
+const col = createColumnHelper<ApplicationsType>();
+
+const RecruiterJobsByApplicantsPage = () => {
+  const [open, setOpen] = useState(false);
+  const [applicantsId, setApplicantsId] = useState<string | null>(null);
+  const [mode, setMode] = useState<ModalMode>("applicants");
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const { data, isLoading } = useMyJobs();
+
+  const jobs: ApplicationsType[] = useMemo(() => data?.data ?? [], [data]);
+  const jobIds = jobs.map((job) => job._id);
+
+  const updateStatus = useUpdateApplicationStatus();
+  const { data: applicantsData, isLoading: applicantsLoading } =
+    useApplicationsByJobId(jobIds as string[]);
+
+  const applicants: ApplicationsType[] = useMemo(
+    () => applicantsData?.data ?? [],
+    [applicantsData],
+  );
+
+  const columns = useMemo(
+    () => [
+      col.display({
+        id: "candidate",
+        header: "Candidate",
+        cell: (i) => {
+          const c = i.row.original.candidateId;
+          return c ? (
+            <div>
+              <p className="font-medium text-dark-text text-sm">{c.name}</p>
+              <p className="text-xs text-primary-gray">{c.email}</p>
+            </div>
+          ) : (
+            <span className="text-xs text-primary-gray">Deleted user</span>
+          );
+        },
+      }),
+      col.display({
+        id: "job",
+        header: "Position",
+        cell: (i) => {
+          const j = i.row.original.jobId;
+          return j ? (
+            <div
+              onClick={() => {
+                setMode("applicants");
+                setOpen(true);
+                setApplicantsId(i.row.original._id);
+              }}
+              className="flex items-center gap-2 font-medium cursor-pointer transition-colors text-left"
+            >
+              <div>
+                <p className="font-medium hover:text-dark-text text-sm text-indigoTags">
+                  {j.title}
+                </p>
+                <p className="text-xs hover:text-primary-gray text-indigoTags">
+                  {j.company}
+                </p>
+              </div>
+              <FiExternalLink className="size-4 text-indigoTags" />
+            </div>
+          ) : (
+            <span className="text-xs text-primary-gray">Job removed</span>
+          );
+        },
+      }),
+      col.display({
+        id: "recruiter",
+        header: "Recruiter",
+        cell: (i) => (
+          <span className="text-sm text-dark-text">
+            {i.row.original.recruiterId?.name ?? "—"}
+          </span>
+        ),
+      }),
+      col.accessor("status", {
+        header: "Status",
+        cell: (i) => <StatusBadge status={i.getValue()} />,
+      }),
+      col.accessor("appliedAt", {
+        header: "Applied",
+        cell: (i) => (
+          <span className="text-xs text-primary-gray">
+            {new Date(i.getValue()).toLocaleDateString()}
+          </span>
+        ),
+      }),
+      col.display({
+        id: "actions",
+        header: "Move to",
+        cell: (i) => {
+          const app = i.row.original;
+          const applicant = applicantStatus[app.status] ?? [];
+          if (applicant.length === 0) {
+            return <span className="text-xs text-primary-gray">—</span>;
+          }
+          return (
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {applicant.map((status) => (
+                <button
+                  key={status}
+                  onClick={() =>
+                    updateStatus.mutate({ id: app._id, status: status })
+                  }
+                  disabled={updateStatus.isPending}
+                  className={`px-2.5 py-1 capitalize cursor-pointer text-xs font-medium rounded-lg transition-colors disabled:opacity-50 ${
+                    status === "rejected"
+                      ? "bg-red-50 text-red-500 hover:bg-red-100"
+                      : status === "hired"
+                        ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                        : "bg-indigoTags/10 text-indigoTags hover:bg-indigoTags/20"
+                  }`}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+          );
+        },
+      }),
+    ],
+    [updateStatus],
+  );
+
+  const table = useReactTable({
+    data: applicants,
+    columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
+
+  return isLoading || applicantsLoading ? (
+    <Spinner />
+  ) : (
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-dark-text text-center ">
+        Total Applications: {applicants.length}
+      </h3>
+      <CustomTable
+        table={table}
+        isLoading={applicantsLoading}
+        emptyMessage="No applications yet"
+      />
+      <CustomPagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageCount={table.getPageCount()}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
+        nextPage={table.nextPage}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
+      />
+      <Modal
+        open={open}
+        onOpenChange={setOpen}
+        mode={mode}
+        setMode={setMode}
+        applicantsId={applicantsId}
+      />
+    </div>
+  );
+};
+
+export default RecruiterJobsByApplicantsPage;

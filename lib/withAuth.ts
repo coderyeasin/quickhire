@@ -3,8 +3,6 @@ import { UserRole } from "@/modules/user/user.interface";
 import { auth } from "@/lib/auth";
 import AppError from "@/lib/AppError";
 
-// reusable-auth-guard
-
 export async function withAuth(allowedRoles?: UserRole[]) {
   const session = await auth();
 

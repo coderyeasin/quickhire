@@ -1,11 +1,7 @@
-import React from "react";
+import ManageJobs from "@/components/Admin/ManageJobs/ManageJobs";
 
-const ManageJobs = () => {
-  return (
-    <div>
-      <h3 className="text-3xl text-indigoTags">Manage Jobs</h3>
-    </div>
-  );
+const ManageJobsHome = () => {
+  return <ManageJobs />;
 };
 
-export default ManageJobs;
+export default ManageJobsHome;

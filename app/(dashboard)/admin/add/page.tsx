@@ -1,11 +1,7 @@
-import React from "react";
+import PostedJob from "@/components/Admin/PostedJob/PostedJob";
 
 const CreateJobs = () => {
-  return (
-    <div>
-      <h3 className="text-3xl text-indigoTags">Create Jobs</h3>
-    </div>
-  );
+  return <PostedJob redirectTo="/admin/jobs" />;
 };
 
 export default CreateJobs;
