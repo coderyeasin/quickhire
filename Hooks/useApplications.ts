@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { ApplicationsType } from "@/types/interfaces";
+import { CreateAppType } from "@/modules/application/application.validation";
 
 // GET APIs
 async function fetchAllApplications() {
@@ -95,7 +96,7 @@ export function useApplicationsByJobId(jobId: string[]) {
 export const useCreateApplication = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (body: ApplicationsType) => {
+    mutationFn: async (body: CreateAppType) => {
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: {

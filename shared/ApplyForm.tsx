@@ -36,9 +36,12 @@ const ApplyForm = ({ jobId }: { jobId: string }) => {
   });
 
   const onSubmit = (data: CreateAppType) => {
-    createApplication(data);
-    reset();
-    router.push(role ? `/${role}/applications` : `/${role}/`);
+    createApplication(data, {
+      onSuccess: () => {
+        reset();
+        router.push(role ? `/${role}/applications` : "/");
+      },
+    });
   };
 
   return (
