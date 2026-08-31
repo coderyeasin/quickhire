@@ -75,8 +75,9 @@ export default function LoginForm({ onSuccess }: { onSuccess: () => void }) {
 
       <button
         type="button"
-        onClick={() => googleLoginAction()}
-        className="w-full flex items-center justify-center gap-2.5 cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-2.5 rounded-lg transition-all"
+        disabled
+        onClick={() => googleLoginAction("candidate")}
+        className="w-full flex items-center justify-center gap-2.5 cursor-not-allowed bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-2.5 rounded-lg transition-all"
       >
         <FaGoogle />
         Continue with Google

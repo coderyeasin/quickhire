@@ -1,11 +1,8 @@
+import ProfileForm from "@/shared/ProfileInfo";
 import React from "react";
 
 const AdminProfileHome = () => {
-  return (
-    <div>
-      <h3>AdminProfileHome</h3>
-    </div>
-  );
+  return <ProfileForm />;
 };
 
 export default AdminProfileHome;

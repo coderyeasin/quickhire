@@ -59,7 +59,7 @@ const getAllApplications = async () => {
   await connectToDB();
   return ApplicationModel.find()
     .populate("candidateId", "name email ")
-    .populate("jobId", "title company")
+    .populate("jobId")
     .populate("recruiterId", "name email")
     .sort({ appliedAt: -1 })
     .lean();
@@ -68,7 +68,10 @@ const getAllApplications = async () => {
 // candidate get own application
 const getOwnApplications = async (candidateId: string) => {
   await connectToDB();
-  return ApplicationModel.find({ candidateId });
+  return ApplicationModel.find({ candidateId })
+    .populate("jobId")
+    .sort({ appliedAt: -1 })
+    .lean();
 };
 
 // get single application details
@@ -155,7 +158,7 @@ const updateApplicationStatus = async (
   return updatedApplication;
 };
 
-// Recruiter & Admin :get applicants for their job
+// Recruiter & Admin :get applicants for their posted jobs
 const getJobApplicantsById = async (
   jobId: string,
   recruiterId: string,
@@ -171,7 +174,7 @@ const getJobApplicantsById = async (
       "Job not found or you are not the owner",
     );
   }
-  console.log("Received jobId:", jobId, recruiterId, requestRole);
+  // console.log("Received jobId:", jobId, recruiterId, requestRole);
 
   //   ownership check
   if (requestRole !== "admin" && job.recruiterId.toString() !== recruiterId) {
@@ -182,8 +185,10 @@ const getJobApplicantsById = async (
   }
 
   // get applications for the job
-  return ApplicationModel.find({ jobId })
-    .populate("candidateId", "name email avatar skills")
+  return ApplicationModel.find({ jobId: { $in: jobId } })
+    .populate("recruiterId", "name email")
+    .populate("candidateId", "name email ")
+    .populate("jobId", "title company, skills")
     .sort({ appliedAt: -1 })
     .lean();
 };

@@ -1,12 +1,7 @@
-import React from "react";
+import ProfileForm from "@/shared/ProfileInfo";
 
 const RecruiterProfile = () => {
-  return (
-    <div>
-      <h3 className="text-3xl">RecruiterProfile</h3>
-      <h3>User Info</h3>
-    </div>
-  );
+  return <ProfileForm />;
 };
 
 export default RecruiterProfile;

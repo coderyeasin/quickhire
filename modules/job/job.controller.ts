@@ -73,6 +73,16 @@ const getAllJobs = catchAsync(async () => {
   });
 });
 
+const getAllRealJobs = catchAsync(async () => {
+  const result = await jobServices.getAllApprovedJobs();
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully all Real Jobs are fetched",
+    data: result,
+  });
+});
+
 export const getMyJobs = catchAsync(async () => {
   const user = await withAuth(["admin", "recruiter"]);
   const result = await jobServices.getRecruiterJobs(user.id);
@@ -100,7 +110,20 @@ export const updateSingleJob = catchAsync(async (req, routeCtx) => {
 
   const { id } = await routeCtx.params;
 
-  const body = await req.json();
+  const rawBody = await req.text();
+  if (!rawBody || rawBody.trim() === "") {
+    throw new AppError(httpStatus.BAD_REQUEST, "Request body cannot be empty");
+  }
+
+  let body;
+  try {
+    body = JSON.parse(rawBody);
+  } catch (error) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Malformed JSON payload provided to server",
+    );
+  }
 
   const parsedData = updateJobValidationSchema.safeParse(body);
 
@@ -157,6 +180,7 @@ export const deleteJob = catchAsync(async (req, routeCtx) => {
 export const jobControllers = {
   createJob,
   getAllJobs,
+  getAllRealJobs,
   getMyJobs,
   getSingleJobs,
   updateSingleJob,

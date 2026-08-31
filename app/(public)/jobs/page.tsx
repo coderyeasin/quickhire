@@ -1,9 +1,12 @@
-import AllJobs from "@/components/Pages/AllJobs/AllJobs";
+import AvailableJobsPage from "@/components/Dashboard/Candidate/AvailableJobsPage";
 
 const JobsHome = () => {
   return (
-    <section className="container-layout h-screen">
-      <AllJobs />
+    <section className="container-layout min-h-screen py-6 md:py-8 lg:py-10">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-clash text-dark-text mb-6 md:mb-8 lg:mb-10">
+        Available <span className="text-blue-text">Jobs</span>
+      </h1>
+      <AvailableJobsPage />
     </section>
   );
 };

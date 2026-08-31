@@ -1,11 +1,7 @@
-import React from "react";
+import RecruiterBoard from "@/components/Dashboard/Recruiter/RecruiterBoard";
 
 const RecruiterPage = () => {
-  return (
-    <div>
-      <h3 className="text-3xl">RecruiterPage</h3>
-    </div>
-  );
+  return <RecruiterBoard />;
 };
 
 export default RecruiterPage;

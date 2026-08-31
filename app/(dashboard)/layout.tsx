@@ -2,6 +2,7 @@ import Sidebar from "@/components/Admin/Sidebar/Sidebar";
 import TopHeader from "@/components/Admin/TopHeader/TopHeader";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 export default async function DashboardLayout({
   children,
@@ -13,11 +14,13 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-[#F8F8FD]">
-      <Sidebar />
-      <div className="pl-64 flex-1 flex flex-col">
-        <TopHeader />
-        <main className="p-10">
-          <div className="container-layout mx-0 max-w-full">{children}</div>
+      <Sidebar role={session.user.role} user={session.user} />
+      <div className="flex flex-col flex-1 min-w-0 lg:pl-64">
+        <TopHeader user={session.user} />
+        <main className="flex-1 p-6 lg:p-10">
+          {/* <div className="container-layout mx-0 max-w-full">{children}</div> */}
+          {children}
+          <Toaster position="top-center" />
         </main>
       </div>
     </div>
