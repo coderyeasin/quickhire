@@ -6,29 +6,70 @@ import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
 import { errorCls, inputCls, labelCls } from "@/shared/ApplyForm";
 import { createJobSchema, CreateJobsTypes } from "@/utils/schemaValidate";
+import BaseJobForm, {
+  SharedJobFormValues,
+} from "@/shared/CustomForm/BaseJobForm";
 
 export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
   const createJob = useCreateJob();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreateJobsTypes>({
-    resolver: zodResolver(createJobSchema),
-  });
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm<CreateJobsTypes>({
+  //   resolver: zodResolver(createJobSchema),
+  // });
 
-  const onSubmit = async (data: CreateJobsTypes) => {
+  // const onSubmit = async (data: CreateJobsTypes) => {
+  //   try {
+  //     const file = data.companyLogo?.[0];
+
+  //     const formData = new FormData();
+
+  //     formData.append("title", data.title);
+  //     formData.append("description", data.description);
+  //     formData.append("company", data.company);
+  //     formData.append("location", data.location);
+  //     formData.append("type", data.type);
+
+  //     if (data.salary) formData.append("salary", data.salary);
+  //     if (data.deadline) formData.append("deadline", data.deadline);
+
+  //     data.skills
+  //       .split(",")
+  //       .map((s) => s.trim())
+  //       .filter(Boolean)
+  //       .forEach((skill) => formData.append("skills", skill));
+
+  //     data.category
+  //       .split(",")
+  //       .map((c) => c.trim())
+  //       .filter(Boolean)
+  //       .forEach((cat) => formData.append("category", cat));
+
+  //     if (file) {
+  //       formData.append("companyLogo", file);
+  //     }
+
+  //     createJob.mutate(formData, {
+  //       onSuccess: () => router.push(redirectTo),
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const handleCreateSubmit = async (data: SharedJobFormValues) => {
     try {
       const file = data.companyLogo?.[0];
-
       const formData = new FormData();
 
-      formData.append("title", data.title);
+      formData.append("title", data.title.trim());
       formData.append("description", data.description);
-      formData.append("company", data.company);
-      formData.append("location", data.location);
+      formData.append("company", data.company.trim());
+      formData.append("location", data.location.trim());
       formData.append("type", data.type);
 
       if (data.salary) formData.append("salary", data.salary);
@@ -59,7 +100,8 @@ export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   };
 
   return (
-    <div className="max-w-3xl">
+    /**
+      <div className="max-w-3xl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5">
           <h3 className="text-sm font-semibold text-dark-text border-b border-slate-100 pb-3">
@@ -206,6 +248,15 @@ export default function PostedJob({ redirectTo }: { redirectTo: string }) {
           {createJob.isPending ? "Posting..." : "Post Job"}
         </button>
       </form>
-    </div>
+    </div> 
+ */
+    <BaseJobForm
+      mode="create"
+      initialValues={{ type: "full-time" }}
+      validationSchema={createJobSchema}
+      isPending={createJob.isPending}
+      onSubmit={handleCreateSubmit}
+      onCancel={() => router.push(redirectTo)}
+    />
   );
 }
