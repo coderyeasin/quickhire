@@ -5,6 +5,37 @@ import { JobModel } from "./job.model";
 import { connectToDB } from "@/lib/mongodb";
 import AppError from "@/lib/AppError";
 
+export function isJobExpiredByDeadline(deadline?: Date | string) {
+  if (!deadline) return false;
+  return new Date(deadline).getTime() <= Date.now();
+}
+
+export async function syncExpiredJobStatuses() {
+  await connectToDB();
+
+  const now = new Date();
+  const result = await JobModel.updateMany(
+    { status: "approved", deadline: { $lte: now } },
+    { $set: { status: "expired" } },
+  );
+
+  return result;
+}
+
+export async function syncExpiredJobStatusById(jobId: string) {
+  await connectToDB();
+
+  const job = await JobModel.findById(jobId);
+  if (!job) return null;
+
+  if (job.status === "approved" && isJobExpiredByDeadline(job.deadline)) {
+    job.status = "expired";
+    await job.save();
+  }
+
+  return job;
+}
+
 // create jobs
 async function createJobIntoDB(payload: CreatedJobType) {
   await connectToDB();
@@ -15,16 +46,22 @@ async function createJobIntoDB(payload: CreatedJobType) {
 //get all jobs - with all statuses only for --- admin --- for approved
 export async function getAllJobsFromDB() {
   await connectToDB();
-  const res = await JobModel.find().sort({ createdAt: -1 }).lean();
+  await syncExpiredJobStatuses();
+  const res = await JobModel.find()
+    .sort({ updatedAt: -1, createdAt: -1 })
+    .lean();
   return res;
 }
 
 // get all jobs for public only --- approved jobs
 export async function getAllApprovedJobs() {
   await connectToDB();
+  await syncExpiredJobStatuses();
 
   const query: Record<string, any> = { status: "approved" };
-  const res = await JobModel.find(query).sort({ createdAt: -1 }).lean();
+  const res = await JobModel.find(query)
+    .sort({ updatedAt: -1, createdAt: -1 })
+    .lean();
   return res;
 }
 
@@ -45,10 +82,26 @@ export async function getJobById(id: string) {
 // get recruiter's own jobs
 export async function getRecruiterJobs(recruiterId: string) {
   await connectToDB();
+  await syncExpiredJobStatuses();
 
   const res = await JobModel.find({ recruiterId })
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1, createdAt: -1 })
     .lean();
+  return res;
+}
+
+export async function getExpiredJobs(recruiterId: string, role?: string) {
+  await connectToDB();
+  await syncExpiredJobStatuses();
+
+  const query =
+    role === "admin"
+      ? { status: "expired" }
+      : { recruiterId, status: "expired" };
+  const res = await JobModel.find(query)
+    .sort({ updatedAt: -1, createdAt: -1 })
+    .lean();
+
   return res;
 }
 
@@ -68,9 +121,41 @@ export async function updateJobs(
     throw new AppError(httpStatus.FORBIDDEN, "You do not own this Job");
   }
 
+  const changedFields = Object.keys(data).filter(
+    (field) =>
+      field !== "status" &&
+      JSON.stringify(res.get(field)) !==
+        JSON.stringify(data[field as keyof UpdateJobType]),
+  );
+  const updateData = {
+    ...data,
+    ...(requesterRole === "recruiter" || res.status === "expired"
+      ? { status: "pending" as const }
+      : {}),
+  };
+
+  if (updateData.status && updateData.status !== res.status) {
+    changedFields.push("status");
+  }
+
   const updatedData = await JobModel.findByIdAndUpdate(
     id,
-    { $set: data },
+    {
+      $set: updateData,
+      ...(changedFields.length > 0
+        ? {
+            $push: {
+              updateHistory: {
+                updatedBy: requesterId,
+                role: requesterRole,
+                changedAt: new Date(),
+                previousStatus: res.status,
+                changedFields,
+              },
+            },
+          }
+        : {}),
+    },
     {
       // new: true,
       returnDocument: "after",
@@ -127,6 +212,7 @@ export const jobServices = {
   getAllApprovedJobs,
   getJobById,
   getRecruiterJobs,
+  getExpiredJobs,
   updateJobs,
   updateJobStatus,
   deleteJob,

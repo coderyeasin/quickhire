@@ -4,6 +4,10 @@ import { JobModel } from "../job/job.model";
 import AppError from "@/lib/AppError";
 import { ApplicationModel } from "./application.model";
 import { ApplicationStatus, STATUS_TRANSITION } from "./application.interface";
+import {
+  syncExpiredJobStatusById,
+  syncExpiredJobStatuses,
+} from "@/modules/job/job.service";
 
 // apply a job
 const applyToJob = async (
@@ -14,14 +18,17 @@ const applyToJob = async (
 ) => {
   await connectToDB();
 
-  //   approved jobs
-  const job = await JobModel.findOne({ _id: jobId, status: "approved" });
+  const job = await JobModel.findById(jobId);
   if (!job) {
-    throw new AppError(httpStatus.NOT_FOUND, "Job not found or not approved");
+    throw new AppError(httpStatus.NOT_FOUND, "Job not found");
   }
 
-  // deadline check
-  if (job.deadline && job.deadline < new Date()) {
+  if (job.status !== "approved") {
+    throw new AppError(httpStatus.BAD_REQUEST, "This job is not available");
+  }
+
+  const jobAfterSync = await syncExpiredJobStatusById(jobId);
+  if (jobAfterSync && jobAfterSync.status === "expired") {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Application deadline has passed",
@@ -68,6 +75,7 @@ const getAllApplications = async () => {
 // candidate get own application
 const getOwnApplications = async (candidateId: string) => {
   await connectToDB();
+  await syncExpiredJobStatuses();
   return ApplicationModel.find({ candidateId })
     .populate("jobId")
     .sort({ appliedAt: -1 })
@@ -209,6 +217,14 @@ const withdrawApplication = async (
     throw new AppError(
       httpStatus.FORBIDDEN,
       "You are not authorized to withdraw this application",
+    );
+  }
+
+  const job = await syncExpiredJobStatusById(application.jobId.toString());
+  if (job?.status === "expired") {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This application can no longer be changed because the deadline has passed",
     );
   }
 

@@ -33,6 +33,10 @@ const CandidateApplicationsPage = () => {
     [data],
   );
 
+  const isExpired = (job: ApplicationsType["jobId"]) =>
+    job?.status === "expired" ||
+    (!!job?.deadline && new Date(job.deadline).getTime() <= Date.now());
+
   const columns = useMemo(
     () => [
       col.display({
@@ -40,14 +44,21 @@ const CandidateApplicationsPage = () => {
         header: "Position",
         cell: (i) => {
           const j = i.row.original.jobId;
+          const expired = isExpired(j);
           return j ? (
             <div
-              onClick={() => {
-                setMode("applicants");
-                setOpen(true);
-                setApplicantsId(i.row.original._id);
-              }}
-              className="font-medium cursor-pointer transition-colors text-left flex items-start gap-3"
+              onClick={
+                expired
+                  ? undefined
+                  : () => {
+                      setMode("applicants");
+                      setOpen(true);
+                      setApplicantsId(i.row.original._id);
+                    }
+              }
+              className={`font-medium transition-colors text-left flex items-start gap-3 ${
+                expired ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+              }`}
             >
               <div>
                 <p className="font-medium hover:text-dark-text text-sm text-indigoTags">
@@ -56,8 +67,13 @@ const CandidateApplicationsPage = () => {
                 <p className="text-xs hover:text-primary-gray text-indigoTags">
                   {j.company}
                 </p>
+                {expired && (
+                  <StatusBadge status="expired" />
+                )}
               </div>
-              <FiExternalLink className="size-4 hover:text-primary-gray text-indigoTags" />
+              {!expired && (
+                <FiExternalLink className="size-4 hover:text-primary-gray text-indigoTags" />
+              )}
             </div>
           ) : (
             <span className="text-xs text-primary-gray">Job removed</span>
@@ -76,13 +92,19 @@ const CandidateApplicationsPage = () => {
       col.display({
         id: "deadline",
         header: "Deadline",
-        cell: (i) => (
-          <span className="text-sm text-dark-text capitalize">
-            {new Date(i.row.original.jobId?.deadline ?? "-").toLocaleDateString(
-              "en-BD",
-            )}
-          </span>
-        ),
+        cell: (i) => {
+          const deadline = i.row.original.jobId?.deadline;
+          const expired = isExpired(i.row.original.jobId);
+          return expired ? (
+            <StatusBadge status="expired" />
+          ) : (
+            <span className="text-sm text-dark-text capitalize">
+              {deadline
+                ? new Date(deadline).toLocaleDateString("en-BD")
+                : "—"}
+            </span>
+          );
+        },
       }),
 
       col.accessor("appliedAt", {

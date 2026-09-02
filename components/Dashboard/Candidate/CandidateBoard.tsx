@@ -21,10 +21,21 @@ import CustomTable from "@/shared/CustomTable";
 
 type CurrentJobsType = {
   _id: string;
-  jobId: { _id: string; title: string; company: string; type: string };
+  jobId: {
+    _id: string;
+    title: string;
+    company: string;
+    type: string;
+    status?: string;
+    deadline?: string;
+  } | null;
   status: string;
   appliedAt: string;
 };
+
+const isJobExpired = (job: CurrentJobsType["jobId"]) =>
+  job?.status === "expired" ||
+  (!!job?.deadline && new Date(job.deadline).getTime() <= Date.now());
 
 const col = createColumnHelper<CurrentJobsType>();
 
@@ -60,6 +71,7 @@ const CandidateBoard = () => {
           <div>
             <p className="font-medium text-dark-text">{i.getValue()?.title}</p>
             <p className="text-xs text-primary-gray">{i.getValue()?.company}</p>
+            {isJobExpired(i.getValue()) && <StatusBadge status="expired" />}
           </div>
         ),
       }),
@@ -85,7 +97,8 @@ const CandidateBoard = () => {
         header: "Actions",
         cell: (i) => {
           const app = i.row.original;
-          const canWithdraw = ["pending", "reviewing"].includes(app.status);
+          const canWithdraw =
+            !isJobExpired(app.jobId) && ["pending", "reviewing"].includes(app.status);
           if (!canWithdraw)
             return <span className="text-xs text-primary-gray">—</span>;
           return (

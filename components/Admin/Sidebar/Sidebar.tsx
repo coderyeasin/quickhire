@@ -5,6 +5,7 @@ import Image from "next/image";
 import NavLinks, { getNavItems, getNavItemsForRole } from "@/shared/NavLinks";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
+import { useExpiredJobs } from "@/Hooks/useJobs";
 
 interface NavLinksProps {
   role: string;
@@ -54,7 +55,12 @@ export default function Sidebar({ role, user }: NavLinksProps) {
 }
 
 function SidebarContent({ role, user }: NavLinksProps) {
-  const { main, controls } = getNavItems(role);
+  const { data: expiredJobs, isLoading: isExpiredJobsLoading } =
+    useExpiredJobs();
+  const hasExpiredJobs =
+    role !== "recruiter" ||
+    (!isExpiredJobsLoading && (expiredJobs?.data?.length ?? 0) > 0);
+  const { main, controls } = getNavItems(role, hasExpiredJobs);
 
   return (
     <aside className="w-64 bg-indigoTags text-white flex flex-col h-full">

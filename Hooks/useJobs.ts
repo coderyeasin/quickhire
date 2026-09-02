@@ -32,6 +32,16 @@ async function fetchMyJobs() {
   return data;
 }
 
+async function fetchExpiredJobs() {
+  const res = await fetch("/api/jobs/expired");
+  const data = await res.json();
+
+  if (!data) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Failed to fetch expired jobs");
+  }
+  return data;
+}
+
 async function fetchJobById(id: string) {
   const res = await fetch(`/api/jobs/${id}`);
   const data = await res.json();
@@ -59,6 +69,13 @@ export function useMyJobs() {
   return useQuery({
     queryKey: ["jobs", "mine"],
     queryFn: fetchMyJobs,
+  });
+}
+
+export function useExpiredJobs() {
+  return useQuery({
+    queryKey: ["jobs", "expired"],
+    queryFn: fetchExpiredJobs,
   });
 }
 
@@ -120,10 +137,10 @@ export function useUpdateJob() {
         throw new AppError(httpStatus.BAD_REQUEST, "Failed to update job");
       return data;
     },
-    onSuccess: (id: string) => {
+    onSuccess: (_, variables) => {
       toast.success("Job updated successfully");
-      qc.invalidateQueries({ queryKey: ["jobs", "mine"] });
-      qc.invalidateQueries({ queryKey: ["job", id] });
+      qc.invalidateQueries({ queryKey: ["jobs"] });
+      qc.invalidateQueries({ queryKey: ["job", variables.id] });
     },
     onError: (error) => {
       const err = error as AppError;
