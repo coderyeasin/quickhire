@@ -46,6 +46,10 @@ const ExpiredJobsPage = () => {
         header: "Created",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
+      col.accessor("updatedAt", {
+        header: "Updated At",
+        cell: (i) => new Date(i.getValue()).toLocaleDateString(),
+      }),
     ],
     [],
   );

@@ -64,6 +64,10 @@ const ManageJobs = () => {
         header: "Posted",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
+      col.accessor("updatedAt", {
+        header: "Updated At",
+        cell: (i) => new Date(i.getValue()).toLocaleDateString(),
+      }),
       col.accessor("updateHistory", {
         header: "Update History",
         cell: (i) => {

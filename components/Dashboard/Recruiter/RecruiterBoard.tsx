@@ -22,6 +22,7 @@ type PostedJobsType = {
   type: string;
   status: string;
   createdAt: string;
+  updatedAt: string;
 };
 const col = createColumnHelper<PostedJobsType>();
 
@@ -66,6 +67,10 @@ const RecruiterBoard = () => {
       }),
       col.accessor("createdAt", {
         header: "Posted",
+        cell: (i) => new Date(i.getValue()).toLocaleDateString(),
+      }),
+      col.accessor("updatedAt", {
+        header: "Updated At",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
       // col.display({
