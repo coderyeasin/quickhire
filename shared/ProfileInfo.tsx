@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { FiCamera, FiUser } from "react-icons/fi";
 import { useSession } from "next-auth/react";
-import { RegisterInput } from "@/modules/user/UserValidators";
+import {
+  UpdateProfileInput,
+  updateProfileValidator,
+} from "@/modules/user/UserValidators";
 import CustomButton from "./CustomButton";
 import Spinner from "./Spinner";
 import { errorCls, inputCls, labelCls } from "./ApplyForm";
@@ -17,13 +20,29 @@ const ProfileForm = () => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [saveState, setSaveState] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<RegisterInput>();
+  } = useForm<UpdateProfileInput>({
+    defaultValues: {
+      name: "",
+      company: "",
+      recruiterProfile: {},
+    },
+  });
+
+  useEffect(() => {
+    if (!user) return;
+    reset({
+      name: user.name ?? "",
+      company: user.company ?? "",
+      recruiterProfile: user.recruiterProfile ?? {},
+    });
+  }, [reset, user]);
 
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -32,8 +51,23 @@ const ProfileForm = () => {
     setPreview(URL.createObjectURL(file));
   }
 
-  function onSubmit(data: RegisterInput) {
-    console.log("Form submitted with data:", data);
+  async function onSubmit(data: UpdateProfileInput) {
+    setSaveState("Saving...");
+    const parsed = updateProfileValidator.safeParse(data);
+    if (!parsed.success) {
+      setSaveState(parsed.error.issues[0]?.message ?? "Check your profile details");
+      return;
+    }
+
+    const response = await fetch("/api/users/me", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(parsed.data),
+    });
+    const result = await response.json();
+    setSaveState(
+      response.ok ? "Profile saved" : result.message ?? "Could not save profile",
+    );
   }
 
   // const role = user?.role ?? "candidate";
@@ -107,8 +141,6 @@ const ProfileForm = () => {
                 <input
                   {...register("name")}
                   className={inputCls}
-                  defaultValue={user?.name}
-                  readOnly
                 />
                 {errors.name && (
                   <p className={errorCls}>{errors.name.message}</p>
@@ -149,7 +181,6 @@ const ProfileForm = () => {
                   <label className={labelCls}>Company Name</label>
                   <input
                     {...register("company")}
-                    defaultValue={user?.company}
                     placeholder="Acme Corp"
                     className={inputCls}
                   />
@@ -158,13 +189,85 @@ const ProfileForm = () => {
             </div>
           )}
 
+          {user?.role === "recruiter" && (
+            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
+              <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-3">
+                <div>
+                  <h3 className="text-sm font-semibold text-dark-text">
+                    Recruiter Profile
+                  </h3>
+                  <p className="text-xs text-primary-gray mt-1">
+                    Complete these details so candidates know who they are speaking with.
+                  </p>
+                </div>
+                <span className="text-xs font-medium text-indigoTags whitespace-nowrap">
+                  10 details
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ProfileField label="Job title" register={register("recruiterProfile.jobTitle")} placeholder="Talent Acquisition Manager" />
+                <ProfileField label="Industry" register={register("recruiterProfile.industry")} placeholder="Technology" />
+                <ProfileField label="Company size" register={register("recruiterProfile.companySize")} placeholder="51-200 employees" />
+                <ProfileField label="Office location" register={register("recruiterProfile.location")} placeholder="New York, NY" />
+                <ProfileField label="Phone" register={register("recruiterProfile.phone")} placeholder="+1 555 123 4567" />
+                <ProfileField label="Hiring focus" register={register("recruiterProfile.hiringFocus")} placeholder="Engineering and product" />
+                <ProfileField label="Company website" register={register("recruiterProfile.companyWebsite")} placeholder="https://company.com" type="url" />
+                <ProfileField label="LinkedIn profile" register={register("recruiterProfile.linkedinUrl")} placeholder="https://linkedin.com/in/name" type="url" />
+                <div>
+                  <label className={labelCls}>Years recruiting</label>
+                  <input
+                    {...register("recruiterProfile.yearsOfExperience", { valueAsNumber: true })}
+                    type="number"
+                    min="0"
+                    max="60"
+                    placeholder="5"
+                    className={inputCls}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className={labelCls}>Professional bio</label>
+                  <textarea
+                    {...register("recruiterProfile.bio")}
+                    rows={4}
+                    maxLength={600}
+                    placeholder="Tell candidates about your recruiting experience and what makes your team a great place to work."
+                    className={`${inputCls} resize-y`}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           <CustomButton
-            label=" Save Changes"
+            label={saveState ?? "Save Changes"}
+            type="submit"
             className="flex items-center gap-2 px-6 py-3 bg-indigoTags text-white font-semibold rounded-lg hover:bg-indigoTags/90 transition-all disabled:opacity-60"
           />
+          {saveState && saveState !== "Saving..." && (
+            <p className="text-sm text-primary-gray">{saveState}</p>
+          )}
         </form>
       )}
     </div>
   );
 };
+
+function ProfileField({
+  label,
+  register,
+  placeholder,
+  type = "text",
+}: {
+  label: string;
+  register: ReturnType<typeof useForm<UpdateProfileInput>>["register"] extends (...args: any[]) => infer R ? R : never;
+  placeholder: string;
+  type?: string;
+}) {
+  return (
+    <div>
+      <label className={labelCls}>{label}</label>
+      <input {...register} type={type} placeholder={placeholder} className={inputCls} />
+    </div>
+  );
+}
 export default ProfileForm;
