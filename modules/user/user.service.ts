@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import { UserRole } from "./user.interface";
 import AppError from "@/lib/AppError";
 import httpStatus from "http-status";
-import { UpdateProfileInput } from "./UserValidators";
 
 // Get users
 export async function getAllUsers() {
@@ -21,15 +20,6 @@ export async function getUserByEmail(email: string) {
 export async function getUserById(id: string) {
   await connectToDB();
   return UserModel.findById(id).lean();
-}
-
-export async function updateUserProfile(id: string, userData: UpdateProfileInput) {
-  await connectToDB();
-  return UserModel.findByIdAndUpdate(
-    id,
-    { $set: userData },
-    { new: true, runValidators: true },
-  ).select("-password -confirmPassword").lean();
 }
 
 // create user - called during registration

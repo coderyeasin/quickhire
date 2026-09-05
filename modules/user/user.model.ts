@@ -27,18 +27,6 @@ const UserSchema = new Schema<IUser>(
       type: String,
       default: null,
     },
-    recruiterProfile: {
-      jobTitle: { type: String, default: "" },
-      companyWebsite: { type: String, default: "" },
-      industry: { type: String, default: "" },
-      companySize: { type: String, default: "" },
-      location: { type: String, default: "" },
-      phone: { type: String, default: "" },
-      linkedinUrl: { type: String, default: "" },
-      hiringFocus: { type: String, default: "" },
-      yearsOfExperience: { type: Number, default: null },
-      bio: { type: String, default: "" },
-    },
     role: {
       type: String,
       enum: ["candidate", "admin", "recruiter"],

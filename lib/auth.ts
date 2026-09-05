@@ -55,7 +55,6 @@ export const authConfig: NextAuthConfig = {
           company: user.company,
           avatar: user.avatar,
           role: user.role,
-          recruiterProfile: user.recruiterProfile,
           createdAt: user.createdAt,
         };
       },
@@ -79,7 +78,6 @@ export const authConfig: NextAuthConfig = {
           if (dbUser && dbUser._id) {
             user.id = dbUser._id.toString();
             user.role = dbUser.role;
-            user.recruiterProfile = dbUser.recruiterProfile;
             return false;
           }
           console.error(
@@ -101,7 +99,6 @@ export const authConfig: NextAuthConfig = {
         token.email = user.email;
         token.company = user.company;
         token.avatar = user.avatar;
-        token.recruiterProfile = user.recruiterProfile;
         token.createdAt = user.createdAt;
       }
       return token;
@@ -115,7 +112,6 @@ export const authConfig: NextAuthConfig = {
         session.user.company = token.company as string;
         session.user.email = token.email as string;
         session.user.avatar = token.avatar as string;
-        session.user.recruiterProfile = token.recruiterProfile;
         session.user.createdAt = token.createdAt as string;
       }
       return session;

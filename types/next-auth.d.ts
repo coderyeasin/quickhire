@@ -1,4 +1,4 @@
-import { IUser, RecruiterProfile, UserRole } from "@/modules/user/user.interface";
+import { IUser, UserRole } from "@/modules/user/user.interface";
 import "next-auth";
 import "next-auth/jwt";
 
@@ -12,7 +12,6 @@ declare module "next-auth" {
       role: UserRole;
       avatar?: string;
       createdAt?: string;
-      recruiterProfile?: RecruiterProfile;
     };
   }
   interface User {
@@ -21,7 +20,6 @@ declare module "next-auth" {
     avatar?: string;
     company?: string;
     createdAt?: string;
-    recruiterProfile?: RecruiterProfile;
   }
 }
 
@@ -31,6 +29,5 @@ declare module "next-auth/jwt" {
     role: UserRole;
     avatar?: string;
     createdAt?: string;
-    recruiterProfile?: RecruiterProfile;
   }
 }

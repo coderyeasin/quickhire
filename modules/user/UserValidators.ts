@@ -29,21 +29,6 @@ export const loginValidator = z.object({
 export const updateProfileValidator = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long").optional(),
   avatar: z.string().optional(),
-  company: z.string().max(120).optional(),
-  recruiterProfile: z
-    .object({
-      jobTitle: z.string().max(100).optional(),
-      companyWebsite: z.string().url("Enter a valid website URL").or(z.literal("")),
-      industry: z.string().max(80).optional(),
-      companySize: z.string().max(40).optional(),
-      location: z.string().max(120).optional(),
-      phone: z.string().max(30).optional(),
-      linkedinUrl: z.string().url("Enter a valid LinkedIn URL").or(z.literal("")),
-      hiringFocus: z.string().max(120).optional(),
-      yearsOfExperience: z.number().int().min(0).max(60).nullable().optional(),
-      bio: z.string().max(600).optional(),
-    })
-    .optional(),
 });
 
 export const changePasswordValidator = z
