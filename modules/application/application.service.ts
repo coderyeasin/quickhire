@@ -9,6 +9,64 @@ import {
   syncExpiredJobStatuses,
 } from "@/modules/job/job.service";
 
+let applicationIndexesReady: Promise<void> | undefined;
+
+const ensureApplicationIndexes = async () => {
+  if (!applicationIndexesReady) {
+    applicationIndexesReady = (async () => {
+      try {
+        await ApplicationModel.collection.dropIndex("jobId_1_candidateId_1");
+      } catch {
+        // The legacy unique index is absent on fresh databases.
+      }
+      await ApplicationModel.collection.createIndex(
+        { jobId: 1, candidateId: 1, appliedAt: 1 },
+        { name: "jobId_1_candidateId_1_appliedAt_1" },
+      );
+    })();
+  }
+  await applicationIndexesReady;
+};
+
+const getReopenTime = (job: {
+  updatedAt?: Date;
+  updateHistory?: { previousStatus: string; changedAt: Date }[];
+}) => {
+  const historyTime = job.updateHistory
+    ?.filter((history) => history.previousStatus === "expired")
+    .sort(
+      (first, second) =>
+        new Date(second.changedAt).getTime() -
+        new Date(first.changedAt).getTime(),
+    )[0]?.changedAt;
+
+  if (!historyTime) return job.updatedAt;
+  if (!job.updatedAt) return historyTime;
+
+  return new Date(historyTime).getTime() > new Date(job.updatedAt).getTime()
+    ? historyTime
+    : job.updatedAt;
+};
+
+const isApplicationExpired = (
+  appliedAt: Date,
+  job: {
+    status?: string;
+    deadline?: Date;
+    updatedAt?: Date;
+    updateHistory?: { previousStatus: string; changedAt: Date }[];
+  } | null,
+) => {
+  if (!job) return false;
+  const deadlineExpired =
+    job.status === "expired" ||
+    (!!job.deadline && new Date(job.deadline).getTime() <= Date.now());
+  const appliedBeforeReopen =
+    !!getReopenTime(job) &&
+    new Date(appliedAt).getTime() < new Date(getReopenTime(job)!).getTime();
+  return deadlineExpired || appliedBeforeReopen;
+};
+
 // apply a job
 const applyToJob = async (
   candidateId: string,
@@ -17,6 +75,7 @@ const applyToJob = async (
   resumeUrl?: string,
 ) => {
   await connectToDB();
+  await ensureApplicationIndexes();
 
   const job = await JobModel.findById(jobId);
   if (!job) {
@@ -35,10 +94,11 @@ const applyToJob = async (
     );
   }
 
-  // duplicate check
+  const reopenTime = getReopenTime(job);
   const existingApplication = await ApplicationModel.findOne({
     candidateId,
     jobId,
+    ...(reopenTime ? { appliedAt: { $gte: reopenTime } } : {}),
   });
   if (existingApplication) {
     throw new AppError(
@@ -76,10 +136,21 @@ const getAllApplications = async () => {
 const getOwnApplications = async (candidateId: string) => {
   await connectToDB();
   await syncExpiredJobStatuses();
-  return ApplicationModel.find({ candidateId })
+  const applications = await ApplicationModel.find({ candidateId })
     .populate("jobId")
     .sort({ appliedAt: -1 })
     .lean();
+
+  return applications.map((application) => ({
+    ...application,
+    isExpired: isApplicationExpired(
+      application.appliedAt,
+      application.jobId as typeof application.jobId & {
+        updatedAt?: Date;
+        updateHistory?: { previousStatus: string; changedAt: Date }[];
+      },
+    ),
+  }));
 };
 
 // get single application details
@@ -221,19 +292,9 @@ const withdrawApplication = async (
   }
 
   const job = await syncExpiredJobStatusById(application.jobId.toString());
-  if (job?.status === "expired") {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "This application can no longer be changed because the deadline has passed",
-    );
-  }
-
-  // only pending applications can be withdrawn
-  if (application.status !== "pending") {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "Only pending applications can be withdrawn",
-    );
+  if (job && isApplicationExpired(application.appliedAt, job)) {
+    await ApplicationModel.findByIdAndDelete(applicationId);
+    return { withdrawn: true };
   }
 
   await ApplicationModel.findByIdAndDelete(applicationId);

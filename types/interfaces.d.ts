@@ -64,6 +64,7 @@ export interface ApplicationsType {
   resumeUrl: string;
   status: string;
   appliedAt: string;
+  isExpired?: boolean;
 
   candidateId: ICandidate | null;
   recruiterId: IRecruiter | null;

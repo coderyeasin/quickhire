@@ -41,7 +41,7 @@ const applicationSchema = new Schema<IApplication>(
   },
 );
 
-applicationSchema.index({ jobId: 1, candidateId: 1 }, { unique: true });
+applicationSchema.index({ jobId: 1, candidateId: 1, appliedAt: 1 });
 applicationSchema.index({ recruiterId: 1, status: 1 });
 applicationSchema.index({ candidateId: 1, appliedAt: -1 });
 applicationSchema.index({ jobId: 1, status: 1 });
