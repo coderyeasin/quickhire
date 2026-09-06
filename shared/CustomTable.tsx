@@ -54,7 +54,7 @@ const CustomTable = <T,>({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="p-4 text-sm text-dark-text whitespace-nowrap"
+                      className="p-4 text-md text-dark-text whitespace-nowrap"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
