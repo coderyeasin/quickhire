@@ -79,7 +79,7 @@ const CandidateBoard = () => {
         id: "type",
         header: "Type",
         cell: (i) => (
-          <span className="text-xs text-primary-gray capitalize">
+          <span className="text-sm text-primary-gray capitalize">
             {i.getValue()}
           </span>
         ),
@@ -98,7 +98,8 @@ const CandidateBoard = () => {
         cell: (i) => {
           const app = i.row.original;
           const canWithdraw =
-            !isJobExpired(app.jobId) && ["pending", "reviewing"].includes(app.status);
+            !isJobExpired(app.jobId) &&
+            ["pending", "reviewing"].includes(app.status);
           if (!canWithdraw)
             return <span className="text-xs text-primary-gray">—</span>;
           return (
