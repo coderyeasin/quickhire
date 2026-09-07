@@ -64,7 +64,11 @@ const WholeApplication = ({
       new Date(applicants.jobId.deadline).getTime() <= currentTime);
 
   const shortDescription =
-    applicants?.jobId?.description?.split(" ").slice(0, 180).join(" ") + "...";
+    userRole !== "candidate"
+      ? applicants?.jobId?.description?.split(" ").slice(0, 180).join(" ") +
+        "..."
+      : applicants?.jobId?.description?.split(" ").slice(0, 30).join(" ") +
+        "...";
 
   if (isLoading) return <Spinner />;
 
