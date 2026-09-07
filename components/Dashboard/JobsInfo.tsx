@@ -53,12 +53,15 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
     job.status === "expired" ||
     (!!job.deadline && new Date(job.deadline).getTime() <= currentTime);
 
-  const alreadyApplied = appData?.some(
-    (item) =>
+  const alreadyApplied = appData?.some((item) => {
+    const isSameCandidate =
       String(item?.candidateId?._id || item?.candidateId) ===
-        String(session?.user?.id) &&
-      String(item?.jobId?._id || item?.jobId) === String(job?._id),
-  );
+      String(session?.user?.id);
+    const isSameJob =
+      String(item?.jobId?._id || item?.jobId) === String(job?._id);
+
+    return isSameCandidate && isSameJob && !item.isExpired;
+  });
 
   const skills = parseArray(job.skills);
   const categories = parseArray(job.category);
