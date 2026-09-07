@@ -209,6 +209,18 @@ const updateApplicationStatus = async (
     );
   }
 
+  const job = await syncExpiredJobStatusById(application.jobId.toString());
+  if (
+    requestRole === "recruiter" &&
+    job &&
+    isApplicationExpired(application.appliedAt, job)
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Expired applications cannot be updated",
+    );
+  }
+
   // status transition validation
   const allowedTransitions =
     STATUS_TRANSITION[application.status as ApplicationStatus];
@@ -239,15 +251,15 @@ const updateApplicationStatus = async (
 
 // Recruiter & Admin :get applicants for their posted jobs
 const getJobApplicantsById = async (
-  jobId: string,
+  jobIds: string[],
   recruiterId: string,
   requestRole: string,
 ) => {
   await connectToDB();
 
   // check if job belongs to recruiter
-  const job = await JobModel.findById(jobId);
-  if (!job) {
+  const jobs = await JobModel.find({ _id: { $in: jobIds } });
+  if (jobs.length !== jobIds.length) {
     throw new AppError(
       httpStatus.NOT_FOUND,
       "Job not found or you are not the owner",
@@ -256,7 +268,10 @@ const getJobApplicantsById = async (
   // console.log("Received jobId:", jobId, recruiterId, requestRole);
 
   //   ownership check
-  if (requestRole !== "admin" && job.recruiterId.toString() !== recruiterId) {
+  if (
+    requestRole !== "admin" &&
+    jobs.some((job) => job.recruiterId?.toString() !== recruiterId)
+  ) {
     throw new AppError(
       httpStatus.FORBIDDEN,
       "You are not authorized to view applicants for this job",
@@ -264,12 +279,24 @@ const getJobApplicantsById = async (
   }
 
   // get applications for the job
-  return ApplicationModel.find({ jobId: { $in: jobId } })
+  const applications = await ApplicationModel.find({
+    jobId: { $in: jobIds },
+  })
     .populate("recruiterId", "name email")
     .populate("candidateId", "name email ")
-    .populate("jobId", "title company, skills")
+    .populate("jobId")
     .sort({ appliedAt: -1 })
     .lean();
+
+  return applications.map((application) => ({
+    ...application,
+    isExpired:
+      requestRole === "recruiter" &&
+      isApplicationExpired(
+        application.appliedAt,
+        application.jobId as (typeof jobs)[number],
+      ),
+  }));
 };
 
 // candidate withdraw application
