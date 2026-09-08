@@ -55,9 +55,12 @@ const AdminApplicants = () => {
         header: "Candidate",
         cell: (i) => {
           const c = i.row.original.candidateId;
+          const textClass = i.row.original.isExpired
+            ? "text-slate-400"
+            : "text-dark-text";
           return c ? (
             <div>
-              <p className="font-medium text-dark-text text-sm">{c.name}</p>
+              <p className={`font-medium text-sm ${textClass}`}>{c.name}</p>
               <p className="text-xs text-primary-gray">{c.email}</p>
             </div>
           ) : (
@@ -70,6 +73,9 @@ const AdminApplicants = () => {
         header: "Position",
         cell: (i) => {
           const j = i.row.original.jobId;
+          const textClass = i.row.original.isExpired
+            ? "text-slate-400"
+            : "text-indigoTags";
           return j ? (
             <div
               onClick={() => {
@@ -80,14 +86,10 @@ const AdminApplicants = () => {
               className="font-medium cursor-pointer transition-colors text-left flex gap-2"
             >
               <div>
-                <p className="font-medium hover:text-dark-text text-sm text-indigoTags">
-                  {j.title}
-                </p>
-                <p className="text-xs hover:text-primary-gray text-indigoTags">
-                  {j.company}
-                </p>
+                <p className={`font-medium text-sm ${textClass}`}>{j.title}</p>
+                <p className={`text-xs ${textClass}`}>{j.company}</p>
               </div>
-              <FiExternalLink className="size-4 hover:text-primary-gray text-indigoTags" />
+              <FiExternalLink className={`size-4 ${textClass}`} />
             </div>
           ) : (
             <span className="text-xs text-primary-gray">Job removed</span>
@@ -98,19 +100,27 @@ const AdminApplicants = () => {
         id: "recruiter",
         header: "Recruiter",
         cell: (i) => (
-          <span className="text-sm text-dark-text">
+          <span
+            className={`text-sm ${i.row.original.isExpired ? "text-slate-400" : "text-dark-text"}`}
+          >
             {i.row.original.recruiterId?.name ?? "—"}
           </span>
         ),
       }),
       col.accessor("status", {
         header: "Status",
-        cell: (i) => <StatusBadge status={i.getValue()} />,
+        cell: (i) => (
+          <StatusBadge
+            status={i.row.original.isExpired ? "expired" : i.getValue()}
+          />
+        ),
       }),
       col.accessor("appliedAt", {
         header: "Applied",
         cell: (i) => (
-          <span className="text-xs text-primary-gray">
+          <span
+            className={`text-xs ${i.row.original.isExpired ? "text-slate-400" : "text-primary-gray"}`}
+          >
             {new Date(i.getValue()).toLocaleDateString()}
           </span>
         ),
@@ -120,6 +130,9 @@ const AdminApplicants = () => {
         header: "Move to",
         cell: (i) => {
           const app = i.row.original;
+          if (app.isExpired) {
+            return <span className="text-xs text-slate-400">Expired</span>;
+          }
           const applicant = applicantStatus[app.status] ?? [];
           if (applicant.length === 0) {
             return <span className="text-xs text-primary-gray">—</span>;

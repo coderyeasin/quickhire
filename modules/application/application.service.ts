@@ -124,12 +124,24 @@ const applyToJob = async (
 // admin get all applications
 const getAllApplications = async () => {
   await connectToDB();
-  return ApplicationModel.find()
+  await syncExpiredJobStatuses();
+  const applications = await ApplicationModel.find()
     .populate("candidateId", "name email ")
     .populate("jobId")
     .populate("recruiterId", "name email")
     .sort({ appliedAt: -1 })
     .lean();
+
+  return applications.map((application) => ({
+    ...application,
+    isExpired: isApplicationExpired(
+      application.appliedAt,
+      application.jobId as (typeof applications)[number]["jobId"] & {
+        updatedAt?: Date;
+        updateHistory?: { previousStatus: string; changedAt: Date }[];
+      },
+    ),
+  }));
 };
 
 // candidate get own application
