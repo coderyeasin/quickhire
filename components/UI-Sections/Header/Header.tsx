@@ -96,7 +96,6 @@ export default function Header() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-3">
             {isLoggedIn && <UserProfile />}
             <button

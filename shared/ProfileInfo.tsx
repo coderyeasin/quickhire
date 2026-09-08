@@ -36,7 +36,6 @@ const ProfileForm = () => {
     console.log("Form submitted with data:", data);
   }
 
-  // const role = user?.role ?? "candidate";
   const initials =
     user?.name
       ?.split(" ")

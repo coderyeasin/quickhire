@@ -124,14 +124,6 @@ const CompaniesJobs = () => {
                   </p>
                 )}
               </div>
-
-              {/* <Link
-                href={`/jobs?company=${encodeURIComponent(group.name)}`}
-                className="mt-auto inline-flex items-center justify-center gap-3 bg-indigoTags rounded-lg px-4 py-3 text-sm font-bold text-white transition-all active:scale-95"
-              >
-                View Company Profile
-                <FaArrowRight />
-              </Link> */}
             </div>
           ))}
         </div>

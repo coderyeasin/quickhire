@@ -137,7 +137,6 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                       const trimmed = line.trim();
                       if (!trimmed) return null;
 
-                      // Check if the line is a bullet point from the textarea
                       if (trimmed.startsWith("*") || trimmed.startsWith("-")) {
                         return (
                           <div

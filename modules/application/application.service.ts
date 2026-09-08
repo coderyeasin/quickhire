@@ -16,9 +16,7 @@ const ensureApplicationIndexes = async () => {
     applicationIndexesReady = (async () => {
       try {
         await ApplicationModel.collection.dropIndex("jobId_1_candidateId_1");
-      } catch {
-        // The legacy unique index is absent on fresh databases.
-      }
+      } catch {}
       await ApplicationModel.collection.createIndex(
         { jobId: 1, candidateId: 1, appliedAt: 1 },
         { name: "jobId_1_candidateId_1_appliedAt_1" },
@@ -107,7 +105,6 @@ const applyToJob = async (
     );
   }
 
-  // create application - recruiterId denormalized from job
   const application = await ApplicationModel.create({
     candidateId,
     jobId,
@@ -182,7 +179,6 @@ const getApplicationById = async (
     throw new AppError(httpStatus.NOT_FOUND, "Application not found");
   }
 
-  // authorization check
   if (
     requestRole !== "admin" &&
     application.candidateId.toString() !== requestId &&
@@ -210,7 +206,6 @@ const updateApplicationStatus = async (
     throw new AppError(httpStatus.NOT_FOUND, "Application not found");
   }
 
-  // ownership check
   if (
     requestRole !== "admin" &&
     application.recruiterId.toString() !== requestId
@@ -233,7 +228,6 @@ const updateApplicationStatus = async (
     );
   }
 
-  // status transition validation
   const allowedTransitions =
     STATUS_TRANSITION[application.status as ApplicationStatus];
   if (!allowedTransitions.includes(newStatus as ApplicationStatus)) {
@@ -250,7 +244,6 @@ const updateApplicationStatus = async (
     { status: newStatus },
     {
       returnDocument: "after",
-      // new: true
     },
   )
     .populate("candidateId", "name email")
@@ -269,7 +262,6 @@ const getJobApplicantsById = async (
 ) => {
   await connectToDB();
 
-  // check if job belongs to recruiter
   const jobs = await JobModel.find({ _id: { $in: jobIds } });
   if (jobs.length !== jobIds.length) {
     throw new AppError(
@@ -277,9 +269,6 @@ const getJobApplicantsById = async (
       "Job not found or you are not the owner",
     );
   }
-  // console.log("Received jobId:", jobId, recruiterId, requestRole);
-
-  //   ownership check
   if (
     requestRole !== "admin" &&
     jobs.some((job) => job.recruiterId?.toString() !== recruiterId)
@@ -290,7 +279,6 @@ const getJobApplicantsById = async (
     );
   }
 
-  // get applications for the job
   const applications = await ApplicationModel.find({
     jobId: { $in: jobIds },
   })
@@ -322,7 +310,6 @@ const withdrawApplication = async (
     throw new AppError(httpStatus.NOT_FOUND, "Application not found");
   }
 
-  // ownership check
   if (application.candidateId.toString() !== candidateId) {
     throw new AppError(
       httpStatus.FORBIDDEN,

@@ -13,10 +13,6 @@ export interface CustomButtonProps {
   type?: "button" | "submit" | "reset";
 }
 
-//----------------- Real Types -----------------
-
-// Register Interface
-
 interface IFormFields {
   register: UseFormRegister<any>;
   errors: FieldErrors<RegisterInput | LoginInput>;

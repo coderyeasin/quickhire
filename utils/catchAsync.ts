@@ -1,5 +1,3 @@
-// High-Order Function --- routeCtx for dynamic routes
-
 import { NextRequest, NextResponse } from "next/server";
 
 type NextHandler = (req: NextRequest, routeCtx?: any) => Promise<NextResponse>;

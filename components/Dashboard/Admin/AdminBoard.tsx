@@ -36,7 +36,6 @@ const AdminBoard = () => {
   const { data: jobsData, isLoading: jobsLoading } = useJobs();
   const { data: applicantsData, isLoading: applicantsLoading } =
     useApplications();
-  // const updateStatus = useUpdateJobStatus();
 
   const jobs: upComingJobsType[] = useMemo(
     () => jobsData?.data ?? [],
@@ -75,40 +74,6 @@ const AdminBoard = () => {
         header: "Updated At",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
-      // col.display({
-      //   id: "actions",
-      //   header: "Actions",
-      //   cell: (i) => {
-      //     const job = i.row.original;
-      //     return (
-      //       <div className="flex items-center gap-2">
-      //         {job.status === "pending" && (
-      //           <>
-      //             <button
-      //               onClick={() =>
-      //                 updateStatus.mutate({ id: job._id, status: "approved" })
-      //               }
-      //               className="px-3 py-1 text-xs font-medium cursor-pointer bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors"
-      //             >
-      //               Approve
-      //             </button>
-      //             <button
-      //               onClick={() =>
-      //                 updateStatus.mutate({ id: job._id, status: "rejected" })
-      //               }
-      //               className="px-3 py-1 text-xs font-medium cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
-      //             >
-      //               Reject
-      //             </button>
-      //           </>
-      //         )}
-      //         {job.status !== "pending" && (
-      //           <span className="text-xs text-primary-gray">—</span>
-      //         )}
-      //       </div>
-      //     );
-      //   },
-      // }),
     ],
     [],
   );

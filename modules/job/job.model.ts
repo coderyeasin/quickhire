@@ -46,7 +46,6 @@ const jobSchema = new Schema<IJob>(
     recruiterId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      //   required: [true, "Recruiter ID is required"],
     },
     status: {
       type: String,
@@ -77,7 +76,6 @@ const jobSchema = new Schema<IJob>(
   },
 );
 
-// index for fast filtering
 jobSchema.index({ recruiterId: 1 });
 jobSchema.index({ skills: 1 });
 

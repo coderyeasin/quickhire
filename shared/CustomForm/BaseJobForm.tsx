@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -24,7 +23,7 @@ export interface SharedJobFormValues {
 interface BaseJobFormProps {
   mode: "create" | "update";
   initialValues: Partial<SharedJobFormValues>;
-  validationSchema?: any; // Used primarily by create context
+  validationSchema?: any;
   isPending: boolean;
   onSubmit: (data: SharedJobFormValues) => void;
   onCancel: () => void;

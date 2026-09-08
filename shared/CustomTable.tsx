@@ -26,7 +26,6 @@ const CustomTable = <T,>({
           </thead>
           <tbody>
             {isLoading ? (
-              // Skeleton
               Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i} className="border-b border-slate-100">
                   {table.getAllColumns().map((col) => (

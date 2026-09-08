@@ -18,7 +18,6 @@ export const epilogue = Epilogue({
 
 export const roboto = Roboto({
   subsets: ["latin"],
-  // weight: ['400', '700'],
   variable: "--font-roboto",
   display: "swap",
 });

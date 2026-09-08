@@ -8,7 +8,6 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { ApplicationsType } from "@/types/interfaces";
 import { CreateAppType } from "@/modules/application/application.validation";
 
 // GET APIs

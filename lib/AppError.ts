@@ -1,4 +1,3 @@
-// super instance class for error
 class AppError extends Error {
   public statusCode: number;
 

@@ -1,35 +1,11 @@
 @import "tailwindcss";
 
-/* 
-Epilogue
-Epilogue
-Roboto
-Roboto Mono
-Inter
-SF Pro
-
-primary-gray: 515B6F
-second-gray: 202430
-third-gray: 7C8493
-ftr-gray: D6DDEB
-
-
-blueTxt: 26A4FF
-darkTxt: 25324B
-blueTxt: 4640DE
-
-activeJob: 56CDAD
-categoryJob: FFB836
-categoryTech: FF6550
- */
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
 @theme inline {
-  /* fonts */
   --font-inter: var(--font-inter);
   --font-epilogue: var(--font-epilogue);
   --font-roboto: var(--font-roboto);
@@ -37,27 +13,22 @@ categoryTech: FF6550
   --font-clash: var(--font-clash);
   --font-sf-pro: var(--font-sf-pro);
 
-  /* base */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* gray palette */
   --color-primary-gray: #515b6f;
   --color-second-gray: #202430;
   --color-third-gray: #7c8493;
 
-  /* text colors */
   --color-blue-text: #26a4ff;
   --color-dark-text: #25324b;
   --color-footerTxt: #d6ddeb;
 
-  /* Tag colors */
   --color-greenTags: #56cdad;
   --color-ylwTags: #ffb836;
   --color-redTags: #ff6550;
   --color-indigoTags: #4640de;
 
-  /* layout container */
   --container-sm: 768px;
   --container-md: 1024px;
   --container-main: 1240px;

@@ -63,7 +63,6 @@ const CandidateBoard = () => {
       (a) => a.status === "shortlisted",
     ).length;
     const rejected = appliedJobs.filter((a) => a.status === "rejected").length;
-    //   const hired = appliedJobs.filter((a) => a.status === "hired").length;
 
     return { pending, reviewing, shortlisted, rejected };
   }, [appliedJobs]);

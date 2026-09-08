@@ -73,18 +73,6 @@ const RecruiterBoard = () => {
         header: "Updated At",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
-      // col.display({
-      //   id: "actions",
-      //   header: "",
-      //   cell: (i) => (
-      //     <Link
-      //       href={`/recruiter/jobs/${i.row.original._id}/applicants`}
-      //       className="text-sm text-indigoTags hover:underline font-medium"
-      //     >
-      //       View applicants →
-      //     </Link>
-      //   ),
-      // }),
     ],
     [],
   );

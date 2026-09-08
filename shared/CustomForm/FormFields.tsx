@@ -1,4 +1,3 @@
-import React from "react";
 import { UseFormRegister, FieldErrors, RegisterOptions } from "react-hook-form";
 import { inputCls, labelCls, errorCls } from "@/shared/ApplyForm";
 

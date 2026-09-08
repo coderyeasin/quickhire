@@ -114,7 +114,6 @@ export function useCreateJob() {
   });
 }
 
-//--------- need to include-------- formdata format --- if logo need change
 export function useUpdateJob() {
   const qc = useQueryClient();
   return useMutation({

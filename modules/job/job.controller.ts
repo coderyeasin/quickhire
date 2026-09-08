@@ -36,7 +36,6 @@ export const createJob = catchAsync(async (req: NextRequest) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Data is not matched");
   }
 
-  //   company logo
   let companyLogoUrl: string | undefined;
   if (logoFile instanceof File && logoFile.size > 0) {
     if (!logoFile.type.startsWith("image/")) {

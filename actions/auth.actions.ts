@@ -12,7 +12,6 @@ export async function getDashboardUrl(role: string): Promise<string> {
   return "/candidate";
 }
 
-// Register Action
 export async function registerAction(formData: FormData) {
   try {
     const avatarFile = formData.get("avatar");
@@ -26,7 +25,6 @@ export async function registerAction(formData: FormData) {
       role: formData.get("role") as string,
     };
 
-    // zod schema validation
     const parsedData = registerValidator.safeParse(raw);
     if (!parsedData.success) {
       return {
@@ -34,7 +32,6 @@ export async function registerAction(formData: FormData) {
         errors: parsedData.error.flatten().fieldErrors,
       };
     }
-    // image upload
     let avatarUrl: string | undefined;
 
     if (avatarFile instanceof File && avatarFile.size > 0) {
@@ -67,7 +64,6 @@ export async function registerAction(formData: FormData) {
   }
 }
 
-// login action
 export async function loginAction(formData: FormData) {
   try {
     await signIn("credentials", {
@@ -90,14 +86,12 @@ export async function loginAction(formData: FormData) {
   }
 }
 
-// google login action
 export async function googleLoginAction(role?: string) {
   await signIn("google", {
     redirectTo: `/${role ?? "candidate"}`,
   });
 }
 
-// logout action
 export async function logoutAction() {
   await signOut({
     redirectTo: "/",

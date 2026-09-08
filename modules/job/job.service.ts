@@ -157,7 +157,6 @@ export async function updateJobs(
         : {}),
     },
     {
-      // new: true,
       returnDocument: "after",
       runValidators: true,
     },

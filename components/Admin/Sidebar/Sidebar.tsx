@@ -31,7 +31,6 @@ export default function Sidebar({ role, user }: NavLinksProps) {
         <FiMenu className="text-xl" />
       </button>
 
-      {/* Mobile */}
       {isOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div
@@ -64,7 +63,6 @@ function SidebarContent({ role, user }: NavLinksProps) {
 
   return (
     <aside className="w-64 bg-indigoTags text-white flex flex-col h-full">
-      {/* Logo */}
       <div className="p-8 shrink-0">
         <Link href="/" className="block">
           <Image
@@ -80,7 +78,6 @@ function SidebarContent({ role, user }: NavLinksProps) {
         </Link>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
         <p className="text-[11px] font-bold text-white/40 uppercase px-4 mb-3 tracking-wider">
           Main Menu
@@ -102,7 +99,6 @@ function SidebarContent({ role, user }: NavLinksProps) {
         )}
       </nav>
 
-      {/* User */}
       <div className="p-4 border-t border-white/10 shrink-0">
         <div className="flex items-center gap-3 px-3 py-3 mb-1">
           <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold shrink-0">

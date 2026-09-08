@@ -25,7 +25,6 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Logged in + own dashboard
   if (session && isProtected) {
     const role = session.user.role;
     for (const [route, allowed] of Object.entries(ROLE_ROUTES)) {
