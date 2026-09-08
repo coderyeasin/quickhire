@@ -29,6 +29,10 @@ const PAGE_TITLES: Record<string, { title: string; sub: string }> = {
   },
   "/recruiter": { title: "Overview", sub: "Your recruitment overview" },
   "/recruiter/jobs": { title: "My Jobs", sub: "Jobs you've posted" },
+  "/recruiter/expired-jobs": {
+    title: "Expired Jobs",
+    sub: "Jobs whose deadline has passed",
+  },
   "/recruiter/add": { title: "Post a Job", sub: "Create a new listing" },
   "/recruiter/profile": { title: "Profile", sub: "Your public profile" },
 

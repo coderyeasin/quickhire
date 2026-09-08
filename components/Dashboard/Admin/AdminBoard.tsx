@@ -27,6 +27,7 @@ type upComingJobsType = {
   type: string;
   status: string;
   createdAt: string;
+  updatedAt: string;
 };
 
 const col = createColumnHelper<upComingJobsType>();
@@ -69,6 +70,10 @@ const AdminBoard = () => {
       col.accessor("status", {
         header: "Status",
         cell: (i) => <StatusBadge status={i.getValue()} />,
+      }),
+      col.accessor("updatedAt", {
+        header: "Updated At",
+        cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
       // col.display({
       //   id: "actions",

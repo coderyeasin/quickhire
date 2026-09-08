@@ -51,13 +51,26 @@ const jobSchema = new Schema<IJob>(
     status: {
       type: String,
       required: [true, "Status is required"],
-      enum: ["pending", "approved", "rejected"],
+      enum: ["pending", "approved", "rejected", "expired"],
       default: "pending",
     },
     deadline: {
       type: Date,
       required: false,
     },
+    updateHistory: [
+      {
+        updatedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        role: { type: String, enum: ["recruiter", "admin"], required: true },
+        changedAt: { type: Date, default: Date.now },
+        previousStatus: {
+          type: String,
+          enum: ["pending", "approved", "rejected", "expired"],
+          required: true,
+        },
+        changedFields: { type: [String], default: [] },
+      },
+    ],
   },
   {
     timestamps: true,

@@ -66,6 +66,37 @@ const MyPostedJobsAsRecruiter = () => {
         header: "Posted",
         cell: (i) => new Date(i.getValue()).toLocaleDateString(),
       }),
+      col.accessor("updatedAt", {
+        header: "Updated At",
+        cell: (i) => new Date(i.getValue()).toLocaleDateString(),
+      }),
+      col.accessor("updateHistory", {
+        header: "Update History",
+        cell: (i) => {
+          const history = [...(i.getValue() ?? [])].reverse();
+
+          return history.length ? (
+            <div className="min-w-56 space-y-2 text-xs">
+              {history.map((entry) => (
+                <div key={entry._id ?? entry.changedAt} className="space-y-0.5">
+                  <div className="flex justify-between gap-2 font-medium text-dark-text">
+                    <span className="capitalize">{entry.role}</span>
+                    <span className="text-slate-500">
+                      {new Date(entry.changedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="text-slate-500">
+                    Previous: {entry.previousStatus}; Changed:{" "}
+                    {entry.changedFields.join(", ")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <span className="text-slate-400">No updates</span>
+          );
+        },
+      }),
       col.display({
         id: "actions",
         header: "Actions",

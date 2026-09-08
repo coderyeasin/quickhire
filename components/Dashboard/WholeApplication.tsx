@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   FiBriefcase,
@@ -45,6 +45,7 @@ const WholeApplication = ({
   applicantsId: string | null | undefined;
 }) => {
   const { data: session } = useSession();
+  const [currentTime] = useState(() => Date.now());
 
   const recruiterEmail = session?.user?.email;
   const userRole = session?.user?.role;
@@ -57,9 +58,17 @@ const WholeApplication = ({
   );
 
   const applicants = applications.find((j) => j._id === applicantsId);
+  const isExpired =
+    applicants?.jobId?.status === "expired" ||
+    (!!applicants?.jobId?.deadline &&
+      new Date(applicants.jobId.deadline).getTime() <= currentTime);
 
   const shortDescription =
-    applicants?.jobId?.description?.split(" ").slice(0, 180).join(" ") + "...";
+    userRole !== "candidate"
+      ? applicants?.jobId?.description?.split(" ").slice(0, 180).join(" ") +
+        "..."
+      : applicants?.jobId?.description?.split(" ").slice(0, 30).join(" ") +
+        "...";
 
   if (isLoading) return <Spinner />;
 
@@ -127,12 +136,18 @@ const WholeApplication = ({
                 <div>
                   <p className="text-xs text-third-gray mb-1">Job ID</p>
 
-                  <Link
-                    href={`/${userRole}/jobs/${applicants?.jobId?._id}`}
-                    className="text-sm text-indigo-600 hover:underline break-all"
-                  >
-                    {applicants?.jobId?._id}
-                  </Link>
+                  {isExpired && userRole === "candidate" ? (
+                    <span className="text-sm text-primary-gray break-all">
+                      {applicants?.jobId?._id}
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/${userRole}/jobs/${applicants?.jobId?._id}`}
+                      className="text-sm text-indigo-600 hover:underline break-all"
+                    >
+                      {applicants?.jobId?._id}
+                    </Link>
+                  )}
                 </div>
               </div>
 
@@ -192,7 +207,7 @@ const WholeApplication = ({
 
                   <div className="bg-gray-50 rounded-xl p-4">
                     <p className="text-sm text-dark-text leading-7 whitespace-pre-line">
-                      {applicants?.coverLetter?.slice(0, 50)}
+                      {applicants?.coverLetter?.slice(0, 100)}
                     </p>
                   </div>
                 </div>

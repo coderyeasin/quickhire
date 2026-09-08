@@ -6,6 +6,7 @@ import {
   FiSettings,
   FiFileText,
   FiTrash2,
+  FiClock,
 } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,7 +17,7 @@ export interface INavItems {
   icon: React.ReactNode;
 }
 
-export function getNavItems(role: string): {
+export function getNavItems(role: string, hasExpiredJobs = true): {
   main: INavItems[];
   controls: INavItems[];
 } {
@@ -56,6 +57,15 @@ export function getNavItems(role: string): {
       main: [
         { href: "/recruiter", label: "Dashboard", icon: <FiGrid /> },
         { href: "/recruiter/jobs", label: "My Jobs", icon: <FiBriefcase /> },
+        ...(hasExpiredJobs
+          ? [
+              {
+                href: "/recruiter/expired-jobs",
+                label: "Expired Jobs",
+                icon: <FiClock />,
+              },
+            ]
+          : []),
         {
           href: "/recruiter/add",
           label: "Post New Job",

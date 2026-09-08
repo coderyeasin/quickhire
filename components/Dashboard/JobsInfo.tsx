@@ -13,6 +13,7 @@ import { FiMapPin, FiClock, FiDollarSign } from "react-icons/fi";
 
 const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
   const [isApply, setIsApply] = useState(false);
+  const [currentTime] = useState(() => Date.now());
   const { data: session } = useSession();
   const role = session?.user.role;
   const { data, isLoading } = useJobById(jobId as string);
@@ -44,14 +45,23 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
     );
   };
   const canApply =
-    (role === "admin" && job.status === "approved") || role === "candidate";
+    (role === "admin" && job.status === "approved") ||
+    (role === "candidate" &&
+      job.status === "approved" &&
+      (!job.deadline || new Date(job.deadline).getTime() > currentTime));
+  const isExpired =
+    job.status === "expired" ||
+    (!!job.deadline && new Date(job.deadline).getTime() <= currentTime);
 
-  const alreadyApplied = appData?.some(
-    (item) =>
+  const alreadyApplied = appData?.some((item) => {
+    const isSameCandidate =
       String(item?.candidateId?._id || item?.candidateId) ===
-        String(session?.user?.id) &&
-      String(item?.jobId?._id || item?.jobId) === String(job?._id),
-  );
+      String(session?.user?.id);
+    const isSameJob =
+      String(item?.jobId?._id || item?.jobId) === String(job?._id);
+
+    return isSameCandidate && isSameJob && !item.isExpired;
+  });
 
   const skills = parseArray(job.skills);
   const categories = parseArray(job.category);
@@ -81,6 +91,11 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                   <span className="px-3 py-1 bg-indigo-50 text-indigoTags rounded-full text-xs font-semibold capitalize">
                     {job.type}
                   </span>
+                  {isExpired && (
+                    <span className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-xs font-semibold">
+                      Expired
+                    </span>
+                  )}
                 </div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark-text">
                   {job.title}
@@ -214,7 +229,7 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
           </div>
           <div className="p-4 md:px-8 border-t border-slate-100 flex justify-center sm:justify-end">
             <CustomButton
-              disabled={alreadyApplied}
+              disabled={alreadyApplied || isExpired}
               onClick={() => {
                 if (alreadyApplied) {
                   toast.error("You already applied for this job");
@@ -241,7 +256,13 @@ const JobsInfo = ({ jobId }: { jobId: string | null | undefined }) => {
                   return;
                 }
               }}
-              label={alreadyApplied ? "Already Applied" : "Apply Now"}
+              label={
+                isExpired
+                  ? "Deadline Expired"
+                  : alreadyApplied
+                    ? "Already Applied"
+                    : "Apply Now"
+              }
               className="w-full sm:w-auto px-6 py-3 bg-indigoTags text-white rounded-xl font-semibold hover:bg-indigoTags/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>

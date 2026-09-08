@@ -83,6 +83,17 @@ const getAllRealJobs = catchAsync(async () => {
   });
 });
 
+export const getExpiredJobs = catchAsync(async () => {
+  const user = await withAuth(["admin", "recruiter"]);
+  const result = await jobServices.getExpiredJobs(user.id, user.role);
+  return sendResponse({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Successfully get expired jobs",
+    data: result,
+  });
+});
+
 export const getMyJobs = catchAsync(async () => {
   const user = await withAuth(["admin", "recruiter"]);
   const result = await jobServices.getRecruiterJobs(user.id);
@@ -127,7 +138,7 @@ export const updateSingleJob = catchAsync(async (req, routeCtx) => {
 
   const parsedData = updateJobValidationSchema.safeParse(body);
 
-  if (!parsedData)
+  if (!parsedData.success)
     throw new AppError(httpStatus.BAD_REQUEST, "Data is not parsed");
 
   const result = await jobServices.updateJobs(
@@ -181,6 +192,7 @@ export const jobControllers = {
   createJob,
   getAllJobs,
   getAllRealJobs,
+  getExpiredJobs,
   getMyJobs,
   getSingleJobs,
   updateSingleJob,

@@ -104,12 +104,7 @@ const ProfileForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelCls}>Full Name</label>
-                <input
-                  {...register("name")}
-                  className={inputCls}
-                  defaultValue={user?.name}
-                  readOnly
-                />
+                <input {...register("name")} className={inputCls} />
                 {errors.name && (
                   <p className={errorCls}>{errors.name.message}</p>
                 )}
@@ -149,7 +144,6 @@ const ProfileForm = () => {
                   <label className={labelCls}>Company Name</label>
                   <input
                     {...register("company")}
-                    defaultValue={user?.company}
                     placeholder="Acme Corp"
                     className={inputCls}
                   />
@@ -167,4 +161,5 @@ const ProfileForm = () => {
     </div>
   );
 };
+
 export default ProfileForm;

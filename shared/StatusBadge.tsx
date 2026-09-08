@@ -27,6 +27,10 @@ const statusConfig: Record<string, { label: string; cls: string }> = {
     label: "Active",
     cls: "bg-emerald-50 text-emerald-600 border-emerald-200",
   },
+  expired: {
+    label: "Expired",
+    cls: "bg-orange-50 text-orange-600 border-orange-200",
+  },
   closed: {
     label: "Closed",
     cls: "bg-slate-100  text-slate-500  border-slate-200",

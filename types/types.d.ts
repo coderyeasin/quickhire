@@ -29,6 +29,14 @@ export type JobsType = {
   status: string;
   deadline: string;
   createdAt: string;
+  updatedAt: string;
+  updateHistory?: {
+    _id?: string;
+    role: "recruiter" | "admin";
+    previousStatus: string;
+    changedFields: string[];
+    changedAt: string;
+  }[];
 };
 
 export interface UpdateJobForm {
