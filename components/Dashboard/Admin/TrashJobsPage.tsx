@@ -41,7 +41,7 @@ const TrashJobsPage = () => {
               setOpen(true);
               setJobId(i.row.original._id);
             }}
-            className="font-medium text-dark-text hover:text-indigoTags transition-colors text-left cursor-pointer"
+            className="font-medium text-slate-400 transition-colors text-left cursor-pointer"
           >
             {i.getValue()}
           </button>
@@ -50,21 +50,41 @@ const TrashJobsPage = () => {
 
       col.accessor("company", {
         header: "Company",
+        cell: (i) => <span className="text-slate-400">{i.getValue()}</span>,
       }),
 
       col.accessor("type", {
         header: "Type",
-        cell: (i) => <span className="capitalize">{i.getValue()}</span>,
+        cell: (i) => (
+          <span className="capitalize text-slate-400">{i.getValue()}</span>
+        ),
       }),
 
       col.accessor("status", {
         header: "Status",
-        cell: (i) => <StatusBadge status={i.getValue()} />,
+        cell: (i) => (
+          <span className="grayscale opacity-70">
+            <StatusBadge status={i.getValue()} />
+          </span>
+        ),
       }),
 
       col.accessor("createdAt", {
         header: "Posted",
-        cell: (i) => new Date(i.getValue()).toLocaleDateString(),
+        cell: (i) => (
+          <span className="text-slate-400">
+            {new Date(i.getValue()).toLocaleDateString()}
+          </span>
+        ),
+      }),
+
+      col.accessor("updatedAt", {
+        header: "Updated At",
+        cell: (i) => (
+          <span className="text-slate-400">
+            {new Date(i.getValue()).toLocaleDateString()}
+          </span>
+        ),
       }),
     ],
     [],

@@ -8,7 +8,12 @@ export const jobTypeEnum = z.enum([
   "intern",
 ]);
 
-export const jobStatusEnum = z.enum(["pending", "approved", "rejected"]);
+export const jobStatusEnum = z.enum([
+  "pending",
+  "approved",
+  "rejected",
+  "expired",
+]);
 
 export const createJobValidationSchema = z.object({
   title: z.string().min(1, "Job title is required").trim(),
@@ -40,4 +45,4 @@ export const createJobValidationSchema = z.object({
 export const updateJobValidationSchema = createJobValidationSchema.partial();
 
 export type CreatedJobType = z.infer<typeof createJobValidationSchema>;
-export type UpdateJobType = z.infer<typeof createJobValidationSchema>;
+export type UpdateJobType = z.infer<typeof updateJobValidationSchema>;

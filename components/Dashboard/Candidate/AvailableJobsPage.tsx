@@ -23,6 +23,12 @@ const AvailableJobsPage = () => {
 
   const originalJobs: JobsType[] = useMemo(() => data?.data ?? [], [data]);
 
+  const getDateKey = (value: string) => {
+    const date = new Date(value);
+    const offset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+  };
+
   const filteredJobs = useMemo(() => {
     return originalJobs.filter((job) => {
       const matchesSearch =
@@ -39,16 +45,26 @@ const AvailableJobsPage = () => {
       let matchesDeadline = true;
 
       if (filters.deadline) {
-        const selectedDate = new Date(filters.deadline).getTime();
+        const selectedDateKey = getDateKey(`${filters.deadline}T12:00:00`);
+        const jobDeadlineKey = getDateKey(job.deadline);
 
-        const jobDeadline = new Date(job.deadline).getTime();
-
-        matchesDeadline = jobDeadline <= selectedDate;
+        matchesDeadline = jobDeadlineKey === selectedDateKey;
       }
 
       return matchesSearch && matchesCategory && matchesType && matchesDeadline;
     });
   }, [originalJobs, filters]);
+
+  const hasOtherFilters = Boolean(
+    filters.search || filters.category || filters.jobType,
+  );
+  const dateLabel = filters.deadline
+    ? new Date(`${filters.deadline}T12:00:00`).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "";
 
   const handleResetFilters = () => {
     setFilters({
@@ -146,10 +162,14 @@ const AvailableJobsPage = () => {
       ) : (
         <div className="py-12 md:py-16 text-center border border-dashed border-third-gray/15 rounded-lg md:rounded-2xl bg-white max-w-sm mx-auto px-4">
           <h3 className="text-base md:text-lg font-bold text-dark-text font-epilogue">
-            No entries match
+            {filters.deadline && !hasOtherFilters
+              ? "No jobs available on this date"
+              : "No entries match"}
           </h3>
           <p className="text-xs md:text-sm text-third-gray mt-2 px-2">
-            Try adjusting your search filters.
+            {filters.deadline
+              ? `No jobs are available for ${dateLabel}. Try another date or update your other filters.`
+              : "Try adjusting your search filters."}
           </p>
         </div>
       )}

@@ -1,7 +1,14 @@
 import { Types } from "mongoose";
 
 export type JobType = "full-time" | "part-time" | "remote" | "intern";
-export type JobStatus = "pending" | "approved" | "rejected";
+export type JobStatus = "pending" | "approved" | "rejected" | "expired";
+export interface IJobUpdateHistory {
+  updatedBy: Types.ObjectId;
+  role: "recruiter" | "admin";
+  changedAt: Date;
+  previousStatus: JobStatus;
+  changedFields: string[];
+}
 
 export interface IJob {
   _id?: string;
@@ -17,4 +24,5 @@ export interface IJob {
   recruiterId?: Types.ObjectId;
   status: JobStatus;
   deadline?: Date;
+  updateHistory?: IJobUpdateHistory[];
 }

@@ -61,10 +61,13 @@ const RecruiterJobsByApplicantsPage = () => {
         header: "Candidate",
         cell: (i) => {
           const c = i.row.original.candidateId;
+          const textClass = i.row.original.isExpired
+            ? "text-slate-400"
+            : "text-dark-text";
           return c ? (
             <div>
-              <p className="font-medium text-dark-text text-sm">{c.name}</p>
-              <p className="text-xs text-primary-gray">{c.email}</p>
+              <p className={`font-medium ${textClass} text-sm`}>{c.name}</p>
+              <p className="text-xs text-slate-400">{c.email}</p>
             </div>
           ) : (
             <span className="text-xs text-primary-gray">Deleted user</span>
@@ -76,24 +79,35 @@ const RecruiterJobsByApplicantsPage = () => {
         header: "Position",
         cell: (i) => {
           const j = i.row.original.jobId;
+          const expired = i.row.original.isExpired;
           return j ? (
             <div
-              onClick={() => {
-                setMode("applicants");
-                setOpen(true);
-                setApplicantsId(i.row.original._id);
-              }}
-              className="flex items-center gap-2 font-medium cursor-pointer transition-colors text-left"
+              onClick={
+                expired
+                  ? undefined
+                  : () => {
+                      setMode("applicants");
+                      setOpen(true);
+                      setApplicantsId(i.row.original._id);
+                    }
+              }
+              className={`flex items-center gap-2 font-medium transition-colors text-left ${expired ? "cursor-not-allowed" : "cursor-pointer"}`}
             >
               <div>
-                <p className="font-medium hover:text-dark-text text-sm text-indigoTags">
+                <p
+                  className={`font-medium text-sm ${expired ? "text-slate-400" : "text-indigoTags hover:text-dark-text"}`}
+                >
                   {j.title}
                 </p>
-                <p className="text-xs hover:text-primary-gray text-indigoTags">
+                <p
+                  className={`text-xs ${expired ? "text-slate-400" : "text-indigoTags hover:text-primary-gray"}`}
+                >
                   {j.company}
                 </p>
               </div>
-              <FiExternalLink className="size-4 text-indigoTags" />
+              {!expired && (
+                <FiExternalLink className="size-4 text-indigoTags" />
+              )}
             </div>
           ) : (
             <span className="text-xs text-primary-gray">Job removed</span>
@@ -104,19 +118,27 @@ const RecruiterJobsByApplicantsPage = () => {
         id: "recruiter",
         header: "Recruiter",
         cell: (i) => (
-          <span className="text-sm text-dark-text">
+          <span
+            className={`text-sm ${i.row.original.isExpired ? "text-slate-400" : "text-dark-text"}`}
+          >
             {i.row.original.recruiterId?.name ?? "—"}
           </span>
         ),
       }),
       col.accessor("status", {
         header: "Status",
-        cell: (i) => <StatusBadge status={i.getValue()} />,
+        cell: (i) => (
+          <StatusBadge
+            status={i.row.original.isExpired ? "expired" : i.getValue()}
+          />
+        ),
       }),
       col.accessor("appliedAt", {
         header: "Applied",
         cell: (i) => (
-          <span className="text-xs text-primary-gray">
+          <span
+            className={`text-xs ${i.row.original.isExpired ? "text-slate-400" : "text-primary-gray"}`}
+          >
             {new Date(i.getValue()).toLocaleDateString()}
           </span>
         ),
@@ -126,6 +148,9 @@ const RecruiterJobsByApplicantsPage = () => {
         header: "Move to",
         cell: (i) => {
           const app = i.row.original;
+          if (app.isExpired) {
+            return <StatusBadge status="rejected" />;
+          }
           const applicant = applicantStatus[app.status] ?? [];
           if (applicant.length === 0) {
             return <span className="text-xs text-primary-gray">—</span>;

@@ -18,7 +18,6 @@ export default async function DashboardLayout({
       <div className="flex flex-col flex-1 min-w-0 lg:pl-64">
         <TopHeader user={session.user} />
         <main className="flex-1 p-6 lg:p-10">
-          {/* <div className="container-layout mx-0 max-w-full">{children}</div> */}
           {children}
           <Toaster position="top-center" />
         </main>

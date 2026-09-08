@@ -15,16 +15,33 @@ import {
 import StatusBadge from "@/shared/StatusBadge";
 import { FaCircleNotch } from "react-icons/fa6";
 import { useMemo } from "react";
-import { IApplication } from "@/modules/application/application.interface";
 import StatusCard from "@/shared/StatusCard";
 import CustomTable from "@/shared/CustomTable";
 
 type CurrentJobsType = {
   _id: string;
-  jobId: { _id: string; title: string; company: string; type: string };
+  jobId: {
+    _id: string;
+    title: string;
+    company: string;
+    type: string;
+    status?: string;
+    deadline?: string;
+    updatedAt?: string;
+  } | null;
   status: string;
   appliedAt: string;
+  isExpired?: boolean;
 };
+
+const isApplicationExpired = (application: CurrentJobsType) =>
+  application.isExpired ??
+  (application.jobId?.status === "expired" ||
+    (!!application.jobId?.deadline &&
+      new Date(application.jobId.deadline).getTime() <= Date.now()) ||
+    (!!application.jobId?.updatedAt &&
+      new Date(application.appliedAt).getTime() <
+        new Date(application.jobId.updatedAt).getTime()));
 
 const col = createColumnHelper<CurrentJobsType>();
 
@@ -32,21 +49,20 @@ const CandidateBoard = () => {
   const { mutate, isPending } = useWithdrawApplication();
   const { data, isLoading } = useMyApplications();
 
-  const appliedJobs = useMemo(() => data?.data ?? [], [data]);
+  const appliedJobs = useMemo(
+    () => (data?.data ?? []) as CurrentJobsType[],
+    [data],
+  );
 
   const jobStatus = useMemo(() => {
-    const pending = appliedJobs.filter(
-      (a: IApplication) => a.status === "pending",
-    ).length;
+    const pending = appliedJobs.filter((a) => a.status === "pending").length;
     const reviewing = appliedJobs.filter(
-      (a: IApplication) => a.status === "reviewing",
+      (a) => a.status === "reviewing",
     ).length;
     const shortlisted = appliedJobs.filter(
-      (a: IApplication) => a.status === "shortlisted",
+      (a) => a.status === "shortlisted",
     ).length;
-    const rejected = appliedJobs.filter(
-      (a: IApplication) => a.status === "rejected",
-    ).length;
+    const rejected = appliedJobs.filter((a) => a.status === "rejected").length;
     //   const hired = appliedJobs.filter((a) => a.status === "hired").length;
 
     return { pending, reviewing, shortlisted, rejected };
@@ -60,6 +76,9 @@ const CandidateBoard = () => {
           <div>
             <p className="font-medium text-dark-text">{i.getValue()?.title}</p>
             <p className="text-xs text-primary-gray">{i.getValue()?.company}</p>
+            {isApplicationExpired(i.row.original) && (
+              <StatusBadge status="expired" />
+            )}
           </div>
         ),
       }),
@@ -67,7 +86,7 @@ const CandidateBoard = () => {
         id: "type",
         header: "Type",
         cell: (i) => (
-          <span className="text-xs text-primary-gray capitalize">
+          <span className="text-sm text-primary-gray capitalize">
             {i.getValue()}
           </span>
         ),
@@ -85,9 +104,6 @@ const CandidateBoard = () => {
         header: "Actions",
         cell: (i) => {
           const app = i.row.original;
-          const canWithdraw = ["pending", "reviewing"].includes(app.status);
-          if (!canWithdraw)
-            return <span className="text-xs text-primary-gray">—</span>;
           return (
             <button
               onClick={() => {
@@ -131,7 +147,13 @@ const CandidateBoard = () => {
     [mutate, isPending],
   );
 
-  const tableData = useMemo(() => appliedJobs.slice(0, 5) ?? [], [appliedJobs]);
+  const tableData = useMemo(
+    () =>
+      appliedJobs
+        .filter((application) => !isApplicationExpired(application))
+        .slice(0, 5),
+    [appliedJobs],
+  );
   const table = useReactTable({
     data: tableData,
     columns,
