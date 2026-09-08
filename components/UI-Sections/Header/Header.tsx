@@ -52,7 +52,7 @@ export default function Header() {
               />
             </Link>
 
-            <ul className="hidden md:flex space-x-6 lg:space-x-10 text-sm md:text-md font-normal font-epilogue">
+            <ul className="hidden md:flex space-x-6 lg:space-x-10 text-sm md:text-md font-normal font-epilogue lg:mt-2">
               {routes.map((route) => (
                 <li key={route.path}>
                   <Link

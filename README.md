@@ -24,6 +24,7 @@ QuickHire is a role-based job marketplace built with Next.js, TypeScript, MongoD
 - Tailwind CSS 4
 - Zod validation
 - Cloudinary
+- Custom Fonts & Color According to figma design
 
 ## User Roles
 

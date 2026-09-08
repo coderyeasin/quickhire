@@ -61,7 +61,7 @@ const sfPro = localFont({
 
 export const metadata: Metadata = {
   title: "QuickHire",
-  description: "Job board for candidates",
+  description: "Get & Post Easy Jobs",
   icons: {
     icon: "/images/fav-ico.png",
   },
