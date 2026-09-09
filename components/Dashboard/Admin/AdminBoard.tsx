@@ -11,6 +11,7 @@ import {
   FiClock,
   FiCheckCircle,
   FiXCircle,
+  FiAlertCircle,
 } from "react-icons/fi";
 import Link from "next/link";
 import { useJobs } from "@/Hooks/useJobs";
@@ -50,7 +51,8 @@ const AdminBoard = () => {
     const pendingJobs = jobs.filter((j) => j.status === "pending");
     const approvedJobs = jobs.filter((j) => j.status === "approved");
     const rejectedJobs = jobs.filter((j) => j.status === "rejected");
-    return { pendingJobs, approvedJobs, rejectedJobs };
+    const expiredJobs = jobs.filter((j) => j.status === "expired");
+    return { pendingJobs, approvedJobs, rejectedJobs, expiredJobs };
   }, [jobs]);
 
   const columns = useMemo(
@@ -116,6 +118,13 @@ const AdminBoard = () => {
           sub="No longer active"
           color="red"
           icon={<FiXCircle />}
+        />
+        <StatusCard
+          label="Expired Jobs"
+          value={jobsLoading ? "—" : jobsStatus.expiredJobs.length}
+          sub="Past their deadline"
+          color="red"
+          icon={<FiAlertCircle />}
         />
         <StatusCard
           label="Candidate Applied"
