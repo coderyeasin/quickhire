@@ -1,29 +1,46 @@
 import { z } from "zod";
 
-export const generatedJDSchema = z.object({
-  title: z.string().min(1, "Job title is required").max(100).trim(),
+export const aiJobDescriptionFieldsSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Job title is required")
+    .trim()
+    .max(100, "Job title is too long"),
 
-  company: z.string().max(150).optional(),
+  company: z
+    .string()
+    .min(1, "Company name is required")
+    .trim()
+    .max(150, "Company name is too long"),
 
-  category: z.array(z.string().min(1)).min(1).max(10),
+  category: z
+    .array(z.string().min(1))
+    .min(1, "At least one category is required"),
 
-  location: z.string().max(150).optional(),
+  location: z
+    .string()
+    .min(1, "Location is required")
+    .trim()
+    .max(150, "Location is too long"),
 
-  type: z.string().max(50).optional(),
+  type: z.enum(["full-time", "part-time", "remote", "intern"]),
 
-  salary: z.string().max(100).optional(),
+  salary: z.string().optional().default("Negotiable"),
 
-  skills: z.array(z.string().min(1)).min(1).max(30),
-
-  experience: z.string().max(100).optional(),
+  skills: z
+    .array(z.string().min(1))
+    .min(1, "At least one skill is required")
+    .max(30),
 });
 
-export const generatedJobDescriptionSchema = z.object({
-  description: z.string().min(1).max(3000),
+export const aiGeneratedJobDescriptionSchema = z.object({
+  description: z.string().min(1, "Generated description is empty"),
 });
 
-export type JobDescriptionInput = z.infer<typeof generatedJDSchema>;
+export type AIJobDescriptionFields = z.infer<
+  typeof aiJobDescriptionFieldsSchema
+>;
 
-export type GeneratedJobDescription = z.infer<
-  typeof generatedJobDescriptionSchema
+export type AIGeneratedJobDescription = z.infer<
+  typeof aiGeneratedJobDescriptionSchema
 >;

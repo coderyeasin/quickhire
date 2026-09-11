@@ -1,74 +1,79 @@
-import { JobDescriptionInput } from "./ai.validation";
+import { AIJobDescriptionFields } from "./ai.validation";
 
-export function buildJobDescriptionPrompt(input: JobDescriptionInput) {
+export function buildJobDescriptionPrompt(input: AIJobDescriptionFields) {
   return `
-Create a professional, realistic job description for a technology recruitment platform.
+You are an experienced technology recruitment content writer.
+
+Your task is to create a professional job description for a technology recruitment platform.
+
+Use ONLY the information provided below.
 
 JOB INFORMATION
 
-Title:
+Job Title:
 ${input.title}
 
 Company:
-${input.company ?? "Not specified"}
+${input.company}
 
-Category:
+Categories:
 ${input.category.join(", ")}
 
 Location:
-${input.location ?? "Not specified"}
+${input.location}
 
-Employment Type:
-${input.type ?? "Not specified"}
+Job Type:
+${input.type}
 
 Salary:
 ${input.salary ?? "Negotiable"}
 
-Experience:
-${input.experience ?? "Not specified"}
-
-Skills:
+Required Skills:
 ${input.skills.join(", ")}
 
-INSTRUCTIONS
 
-1. Write a complete and professional job description suitable for publishing on a technology recruitment platform.
+WRITING REQUIREMENTS
 
-2. The generated content will be stored in a single "description" field, so return one well-structured description rather than separate JSON fields.
+1. Write a professional, realistic and attractive job description.
 
-3. Organize the description using clear sections such as:
-   - Overview
+2. The description is intended for a technology recruitment platform.
+
+3. Keep the content relevant to the provided job title and skills.
+
+4. Do not invent technologies that are not included in the provided information.
+
+5. Do not invent company history, company culture, salary amounts, benefits,
+   office facilities, team size, funding, or other company information.
+
+6. Do not invent years of experience because no experience field is provided.
+
+7. Do not make promises about employment.
+
+8. Do not include discriminatory or exclusionary requirements.
+
+9. Do not include unnecessary buzzwords.
+
+10. Keep the writing concise enough for a real job listing.
+
+11. Clearly organize the description into:
+   - About the Role
    - Responsibilities
    - Requirements
-   - Preferred Skills
-   - Benefits
+   - Preferred Qualifications
 
-4. Only mention technologies, frameworks, tools, qualifications, or skills that are provided in the job information. Do not invent specific technologies.
+12. Responsibilities must be realistic for the job title.
 
-5. Use the provided job title, category, employment type, location, experience, and skills to make the responsibilities and requirements relevant to the role.
+13. Requirements must be based primarily on the provided skills.
 
-6. Do not invent specific salary amounts, benefits, company facts, working arrangements, or other information that was not provided.
+14. Preferred qualifications should only be included when they can reasonably
+    be inferred from the provided job information. Otherwise return a short
+    list or empty section.
 
-7. If salary is "Negotiable", you may mention that compensation is negotiable, but do not create a salary range.
+15. Do not include Markdown code fences.
 
-8. If experience is not specified, do not invent a required number of years.
+16. Return ONLY the requested JSON structure.
 
-9. Responsibilities should describe realistic duties appropriate for the specified role and technology stack.
-
-10. Requirements should focus on capabilities reasonably expected from the provided role and skills.
-
-11. Keep required skills and preferred skills logically distinct. Do not incorrectly make every skill a mandatory requirement.
-
-12. Use concise, clear, natural language. Avoid excessive buzzwords, exaggerated claims, and generic marketing language.
-
-13. Keep the description inclusive and professional. Do not discriminate based on age, gender, race, religion, nationality, disability, or other protected characteristics.
-
-14. Do not make employment decisions, rank candidates, or evaluate candidate suitability.
-
-15. Do not include application instructions, contact information, or information that was not provided in the job information.
-
-16. Do not use emojis.
-
-17. Return only the generated job description text. Do not return JSON, explanations, comments, or additional notes.
+The final description should be ready for a recruiter to review,
+edit if necessary, and publish.
 `;
 }
