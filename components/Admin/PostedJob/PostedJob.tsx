@@ -3,9 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useCreateJob } from "@/Hooks/useJobs";
 import { createJobSchema } from "@/utils/schemaValidate";
-import BaseJobForm, {
-  SharedJobFormValues,
-} from "@/shared/CustomForm/BaseJobForm";
+import BaseJobForm from "@/shared/CustomForm/BaseJobForm";
+import { SharedJobFormValues } from "@/types/interfaces";
 
 export default function PostedJob({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
