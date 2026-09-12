@@ -2,10 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useUpdateJob } from "@/Hooks/useJobs";
-import { EditJobFormType } from "@/types/interfaces";
-import BaseJobForm, {
-  SharedJobFormValues,
-} from "@/shared/CustomForm/BaseJobForm";
+import { EditJobFormType, SharedJobFormValues } from "@/types/interfaces";
+import BaseJobForm from "@/shared/CustomForm/BaseJobForm";
 
 function UpdateSingleJobHome({ jobData, redirectTo }: EditJobFormType) {
   const router = useRouter();

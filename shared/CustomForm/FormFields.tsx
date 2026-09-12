@@ -1,14 +1,5 @@
-import { UseFormRegister, FieldErrors, RegisterOptions } from "react-hook-form";
 import { inputCls, labelCls, errorCls } from "@/shared/ApplyForm";
-
-interface BaseFieldProps {
-  label: string;
-  name: string;
-  register: UseFormRegister<any>;
-  errors: FieldErrors;
-  rules?: RegisterOptions;
-  placeholder?: string;
-}
+import { BaseFieldProps } from "@/types/interfaces";
 
 export const JobInput = ({
   label,

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister, RegisterOptions } from "react-hook-form";
 import { JobsType } from "./types";
 import { LoginInput, RegisterInput } from "@/modules/user/UserValidators";
 import { Table as TanTable } from "@tanstack/react-table";
@@ -106,4 +106,52 @@ export interface ICustomPagination {
 export interface EditJobFormType {
   jobData: JobsType;
   redirectTo: string;
+}
+
+export interface SharedJobFormValues {
+  title: string;
+  company: string;
+  location: string;
+  type: "full-time" | "part-time" | "remote" | "intern";
+  description: string;
+  salary: string;
+  deadline: string;
+  skills: string;
+  category: string;
+  companyLogo?: any;
+}
+
+export interface BaseJobFormProps {
+  mode: "create" | "update";
+  initialValues: Partial<SharedJobFormValues>;
+  validationSchema?: any;
+  isPending: boolean;
+  onSubmit: (data: SharedJobFormValues) => void;
+  onCancel: () => void;
+}
+
+export interface BaseFieldProps {
+  label: string;
+  name: string;
+  register: UseFormRegister<any>;
+  errors: FieldErrors;
+  rules?: RegisterOptions;
+  placeholder?: string;
+}
+
+export interface JobDetailsFormProps {
+  mode: "create" | "update";
+  initialValues: Partial<SharedJobFormValues>;
+  register: UseFormRegister<SharedJobFormValues>;
+  errors: FieldErrors<SharedJobFormValues>;
+  isPending: boolean;
+  isGeneratingAI: boolean;
+  aiError: string | null;
+  onGenerateAI: () => void;
+}
+
+export interface GeneratedDescriptionProps {
+  description: string;
+  onUse: () => void;
+  onDiscard: () => void;
 }
