@@ -14,7 +14,7 @@ export async function generateJobDescription(
   const prompt = buildJobDescriptionPrompt(input);
 
   const response = await gemini.models.generateContent({
-    model: "gemini-3.8-flash",
+    model: "gemini-3.6-flash",
 
     contents: prompt,
 
